@@ -35,7 +35,7 @@ camelCase (nomMethode)
 ### Représenter les exemples
 
 Une matrice de chaines de caractères :
-* Autant de colonnes qu'il y a de attribut
+* Autant de colonnes qu'il y a d'attributs
 * Autant de lignes qu'il y a d'exemples
 
 ### Représenter un arbre
