@@ -24,27 +24,28 @@ camelCase (nomMethode)
 ### Commentaire en début de classe
 
     /**
-    * NomClasse
-    *
-    * Cette classe permet d'instancier un ... 
-    * Un objet de type ... instancie cette classe dans la methode ...
-    */
+     * NomClasse
+     *
+     * Cette classe permet d'instancier un ... 
+     * Un objet de type ... instancie cette classe dans la methode ...
+     */
 
 ## Structures utilisées
-
-### Représenter les exemples
-
-Une matrice de chaines de caractères :
-* Autant de colonnes qu'il y a d'attributs
-* Autant de lignes qu'il y a d'exemples
 
 ### Représenter un arbre
 
 Classe Arbre qui contient :
-* 
+* Un pointeur vers le noeud racine de l'arbre
 
 ### Représenter un noeud d'arbre
 
 Classe Noeud qui contient :
-* Des exemples
-* Une méthode pour trouver le meilleur attribut
+* Un jeu de données
+* Un pointeur vers chaque noeud enfants (liste)
+* Une calcul du meilleur attribut (gain d'entropie pour chaque attribut)
+
+### Représenter un jeu de données
+
+Classe JeuDonnees qui contient :
+* Une matrice de chaines de caractères (autant de colonnes qu'il y a d'attributs et autant de lignes qu'il y a d'exemples)
+* Les attributs et leur valeur précédemment choisis (liste)
