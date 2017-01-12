@@ -3,6 +3,7 @@ package arbre;
 import java.io.*;
 
 class Arbre {
+    
     protected Noeud noeud_racine;
     protected Noeud fils1;
     protected Noeud fils2;
