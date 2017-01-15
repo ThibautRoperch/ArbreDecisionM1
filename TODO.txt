@@ -1,0 +1,16 @@
+
+Si j'ai bien compris comment un arbre se construit :
+- Création d'un premier noeud contenant le jeu de données complet
+- Ce noeud choisit un attribut : calcul du gain d'information (semestre 1) ou du gain d'entropie (semestre 2) ?
+- Pour chaque valeur de cet attribut, le noeud instancie un noeud fils contenant le jeu de données en ne gardant que les exemples concernés par la valeur
+  Ex : l'attribut choisi est Prévision et a 3 valeurs : Soleil, Pluie, Couvert
+  3 noeuds sont créés, ayant tous pour noeud père le même noeud
+  1 noeud n'aura que les exemples où Prévision = Soleil
+  1 noeud n'aura que les exemples où Prévision = Pluie
+  1 noeud n'aura que les exemples où Prévision = Couvert
+- Chaque noeud ainsi créé fera un choix d'un nouvel attribut, s'il n'a pas que des "+" ou des "OUI"
+
+Récap' :
+- Une instance d'arbre (classe Arbre) créé un noeud racine (classe Noeud) en lui passant le jeu complet
+  L'arbre execute le noeud racine (racine.start())
+- Chaque noeud choisit un attribut et créé des noeuds fils, ssi ce n'est pas une feuille pure
