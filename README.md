@@ -1,4 +1,5 @@
 # ArbreDecisionM1
+
 Construire et post-élaguer un arbre de décision (projet d'option IA M1 info 2017)
 
 ## Termes employés
@@ -23,12 +24,12 @@ camelCase (nomMethode)
 
 ### Commentaire en début de classe
 
-    /**
-     * NomClasse
-     *
-     * Cette classe permet d'instancier un ... 
-     * Un objet de type ... instancie cette classe dans la methode ...
-     */
+	/**
+	 * NomClasse
+	 *
+	 * Cette classe permet d'instancier un ... 
+	 * Un objet de type ... instancie cette classe dans la methode ...
+	 */
 
 ## Structures utilisées
 
@@ -49,3 +50,7 @@ Classe Noeud qui contient :
 Classe JeuDonnees qui contient :
 * Une matrice de chaines de caractères (autant de colonnes qu'il y a d'attributs et autant de lignes qu'il y a d'exemples)
 * Les attributs et leur valeur précédemment choisis (liste)
+
+
+http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html
+https://github.com/ThibautRoperch/ArbreDecisionM1#arbredecisionm1
