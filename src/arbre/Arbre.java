@@ -2,27 +2,34 @@ package arbre;
 
 import java.io.*;
 
+import donnees.JeuDonnees;
+import modele.Modele;
+
 public class Arbre {
 	
-	protected Noeud noeud_racine; //faire les tests pour déterminer si le noeud est une feuille pure
-	protected Arbre fils1;
-	protected Arbre fils2;
+	protected JeuDonnees jeu_apprentissage;
+	protected Noeud noeud_racine;
 	
-	public Arbre() {
-		//calculer le meilleur attribut à mettre en noeud racine, puis remplir les fils. Puis recommencer sur les fils.
+	public Arbre(JeuDonnees donnees) {
+		this.jeu_apprentissage = donnees;
+		this.noeud_racine = new Noeud(this.jeu_apprentissage);
+	}
 
-	} 
+	public void construire(int k) {
+		this.noeud_racine.start();
+	}
 
-	//Calcule le gain pour choisir le meilleur attribut.
-	//Prendre le jeu d'apprentissage en paramètre maybe ? 
-	public int gain(int positif, int negatif) {
-		//return positif*(log(positif/positif+negatif)-log(P/P+N));
+	public void postElaguer(JeuDonnees donnees) {
 
-		//Appeler la fonction pour chaque attribut, et mettre à jour le
+	}
+
+	public Modele genererModele() {
+		return new Modele();
 	}
 
 	public static void main(String[] args) {
-		Arbre a = new Arbre();
+		//Arbre a = new Arbre(new JeuDonnees("../jeux/vote.arff"));
+		//a.genererArbre();
 	}
 
 }

@@ -1,6 +1,9 @@
-
 import java.io.*;
 import java.util.*;
+
+import arbre.Arbre;
+import donnees.JeuDonnees;
+import modele.Modele;
 
 public class Main {
 
@@ -24,11 +27,11 @@ public class Main {
 
 		Arbre arbre_decision = new Arbre(jeu_app);
 		arbre_decision.construire(k); // c'est là qu'il faut donner le coeff k ?
-		arbre_decision.postElagage(); // c'est là qu'il faut post-élaguer ?
+		arbre_decision.postElaguer(jeu_test); // c'est là qu'il faut post-élaguer ?
 
 		// 4. Construction du modèle (instance de la classe Modele) associé à l'arbre de décision
 
-		Model modele = arbre_decision.getModel();
+		Modele modele = arbre_decision.genererModele();
 
 		// 5. Test du modèle avec le jeu de test				Un modèle est un ensemble de règles ou d'hypothèses
 		modele.tester(jeu_test); // String resultat_test = modele.tester(jeu_test); ?

@@ -16,10 +16,6 @@ arbre:
 	@echo "# Création d'un arbre de test"
 	java -cp bin arbre.Arbre
 	
-noeud:
-	@echo "# Création d'un noeud de test"
-	java -cp bin arbre.Noeud
-	
 # nettoyage
 
 clean:
