@@ -12,7 +12,7 @@ public class Noeud {
 	protected int nb_exemples;         //Taille de la matrice, on la sort de chais pas trop où 
 	protected String[nb_exemples][nb_attributs];
 	*/
-	JeuDonnees jeu_de_donnees;
+	protected JeuDonnees jeu_de_donnees;
 
 	public Noeud() {
 		
