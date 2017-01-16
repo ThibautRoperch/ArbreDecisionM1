@@ -28,8 +28,8 @@ public class Arbre {
 	}
 
 	public static void main(String[] args) {
-		//Arbre a = new Arbre(new JeuDonnees("../jeux/vote.arff"));
-		//a.genererArbre();
+		Arbre a = new Arbre(new JeuDonnees("../jeux/vote.arff"));
+		a.genererArbre();
 	}
 
 }

@@ -29,7 +29,9 @@ public class Noeud extends Thread {
 			ArrayList<String> valeurs_possibles = jeu_de_donnees.valeursPossibles(attribut_choisi);
 			// Créer autant de noeuds fils qu'il y a de valeurs pour l'attribut choisi
 			for (String valeur : valeurs_possibles) {
-				// nouveau jeu de données : juste enlever de la liste des attributs l'attribut utilisé par le noeud
+				// Créer un nouveau jeu de données pour le fils à partir
+				// Partir du jeu de données du noeud actuel et enlever de la liste l'attribut utilisé par le noeud
+
 			}
 		}
 	}
