@@ -45,6 +45,29 @@ public class JeuDonnees {
 	}
 
 	/**
+	 * Retourne les attributs candidats à une évaluation
+	 * La liste des attributs candidats est la liste des attributs - l'attribut classe (qui est le dernier attribut de la liste)
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> attributsCandidats() {
+		ArrayList<String> res = new ArrayList<String>();
+		String[] attributs = (String[]) this.attributs.keySet().toArray();
+		for (int i = 0; i < attributs.length - 1; ++i) {
+			res.add(attributs[i]);
+		}
+		return res;
+	}
+
+	/**
+	 * Retourne les valeurs possibles pour un candidat donné en paramètre
+	 * @param attribut
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> valeursPossibles(String attribut) {
+		return this.attributs.get(attribut);
+	}
+
+	/**
 	 * Retourne le nombre de classes différentes dans ce jeu de données
 	 * @return int
 	 */
