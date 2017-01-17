@@ -28,10 +28,13 @@ public class Noeud extends Thread {
 			// Récupérer auprès du jeu de données les valeurs possibles pour l'attribut choisi
 			ArrayList<String> valeurs_possibles = jeu_de_donnees.valeursPossibles(attribut_choisi);
 			// Créer autant de noeuds fils qu'il y a de valeurs pour l'attribut choisi
-			for (String valeur : valeurs_possibles) {
-				// Créer un nouveau jeu de données pour le fils à partir
-				// Partir du jeu de données du noeud actuel et enlever de la liste l'attribut utilisé par le noeud
-
+			for (String valeur_possible : valeurs_possibles) {
+				// Créer un nouveau jeu de données pour le fils
+				// Partir du jeu de données du noeud actuel et enlever les exemples où attribut_choisi != valeur
+				// Mettre dans le modèle du jeu de données l'attribut et la valeur utilisés par le noeud
+				JeuDonnees donnees_fils = new JeuDonnees(this.jeu_de_donnees.attributs(), this.jeu_de_donnees.selectionnerExemplesOu(attribut_choisi, valeur_possible));
+				donnees_fils.ajouterAuModele(attribut_choisi, valeur_possible);
+				enfants.add(new Noeud(donnees_fils));
 			}
 		}
 	}
@@ -57,6 +60,11 @@ public class Noeud extends Thread {
 		//return positif*(log(positif/positif+negatif)-log(P/P+N));
 
 		//Appeler la fonction pour chaque attribut, et mettre à jour le
+		return 0;
+	}
+
+	public String toString() {
+		return "noeud tostring à coder";
 	}
 
 }
