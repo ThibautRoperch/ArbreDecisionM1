@@ -31,4 +31,11 @@ public class LectureFichier {
 		}
 
 	}
+
+
+	public static void remplirDepuisFichier(JeuDonnees donnees, String nom_fichier) { // static permet d'appeller la fonction sans avoir besoin d'instancier la classe dans une variable
+		// Lecture du fichier et remplissage du jeu donné en paramètre
+		// donnees.ajouterAttribut(String attribut, ArrayList<String> valeurs)
+		// donnees.ajouterExemple(ArrayList<String> exemple)
+	}
 }
