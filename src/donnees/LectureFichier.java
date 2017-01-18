@@ -10,24 +10,6 @@ public class LectureFichier {
 		String fichier = nom_fichier;
 		String lignes_fichier = new String();
 
-		// TEST 
-		/* 
-		String[] test; 
-		String[] res;
-		String ligne_test = "bonjour 'bla' 'bla' 'bli' 'blo' 'blu' 'bla' 'bli' \n on continue ici 'lol' 'mdr' bob";
-		test = ligne_test.split("\'");
-		for(int x=0; x<=ligne_test.length(); x++) {
-			System.out.println(test[x]);
-			//res[x]=test[x];
-		}
-
-
-		// FIN TEST 
-		*/
-
-
-
-		
 		// lecture du fichier texte
 		try {
 			InputStream ips = new FileInputStream(fichier); 
@@ -36,30 +18,48 @@ public class LectureFichier {
 			String ligne_lue;
 			
 			boolean lire_fichier = ((ligne_lue = br.readLine()) != null) ? true : false;
-			//String declaration_section = new String();
 
 			while (lire_fichier) {
-				lignes_fichier += "\n" + ligne_lue;
+				lignes_fichier += "\n" + ligne_lue;		//Pas utile je crois
 				ligne_lue = br.readLine();
 				String[] ligne_split;
 
-				//JE SAIS PAS POURQUOI CA BOUCLE PAS MAIS G PALTEMP
+
 				if(ligne_lue.contains("@attribute")) {
 					ligne_split = ligne_lue.split("\'");
-					for (int x=1; x<ligne_lue.length(); x++) {
-						
+					for (int x=1; x<ligne_split.length; x++) {	
+						//Avant d'ajouter, on vérifie que le caractère n'est pas une , ou { ou ]. 
 						if(!(ligne_split[x].contains("}") || ligne_split[x].contains(",") || ligne_split[x].contains("{"))) {
-							//Avant d'ajouter, on vérifie que le caractère n'est pas une , ou { ou ]. 
 
 							//jeu.ajouter(ligne_split[x]);	
 							System.out.println(ligne_split[x]);
-						} 
+						}
 					}
 				}
-				
-				
-				if (ligne_lue == null) lire_fichier = false;
+
+				//On détecte quand commence la déclaration de data puis on lit ligne par ligne pour alimenter le jeu de données 
+				if(ligne_lue.contains("@data")) {
+					while(lire_fichier) {
+						//Passage à la ligne suivante pour éviter la ligne @data
+						ligne_lue = br.readLine();
+						
+						//On remplace les ' par "" (rien)
+						ligne_lue = ligne_lue.replace("'", "");
+						//Puis on split par les virgules ,
+						ligne_split = ligne_lue.split(",");
+						//On parcourt la ligne pour qui contient une ligne de data
+						for(int x=1; x<ligne_split.length; x++) {
+							//ALIMENTER LES DATA ICI 
+							System.out.println(ligne_split[x]);
+						}
+
+						//Si on arrive à la fin du fichier, on stop la lecture
+						if (ligne_lue == null) lire_fichier = false;
+					}
+					
+				}				
 			}
+
 			br.close();
 		}
 		catch (Exception e) {
