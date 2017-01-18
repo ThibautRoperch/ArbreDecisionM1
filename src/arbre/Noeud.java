@@ -30,6 +30,7 @@ public class Noeud extends Thread {
 			String attribut_choisi = meilleurAttribut();
 			// Récupérer auprès du jeu de données les valeurs possibles pour l'attribut choisi
 			ArrayList<String> valeurs_possibles = jeu_de_donnees.valeursPossibles(attribut_choisi);
+			System.out.println(valeurs_possibles);
 			// Créer autant de noeuds fils qu'il y a de valeurs pour l'attribut choisi
 			for (String valeur_possible : valeurs_possibles) {
 				// Créer un nouveau jeu de données pour le fils, pour cela :
@@ -72,6 +73,11 @@ public class Noeud extends Thread {
 		return "crime";
 	}
 
+	private int gain(String attribut) {
+		return 0;
+	}
+
+	/*
 	//calculer le meilleur attribut à mettre en noeud racine, puis remplir les fils. Puis recommencer sur les fils.
 	//Calcule le gain pour choisir le meilleur attribut.
 	//Prendre le jeu d'apprentissage en paramètre maybe ? 
@@ -81,13 +87,14 @@ public class Noeud extends Thread {
 		//Appeler la fonction pour chaque attribut, et mettre à jour le
 		return 0;
 	}
+	*/
 
 	public String toString() {
-		//String res = "\n----- NOEUD -----\n" + this.jeu_de_donnees + "\n";
-		//for (Noeud fils : this.noeuds_fils) {
-			// res += fils;
-		//}
-		return "";
+		String res = "\n----- NOEUD -----\n" + this.jeu_de_donnees + "\n";
+		for (Noeud fils : this.noeuds_fils) {
+			res += fils;
+		}
+		return res;
 	}
 
 }

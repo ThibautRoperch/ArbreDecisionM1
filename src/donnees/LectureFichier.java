@@ -58,14 +58,13 @@ public class LectureFichier {
 							donnee_ligne.add(ligne_split[x]);
 						}
 
-						System.out.println(donnee_ligne);
 						donnees.ajouterExemple(donnee_ligne);
 
 						//Si on arrive à la fin du fichier, on stop la lecture
 						if (ligne_lue == null) lire_fichier = false;
 					}
 					
-				}				
+				}
 			}
 
 			br.close();
@@ -73,7 +72,7 @@ public class LectureFichier {
 		catch (Exception e) {
 			System.out.println(e.toString());
 		}
-	} 
+	}
 
 	public static void main (String[] args) {
 		JeuDonnees donnees = new JeuDonnees("jeux/vote.arff");

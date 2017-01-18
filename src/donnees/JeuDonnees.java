@@ -122,19 +122,15 @@ public class JeuDonnees {
 
 		// Pour chaque exemple
 		for (ArrayList<String> exemple : this.exemples) {
-			if (exemple.size() > 0) {
-				// La classe est à la dernière case du tableau (dernier attribut)
-				String classe_exemple = exemple.get(exemple.size() - 1);
-				// Si le tableau récap ne contient pas encore la classe de cet exemple
-				if (!classes.containsKey(classe_exemple)) {
-					// Ajouter au tableau récap la classe de l'exemple
-					classes.put(classe_exemple, 1);
-				} else {
-					// Augmenter le nombre d'exemples de cette classe
-					classes.put(classe_exemple, classes.get(classe_exemple) + 1);
-				}
+			// La classe est à la dernière case du tableau (dernier attribut)
+			String classe_exemple = exemple.get(exemple.size() - 1);
+			// Si le tableau récap ne contient pas encore la classe de cet exemple
+			if (!classes.containsKey(classe_exemple)) {
+				// Ajouter au tableau récap la classe de l'exemple
+				classes.put(classe_exemple, 1);
 			} else {
-				System.out.println("exemple vide !! :'(");
+				// Augmenter le nombre d'exemples de cette classe
+				classes.put(classe_exemple, classes.get(classe_exemple) + 1);
 			}
 		}
 
