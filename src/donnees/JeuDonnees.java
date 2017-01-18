@@ -150,10 +150,11 @@ public class JeuDonnees {
 			if (classe.getValue() > max) {
 				max = classe.getValue();
 			} else {
-				classe.remove(classe.getKey());
+				classes.remove(classe.getKey());
 			}
 		}
 		// si egalité, comment on fait ? y'aura deux trucs ou + dans classes, comment choisir ?
+		// get (dans l'arbre) les trucs édjà trouvé (faire une liste)
 		return "";
 	}
 
