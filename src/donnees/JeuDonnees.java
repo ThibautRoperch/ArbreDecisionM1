@@ -26,7 +26,7 @@ public class JeuDonnees {
 	 */
 	public JeuDonnees(String nom_fichier) {
 		this();
-		// LectureFichier(this, nom_fichier);
+		// LectureFichier.remplirDepuisFichier(this, nom_fichier);
 	}
 
 	/**
@@ -34,10 +34,10 @@ public class JeuDonnees {
 	 * @param attributs
 	 * @param exemples
 	 */
-	public JeuDonnees(HashMap<String, ArrayList<String>> attributs, ArrayList<ArrayList<String>> exemples) {
-		this();
+	public JeuDonnees(HashMap<String, ArrayList<String>> attributs, ArrayList<ArrayList<String>> exemples, Modele modele) {
 		this.attributs = attributs;
 		this.exemples = exemples;
+		this.modele = modele;
 	}
 
 	/**
@@ -49,6 +49,14 @@ public class JeuDonnees {
 		res.putAll(this.attributs);
 		return res;
 	}
+
+	/**
+	 * Retourne une copie du modèle
+	 * @return Modele
+	 */
+	 public Modele modele() {
+		 return this.modele.clone();
+	 }
 	
 	/**
 	 * Ajoute un attribut et ses valeurs possibles
@@ -74,18 +82,28 @@ public class JeuDonnees {
 	 */
 	public ArrayList<String> attributsCandidats() {
 		ArrayList<String> res = new ArrayList<String>();
-		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
 
 		// Pour chaque attribut
-		for (int i = 0; i < attributs.length - 1; ++i) {
-			res.add(attributs[i]);
+		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
+			// Ajoute le nom de l'attribut à la liste recap
+			res.add(attribut.getKey());
 		}
-
+		
 		return res;
 	}
 
 	/**
-	 * Retourne les valeurs possibles pour un candidat donné en paramètre
+	 * Retourne l'attribut classe
+	 * @return String
+	 */
+	public String attributClasse() {
+		ArrayList<String> res = new ArrayList<String>();
+		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		return (String) attributs[attributs.length - 1];
+	}
+
+	/**
+	 * Retourne les valeurs possibles pour un attribut donné en paramètre
 	 * @param attribut
 	 * @return ArrayList<String>
 	 */
@@ -94,24 +112,49 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Retourne le nombre de classes différentes dans les exemples
-	 * @return int
+	 * Retourne la liste des différentes valeurs de la classe des exemples
+	 * La liste est un tableau associatif avec en clef la classe et en valeur le nombre d'exemples ayant cette classe
+	 * @return HashMap<String, int>
 	 */
-	public int nombreDeClassesExemples() {
-		ArrayList<String> classes = new ArrayList<String>();
+	public HashMap<String, Integer> valeursClasseExemples() {
+		HashMap<String, Integer> classes = new HashMap<String, Integer>();
 
 		// Pour chaque exemple
 		for (ArrayList<String> exemple : this.exemples) {
-			// Si le tableau récap ne contient pas encore la classe de cet exemple
-			// La classe de cet exemple est la dernière valeur du tableau
+			// La classe est à la dernière case du tableau (dernier attribut)
 			String classe_exemple = exemple.get(exemple.size()-1);
-			if (!classes.contains(classe_exemple)) {
+			// Si le tableau récap ne contient pas encore la classe de cet exemple
+			if (!classes.containsKey(classe_exemple)) {
 				// Ajouter au tableau récap la classe de l'exemple
-				classes.add(classe_exemple);
+				classes.put(classe_exemple, 1);
+			} else {
+				// Augmenter le nombre d'exemples de cette classe
+				classes.put(classe_exemple, classes.get(classe_exemple)+1);
 			}
 		}
 
-		return classes.size();
+		return classes;
+	}
+
+	/**
+	 * Retourne la classe dominante parmi les exemples
+	 * @return String
+	 */
+	public String classeDominante() {
+		HashMap<String, Integer> classes = this.valeursClasseExemples();
+		int max = 0;
+		// Pour chaque classe
+		for (Map.Entry<String, Integer> classe : classes.entrySet()) {
+			// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplascer
+			// Sinon, supprimer la classe (en local)
+			if (classe.getValue() > max) {
+				max = classe.getValue();
+			} else {
+				classe.remove(classe.getKey());
+			}
+		}
+		// si egalité, comment on fait ? y'aura deux trucs ou + dans classes, comment choisir ?
+		return "";
 	}
 
 	/**
@@ -121,8 +164,8 @@ public class JeuDonnees {
 	 */
 	public ArrayList<ArrayList<String>> selectionnerExemplesOu(String attribut, String valeur) {
 		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		int indice_attribut = Arrays.asList(attributs).indexOf("Lily Monte Negro");
+		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		int indice_attribut = Arrays.asList(attributs).indexOf(attribut);
 
 		// Pour chaque exemple
 		for (ArrayList<String> exemple : this.exemples) {
@@ -137,21 +180,21 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Ajoute au modèle l'attribut et sa valeur
+	 * Ajoute au modèle l'attribut et sa valeur en tant que condition
 	 * Enlève de la liste des attributs l'attribut donné en paramètre, ainsi que des exemples
 	 * @param attribut
 	 * @param valeur
 	 */
-	public void ajouterAuModele(String attribut, String valeur) {
+	public void enregistrerCondition(String attribut, String valeur) {
 		// Ajoute au modèle l'attribut et sa valeur
-		this.modele.ajouterAttributValeur(attribut, valeur);
+		this.modele.ajouterCondition(attribut, valeur);
 
 		// Supprime l'attribut de la liste des attributs
 		this.attributs.remove(attribut);
 
 		// Supprime la colonne attribut des exemples
-		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		int indice_attribut = Arrays.asList(attributs).indexOf("Lily Monte Negro");
+		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		int indice_attribut = Arrays.asList(attributs).indexOf(attribut);
 		// Pour chaque exemple
 		for (ArrayList<String> exemple : this.exemples) {
 			// Supprime la valeur à la colonne de l'attribut
@@ -159,14 +202,23 @@ public class JeuDonnees {
 		}
 	}
 
+	/**
+	 * Ajoute au modèle l'attribut classe et sa valeur en tant que conclusion
+	 * @param valeur
+	 */
+	public void enregistrerConclusion(String valeur) {
+		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		String classe = (String) attributs[attributs.length - 1];
+		this.modele.ajouterConclusion(classe, valeur);
+	}
+
 	public String toString() {
 		String res = "";
 
-		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-
 		// Pour chaque attribut
-		for (int i = 0; i < attributs.length - 1; ++i) {
-			res += attributs[i] + "\t";
+		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
+			// Ajoute le nom de l'attribut à la chaine
+			res += attribut.getKey() + "\t";
 		}
 
 		res += "\n";
