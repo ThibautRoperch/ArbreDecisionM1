@@ -26,7 +26,7 @@ public class JeuDonnees {
 	 */
 	public JeuDonnees(String nom_fichier) {
 		this();
-		LectureFichier.LectureFichier(jeu, nom_fichier);
+		LectureFichier.lectureFichier(this, nom_fichier);
 	}
 
 	/**
@@ -122,15 +122,19 @@ public class JeuDonnees {
 
 		// Pour chaque exemple
 		for (ArrayList<String> exemple : this.exemples) {
-			// La classe est à la dernière case du tableau (dernier attribut)
-			String classe_exemple = exemple.get(exemple.size()-1);
-			// Si le tableau récap ne contient pas encore la classe de cet exemple
-			if (!classes.containsKey(classe_exemple)) {
-				// Ajouter au tableau récap la classe de l'exemple
-				classes.put(classe_exemple, 1);
+			if (exemple.size() > 0) {
+				// La classe est à la dernière case du tableau (dernier attribut)
+				String classe_exemple = exemple.get(exemple.size() - 1);
+				// Si le tableau récap ne contient pas encore la classe de cet exemple
+				if (!classes.containsKey(classe_exemple)) {
+					// Ajouter au tableau récap la classe de l'exemple
+					classes.put(classe_exemple, 1);
+				} else {
+					// Augmenter le nombre d'exemples de cette classe
+					classes.put(classe_exemple, classes.get(classe_exemple) + 1);
+				}
 			} else {
-				// Augmenter le nombre d'exemples de cette classe
-				classes.put(classe_exemple, classes.get(classe_exemple)+1);
+				System.out.println("exemple vide !! :'(");
 			}
 		}
 
@@ -164,7 +168,7 @@ public class JeuDonnees {
 		}
 		// Sinon, choisir une classe en regardant ce qui a déjà été choisi dans l'arbre
 		else {
-			class_dominante = "En éspérant que ce cas n'arrive jamais lol";
+			classe_dominante = "En éspérant que ce cas n'arrive jamais lol";
 		}
 
 		return classe_dominante;

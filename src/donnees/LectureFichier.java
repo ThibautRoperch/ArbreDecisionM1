@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class LectureFichier {
 
 //ajouter JeuDonnees jeu, en argument (c'est pour les tests qu'il a été enlevé)
-    public LectureFichier(JeuDonnees donnees, String nom_fichier) { // throws IOException 
+	public static void lectureFichier(JeuDonnees donnees, String nom_fichier) { // throws IOException 
 		String fichier = nom_fichier;
 		String lignes_fichier = new String();
 
@@ -58,6 +58,7 @@ public class LectureFichier {
 							donnee_ligne.add(ligne_split[x]);
 						}
 
+						System.out.println(donnee_ligne);
 						donnees.ajouterExemple(donnee_ligne);
 
 						//Si on arrive à la fin du fichier, on stop la lecture
@@ -74,16 +75,9 @@ public class LectureFichier {
 		}
 	} 
 
-    public static void main (String[] args) {
+	public static void main (String[] args) {
 		JeuDonnees donnees = new JeuDonnees("jeux/vote.arff");
-        LectureFichier l = new LectureFichier(donnees, "jeux/vote.arff");
-    }
-
-
-	public static void remplirDepuisFichier(JeuDonnees donnees, String nom_fichier) { // static permet d'appeller la fonction sans avoir besoin d'instancier la classe dans une variable
-		// Lecture du fichier et remplissage du jeu donné en paramètre
-		// donnees.ajouterAttribut(String attribut, ArrayList<String> valeurs)
-		// donnees.ajouterExemple(ArrayList<String> exemple)
+		LectureFichier.lectureFichier(donnees, "jeux/vote.arff");
 	}
 
 }

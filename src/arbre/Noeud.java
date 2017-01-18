@@ -69,7 +69,7 @@ public class Noeud extends Thread {
 		// appeller la méthode de gain pr chaque attribut, mettre le meilleur resultat dans une variable
 		// retourner la variable
 
-		return "";
+		return "crime";
 	}
 
 	//calculer le meilleur attribut à mettre en noeud racine, puis remplir les fils. Puis recommencer sur les fils.
@@ -83,11 +83,11 @@ public class Noeud extends Thread {
 	}
 
 	public String toString() {
-		String res = "\n----- NOEUD -----\n" + this.jeu_de_donnees + "\n";
-		for (Noeud fils : this.noeuds_fils) {
-			res += fils;
-		}
-		return res;
+		//String res = "\n----- NOEUD -----\n" + this.jeu_de_donnees + "\n";
+		//for (Noeud fils : this.noeuds_fils) {
+			// res += fils;
+		//}
+		return "";
 	}
 
 }
