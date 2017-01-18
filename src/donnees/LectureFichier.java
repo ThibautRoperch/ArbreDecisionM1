@@ -43,24 +43,26 @@ public class LectureFichier {
 
 				//On détecte quand commence la déclaration de data puis on lit ligne par ligne pour alimenter le jeu de données 
 				if(ligne_lue.contains("@data")) {
+					//Passage à la ligne suivante pour éviter la ligne @data
+					ligne_lue = br.readLine();
 					while(lire_fichier) {
-						//Passage à la ligne suivante pour éviter la ligne @data
-						ligne_lue = br.readLine();
+						if(!ligne_lue.contains("%")) {
+							//On remplace les ' par "" (rien)
+							ligne_lue = ligne_lue.replace("'", "");
+							//Puis on split par les virgules ,
+							ligne_split = ligne_lue.split(",");
+							//On parcourt la ligne pour qui contient une ligne de data
+							ArrayList<String> donnee_ligne = new ArrayList<String>();
+							for(int x=1; x<ligne_split.length; x++) {
+								//ALIMENTER LES DATA ICI 
+								donnee_ligne.add(ligne_split[x]);
+							}
 						
-						//On remplace les ' par "" (rien)
-						ligne_lue = ligne_lue.replace("'", "");
-						//Puis on split par les virgules ,
-						ligne_split = ligne_lue.split(",");
-						//On parcourt la ligne pour qui contient une ligne de data
-						ArrayList<String> donnee_ligne = new ArrayList<String>();
-						for(int x=1; x<ligne_split.length; x++) {
-							//ALIMENTER LES DATA ICI 
-							donnee_ligne.add(ligne_split[x]);
+
+							//System.out.println(donnee_ligne);
+							donnees.ajouterExemple(donnee_ligne);
 						}
-
-						System.out.println(donnee_ligne);
-						donnees.ajouterExemple(donnee_ligne);
-
+						ligne_lue = br.readLine();
 						//Si on arrive à la fin du fichier, on stop la lecture
 						if (ligne_lue == null) lire_fichier = false;
 					}
