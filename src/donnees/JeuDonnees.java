@@ -26,7 +26,7 @@ public class JeuDonnees {
 	 */
 	public JeuDonnees(String nom_fichier) {
 		this();
-		// LectureFichier.remplirDepuisFichier(this, nom_fichier);
+		LectureFichier.LectureFichier(jeu, nom_fichier);
 	}
 
 	/**
@@ -143,7 +143,9 @@ public class JeuDonnees {
 	 */
 	public String classeDominante() {
 		HashMap<String, Integer> classes = this.valeursClasseExemples();
+		String classe_dominante = "";
 		int max = 0;
+
 		// Pour chaque classe
 		for (Map.Entry<String, Integer> classe : classes.entrySet()) {
 			// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplacer
@@ -154,9 +156,18 @@ public class JeuDonnees {
 				classes.remove(classe.getKey());
 			}
 		}
-		// si egalité, comment on fait ? y'aura deux trucs ou + dans classes, comment choisir ?
-		// get (dans l'arbre) les trucs édjà trouvé (faire une liste)
-		return "";
+
+		// S'il n'y a plus qu'une seule classe dans la map
+		if (classes.size() == 1) {
+			// Récupérer le nom de la classe (1er indice de la liste des clefs de la map)
+			classe_dominante = (String) classes.keySet().toArray()[0];
+		}
+		// Sinon, choisir une classe en regardant ce qui a déjà été choisi dans l'arbre
+		else {
+			class_dominante = "En éspérant que ce cas n'arrive jamais lol";
+		}
+
+		return classe_dominante;
 	}
 
 	/**
