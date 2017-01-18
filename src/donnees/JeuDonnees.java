@@ -3,19 +3,21 @@ package donnees;
 import java.io.*;
 import java.util.*;
 
-import donnees.*;
+import modele.Modele;
 
 public class JeuDonnees {
     
 	protected HashMap<String, ArrayList<String>> attributs;
-	protected ArrayList<ArrayList<String>> donnees;
+	protected ArrayList<ArrayList<String>> exemples;
+	protected Modele modele;
 
 	/**
 	 * Construit un jeu de données vide
 	 */
 	public JeuDonnees() {
 		this.attributs = new HashMap<String, ArrayList<String>>();
-		this.donnees = new ArrayList<ArrayList<String>>();
+		this.exemples = new ArrayList<ArrayList<String>>();
+		this.modele = new Modele();
 	}
 
 	/**
@@ -24,9 +26,30 @@ public class JeuDonnees {
 	 */
 	public JeuDonnees(String nom_fichier) {
 		this();
-		LectureFichier(this, nom_fichier);
+		// LectureFichier(this, nom_fichier);
 	}
 
+	/**
+	 * Construit un jeu de données à partir d'attributs et d'exemples
+	 * @param attributs
+	 * @param exemples
+	 */
+	public JeuDonnees(HashMap<String, ArrayList<String>> attributs, ArrayList<ArrayList<String>> exemples) {
+		this();
+		this.attributs = attributs;
+		this.exemples = exemples;
+	}
+
+	/**
+	 * Retourne une copie des attributs
+	 * @return HashMap<String, ArrayList<String>>
+	 */
+	public HashMap<String, ArrayList<String>> attributs() {
+		HashMap<String, ArrayList<String>> res = new HashMap<String, ArrayList<String>>();
+		res.putAll(this.attributs);
+		return res;
+	}
+	
 	/**
 	 * Ajoute un attribut et ses valeurs possibles
 	 * @param attribut
@@ -41,7 +64,7 @@ public class JeuDonnees {
 	 * @param exemple
 	 */
 	public void ajouterExemple(ArrayList<String> exemple) {
-		this.donnees.add(exemple);
+		this.exemples.add(exemple);
 	}
 
 	/**
@@ -51,10 +74,13 @@ public class JeuDonnees {
 	 */
 	public ArrayList<String> attributsCandidats() {
 		ArrayList<String> res = new ArrayList<String>();
-		String[] attributs = (String[]) this.attributs.keySet().toArray();
+		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+
+		// Pour chaque attribut
 		for (int i = 0; i < attributs.length - 1; ++i) {
 			res.add(attributs[i]);
 		}
+
 		return res;
 	}
 
@@ -68,14 +94,14 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Retourne le nombre de classes différentes dans ce jeu de données
+	 * Retourne le nombre de classes différentes dans les exemples
 	 * @return int
 	 */
 	public int nombreDeClassesExemples() {
 		ArrayList<String> classes = new ArrayList<String>();
 
 		// Pour chaque exemple
-		for (ArrayList<String> exemple : this.donnees) {
+		for (ArrayList<String> exemple : this.exemples) {
 			// Si le tableau récap ne contient pas encore la classe de cet exemple
 			// La classe de cet exemple est la dernière valeur du tableau
 			String classe_exemple = exemple.get(exemple.size()-1);
@@ -88,10 +114,79 @@ public class JeuDonnees {
 		return classes.size();
 	}
 
+	/**
+	 * Retourne les exemples du jeu de données où attribut = valeur donnés en paramètre
+	 * @param attribut
+	 * @param valeur
+	 */
+	public ArrayList<ArrayList<String>> selectionnerExemplesOu(String attribut, String valeur) {
+		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		int indice_attribut = Arrays.asList(attributs).indexOf("Lily Monte Negro");
+
+		// Pour chaque exemple
+		for (ArrayList<String> exemple : this.exemples) {
+			// Si la valeur de l'attribut de l'exemple = la valeur du paramètre
+			if (exemple.get(indice_attribut).equals(valeur)) {
+				// Enregistrer l'exemple
+				res.add(exemple);
+			}
+		}
+
+		return res;
+	}
+
+	/**
+	 * Ajoute au modèle l'attribut et sa valeur
+	 * Enlève de la liste des attributs l'attribut donné en paramètre, ainsi que des exemples
+	 * @param attribut
+	 * @param valeur
+	 */
+	public void ajouterAuModele(String attribut, String valeur) {
+		// Ajoute au modèle l'attribut et sa valeur
+		this.modele.ajouterAttributValeur(attribut, valeur);
+
+		// Supprime l'attribut de la liste des attributs
+		this.attributs.remove(attribut);
+
+		// Supprime la colonne attribut des exemples
+		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		int indice_attribut = Arrays.asList(attributs).indexOf("Lily Monte Negro");
+		// Pour chaque exemple
+		for (ArrayList<String> exemple : this.exemples) {
+			// Supprime la valeur à la colonne de l'attribut
+			exemple.remove(indice_attribut);
+		}
+	}
+
+	public String toString() {
+		String res = "";
+
+		String[] attributs = (String[]) this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+
+		// Pour chaque attribut
+		for (int i = 0; i < attributs.length - 1; ++i) {
+			res += attributs[i] + "\t";
+		}
+
+		res += "\n";
+
+		// Pour chaque exemple
+		for (ArrayList<String> exemple : this.exemples) {
+			// Pour chaque valeur (de la colonne de chaque attribut)
+			for (String valeur : exemple) {
+				res += valeur + "\t";
+			}
+			res += "\n";
+		}		
+
+		return res;
+	}
+
 }
 
 /*
-	donnees =	[
+	exemples =	[
 					1 : [ "aaa", "bbb", "OUI" ],
 					2 : [ "aaa", "bbb", "NON" ]
 				]

@@ -27,9 +27,14 @@ public class Arbre {
 		return new Modele();
 	}
 
+	public String toString() {
+		return jeu_apprentissage + "\n" + noeud_racine;
+	}
+
 	public static void main(String[] args) {
 		Arbre a = new Arbre(new JeuDonnees("../jeux/vote.arff"));
-		a.genererArbre();
+		a.construire(5);
+		System.out.println(a);
 	}
 
 }
