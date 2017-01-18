@@ -34,7 +34,7 @@ public class Arbre {
 	public static void main(String[] args) {
 		Arbre a = new Arbre(new JeuDonnees("jeux/vote.arff"));
 		a.construire();
-		System.out.println(a);
+		//System.out.println(a);
 		// a.postElaguer(jeu 2, coeef v)
 	}
 
