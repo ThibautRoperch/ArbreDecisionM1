@@ -1,7 +1,5 @@
 package arbre;
 
-import java.io.*;
-
 import donnees.JeuDonnees;
 import modele.Modele;
 
@@ -15,11 +13,13 @@ public class Arbre {
 		this.noeud_racine = new Noeud(this.jeu_apprentissage);
 	}
 
-	public void construire(int k) {
-		this.noeud_racine.start();
+	public void construire() {
+		if (this.jeu_apprentissage.estBienConstruit()) {
+			this.noeud_racine.start();
+		}
 	}
 
-	public void postElaguer(JeuDonnees donnees) {
+	public void postElaguer(JeuDonnees donnees, int coeff_v) {
 
 	}
 
@@ -33,8 +33,9 @@ public class Arbre {
 
 	public static void main(String[] args) {
 		Arbre a = new Arbre(new JeuDonnees("../jeux/vote.arff"));
-		a.construire(5);
+		a.construire();
 		System.out.println(a);
+		// a.postElaguer(jeu 2, coeef v)
 	}
 
 }

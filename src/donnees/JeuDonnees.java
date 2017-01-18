@@ -1,7 +1,9 @@
 package donnees;
 
-import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import modele.Modele;
 
@@ -9,7 +11,6 @@ public class JeuDonnees {
     
 	protected HashMap<String, ArrayList<String>> attributs;
 	protected ArrayList<ArrayList<String>> exemples;
-	protected Modele modele;
 
 	/**
 	 * Construit un jeu de données vide
@@ -17,7 +18,6 @@ public class JeuDonnees {
 	public JeuDonnees() {
 		this.attributs = new HashMap<String, ArrayList<String>>();
 		this.exemples = new ArrayList<ArrayList<String>>();
-		this.modele = new Modele();
 	}
 
 	/**
@@ -34,12 +34,14 @@ public class JeuDonnees {
 	 * @param attributs
 	 * @param exemples
 	 */
-	public JeuDonnees(HashMap<String, ArrayList<String>> attributs, ArrayList<ArrayList<String>> exemples, Modele modele) {
+	public JeuDonnees(HashMap<String, ArrayList<String>> attributs, ArrayList<ArrayList<String>> exemples) {
 		this.attributs = attributs;
 		this.exemples = exemples;
-		this.modele = modele;
 	}
 
+	public boolean estBienConstruit() {
+		return this.attributs.size() > 0;
+	}
 	/**
 	 * Retourne une copie des attributs
 	 * @return HashMap<String, ArrayList<String>>
@@ -49,14 +51,6 @@ public class JeuDonnees {
 		res.putAll(this.attributs);
 		return res;
 	}
-
-	/**
-	 * Retourne une copie du modèle
-	 * @return Modele
-	 */
-	 public Modele modele() {
-		 return this.modele.clone();
-	 }
 	
 	/**
 	 * Ajoute un attribut et ses valeurs possibles
@@ -77,7 +71,9 @@ public class JeuDonnees {
 
 	/**
 	 * Retourne les attributs candidats à une évaluation
-	 * La liste des attributs candidats est la liste des attributs - l'attribut classe (qui est le dernier attribut de la liste)
+	 * La liste des attributs candidats est la liste des attributs excluant :
+	 * - l'attribut de classe (qui est le dernier attribut de la liste des attributs)
+	 * - les attributs qui n'ont qu'une valeur possible (ou moins), car les valeurs sont supprimées à l'issue du choix d'un attribut candidat par le noeud
 	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> attributsCandidats() {
@@ -85,15 +81,20 @@ public class JeuDonnees {
 
 		// Pour chaque attribut
 		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
-			// Ajoute le nom de l'attribut à la liste recap
-			res.add(attribut.getKey());
+			// Ajoute le nom de l'attribut à la liste recap si celui-ci a au moins une valeur possible
+			if (attribut.getValue().size() > 1) {
+				res.add(attribut.getKey());
+			}
 		}
-		
+
+		// Enlève le dernier attribut qui est l'attribut de classe
+		res.remove(res.size() - 1);
+
 		return res;
 	}
 
 	/**
-	 * Retourne l'attribut classe
+	 * Retourne l'attribut de classe
 	 * @return String
 	 */
 	public String attributClasse() {
@@ -145,7 +146,7 @@ public class JeuDonnees {
 		int max = 0;
 		// Pour chaque classe
 		for (Map.Entry<String, Integer> classe : classes.entrySet()) {
-			// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplascer
+			// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplacer
 			// Sinon, supprimer la classe (en local)
 			if (classe.getValue() > max) {
 				max = classe.getValue();
@@ -181,36 +182,14 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Ajoute au modèle l'attribut et sa valeur en tant que condition
-	 * Enlève de la liste des attributs l'attribut donné en paramètre, ainsi que des exemples
+	 * Enlève de la liste des attributs les valeurs de l'attribut donné en paramètre sauf celle donnée en paramètre
 	 * @param attribut
 	 * @param valeur
 	 */
-	public void enregistrerCondition(String attribut, String valeur) {
-		// Ajoute au modèle l'attribut et sa valeur
-		this.modele.ajouterCondition(attribut, valeur);
-
-		// Supprime l'attribut de la liste des attributs
-		this.attributs.remove(attribut);
-
-		// Supprime la colonne attribut des exemples
-		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		int indice_attribut = Arrays.asList(attributs).indexOf(attribut);
-		// Pour chaque exemple
-		for (ArrayList<String> exemple : this.exemples) {
-			// Supprime la valeur à la colonne de l'attribut
-			exemple.remove(indice_attribut);
-		}
-	}
-
-	/**
-	 * Ajoute au modèle l'attribut classe et sa valeur en tant que conclusion
-	 * @param valeur
-	 */
-	public void enregistrerConclusion(String valeur) {
-		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		String classe = (String) attributs[attributs.length - 1];
-		this.modele.ajouterConclusion(classe, valeur);
+	public void enregistrerAttribut(String attribut, String valeur) {
+		// Supprime les valeurs de l'attribut, sauf celle données en paramètre
+		this.attributs.get(attribut).clear();
+		this.attributs.get(attribut).add(valeur);
 	}
 
 	public String toString() {
