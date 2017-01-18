@@ -1,7 +1,6 @@
 package arbre;
 
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
 
 import donnees.JeuDonnees;
 
@@ -25,13 +24,8 @@ public class Noeud extends Thread {
 	 * Si le noeud est pure ou s'il n'a pas d'attributs candidats dans son jeu de données, alors c'est une feuille
 	 */
 	public void run() {
-		// S'il n'existe pas d'attributs candidats, déterminer la classe du noeud alors devenu feuille
-		if (this.jeu_de_donnees.attributsCandidats().size() == 0) {
-			String valeur_classe = this.jeu_de_donnees.classeDominante();
-			this.jeu_de_donnees.enregistrerConclusion(valeur_classe);
-		}
-		// Sinon, si le noeud n'est pas pure, créer des noeuds fils
-		else if (!this.estPure()) {
+		// Si le noeud n'est pas pure et s'il y a des attributs à évaluer, créer des noeuds fils
+		if (!this.estPure() && this.jeu_de_donnees.attributsCandidats().size() > 0) {
 			// Choisir un attribut en fonction du gain d'information de chacune de ses valeurs
 			String attribut_choisi = meilleurAttribut();
 			// Récupérer auprès du jeu de données les valeurs possibles pour l'attribut choisi
@@ -42,14 +36,19 @@ public class Noeud extends Thread {
 				// Partir du jeu de données du noeud actuel et enlever les exemples où attribut_choisi != valeur
 				// Mettre dans le modèle du jeu de données l'attribut et la valeur utilisés par le noeud
 				JeuDonnees donnees_fils = new JeuDonnees(	this.jeu_de_donnees.attributs(),
-															this.jeu_de_donnees.selectionnerExemplesOu(attribut_choisi, valeur_possible),
-															this.jeu_de_donnees.modele()	);
-				donnees_fils.enregistrerCondition(attribut_choisi, valeur_possible);
+															this.jeu_de_donnees.selectionnerExemplesOu(attribut_choisi, valeur_possible)	);
+				donnees_fils.enregistrerAttribut(attribut_choisi, valeur_possible);
 				// Créer à partir des données, enregistrer et lancer le noeud fils
 				Noeud noeud_fils = new Noeud(donnees_fils);
 				noeuds_fils.add(noeud_fils);
 				noeud_fils.start();
 			}
+		}
+		// Sinon, le noeud est une feuille, enregistrer la classe dominante des exemples en tant que conclusion dans le modèle du jeu de données
+		else {
+			String attribut_classe = this.jeu_de_donnees.attributClasse();
+			String valeur_classe = this.jeu_de_donnees.classeDominante();
+			this.jeu_de_donnees.enregistrerAttribut(attribut_classe, valeur_classe);
 		}
 	}
 

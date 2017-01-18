@@ -27,3 +27,22 @@ http://archive.ics.uci.edu/ml/
 
 vérifier que le clonage (méthode attributs de la classe JeuDonnees) fait bien son boulot
 et aussi modele.java la méthode clone
+
+
+
+
+
+
+
+
+
+// POUBELLE
+
+		// Supprime la colonne attribut des exemples
+		/*Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
+		int indice_attribut = Arrays.asList(attributs).indexOf(attribut);
+		// Pour chaque exemple
+		for (ArrayList<String> exemple : this.exemples) {
+			// Supprime la valeur à la colonne de l'attribut
+			exemple.remove(indice_attribut);
+		}*/

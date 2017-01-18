@@ -15,6 +15,10 @@ main:
 arbre:
 	@echo "# Création d'un arbre de test"
 	java -cp bin arbre.Arbre
+
+lecturefichier:
+	@echo "# Lecture d'un fichier de test"
+	java -cp bin donnees.LectureFichier
 	
 # nettoyage
 
