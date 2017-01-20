@@ -1,6 +1,7 @@
 package arbre;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import donnees.JeuDonnees;
 
@@ -21,17 +22,17 @@ public class Noeud extends Thread {
 	/**
 	 * Créé des noeuds fils pour chaque valeur de l'attribut choisi
 	 * Un noeud fils a un son propre jeu de données et son propre modèle, tous deux créés à partir de ceux de this
-	 * Si le noeud est pure ou s'il n'a pas d'attributs candidats dans son jeu de données, alors c'est une feuille
+	 * Si le noeud est pur ou s'il n'a pas d'attributs candidats dans son jeu de données, alors c'est une feuille
 	 */
 	public void run() {
 		if (!this.jeu_de_donnees.estBienConstruit()) {
 			System.out.println("Erreur : Jeu de données du noeud vide d'attributs ou d'exemples");
 		}
 
-		// Si le noeud n'est pas pure et s'il y a des attributs à évaluer, créer des noeuds fils
-		if (!this.estPure() && this.jeu_de_donnees.attributsCandidats().size() > 0) {
+		// Si le noeud n'est pas pur et s'il y a des attributs à évaluer, créer des noeuds fils
+		if (!this.estPur() && this.jeu_de_donnees.attributsCandidats().size() > 0) {
 			// Choisir un attribut en fonction du gain d'information de chacune de ses valeurs
-			String attribut_choisi = meilleurAttribut();
+			String attribut_choisi = meilleurAttribut("Class");
 			// Récupérer auprès du jeu de données les valeurs possibles pour l'attribut choisi
 			ArrayList<String> valeurs_possibles = jeu_de_donnees.valeursPossibles(attribut_choisi);
 			// Créer autant de noeuds fils qu'il y a de valeurs pour l'attribut choisi
@@ -57,17 +58,33 @@ public class Noeud extends Thread {
 	}
 
 	/**
-	 * Retourne true si la feuille est pure
-	 * Une feuille est pure si son jeu de données ne contient que des exemples de la même classe
+	 * Retourne true si la feuille est pur
+	 * Une feuille est pur si son jeu de données ne contient que des exemples de la même classe
 	 * @return boolean
 	 */
-	public boolean estPure() {
+	public boolean estPur() {
 		return this.jeu_de_donnees.valeursClasseExemples().size() == 1;
 	}
 
-	private String meilleurAttribut() {
+	//Dis moi si tu galères à comprendre mais normalement ça devrait aller :p 
+	//Mais j'pense que c'est quand même nul :trololo:
+	private String meilleurAttribut(String valeur_attribut) {
 		ArrayList<String> attributs_candidats = this.jeu_de_donnees.attributsCandidats();
+		int plus = 0, moins = 0;
+		String meilleur_attribut;
+		int max;
+		Iterator<String> it = attributs_candidats.iterator();
+		while(it.hasNext()) {
+			String s = it.toString();
+			if(s == valeur_attribut) {
+				plus++;
+			} else moins++;
 
+			if(gain(s) > max) {
+				meilleur_attribut = s;
+				max = gain(attributs_candidats, s);
+			}
+		}
 		// faire d truc
 		// compter les + et les -
 		// appeller la méthode de gain pr chaque attribut, mettre le meilleur resultat dans une variable
@@ -84,7 +101,7 @@ public class Noeud extends Thread {
 		-∑ fs log2 fs;
 		 s
 		*/
-
+		
 		return 0;
 	}
 
