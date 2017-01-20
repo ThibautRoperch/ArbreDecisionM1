@@ -40,7 +40,7 @@ public class JeuDonnees {
 	}
 
 	public boolean estBienConstruit() {
-		return this.attributs.size() > 0;
+		return this.attributs.size() > 0 && this.exemples.size() > 0;
 	}
 	/**
 	 * Retourne une copie des attributs

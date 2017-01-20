@@ -47,6 +47,7 @@ Récap' :
 Entropie semestre 1 : http://moodle.univ-angers.fr/pluginfile.php/579146/mod_resource/content/1/ArbreDecision.pdf Algo page 9 et calcul de gain page 13
 Entropie: http://www-lisic.univ-littoral.fr/~verel/TEACHING/13-14/IASF-M1app/cm10.pdf
 Entropie > 1 : http://people.revoledu.com/kardi/tutorial/DecisionTree/how-to-measure-impurity.htm
+Post-élagage : https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Le_post-.C3.A9lagage
 
 // SUJET DU PROJET
 

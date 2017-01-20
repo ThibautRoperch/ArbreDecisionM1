@@ -14,9 +14,7 @@ public class Arbre {
 	}
 
 	public void construire() {
-		if (this.jeu_apprentissage.estBienConstruit()) {
-			this.noeud_racine.start();
-		}
+		this.noeud_racine.start();
 	}
 
 	public void postElaguer(JeuDonnees donnees, int coeff_v) {
@@ -34,7 +32,7 @@ public class Arbre {
 	public static void main(String[] args) {
 		Arbre a = new Arbre(new JeuDonnees("jeux/vote.arff"));
 		a.construire();
-		//System.out.println(a);
+		// System.out.println(a);
 		// a.postElaguer(jeu 2, coeef v)
 	}
 

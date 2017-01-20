@@ -24,13 +24,16 @@ public class Noeud extends Thread {
 	 * Si le noeud est pure ou s'il n'a pas d'attributs candidats dans son jeu de données, alors c'est une feuille
 	 */
 	public void run() {
+		if (!this.jeu_de_donnees.estBienConstruit()) {
+			System.out.println("Erreur : Jeu de données du noeud vide d'attributs ou d'exemples");
+		}
+
 		// Si le noeud n'est pas pure et s'il y a des attributs à évaluer, créer des noeuds fils
 		if (!this.estPure() && this.jeu_de_donnees.attributsCandidats().size() > 0) {
 			// Choisir un attribut en fonction du gain d'information de chacune de ses valeurs
 			String attribut_choisi = meilleurAttribut();
 			// Récupérer auprès du jeu de données les valeurs possibles pour l'attribut choisi
 			ArrayList<String> valeurs_possibles = jeu_de_donnees.valeursPossibles(attribut_choisi);
-			System.out.println(valeurs_possibles);
 			// Créer autant de noeuds fils qu'il y a de valeurs pour l'attribut choisi
 			for (String valeur_possible : valeurs_possibles) {
 				// Créer un nouveau jeu de données pour le fils, pour cela :
@@ -70,10 +73,18 @@ public class Noeud extends Thread {
 		// appeller la méthode de gain pr chaque attribut, mettre le meilleur resultat dans une variable
 		// retourner la variable
 
-		return "crime";
+		// ou alors au pif !
+
+		return attributs_candidats.get( (int) Math.random() * attributs_candidats.size() );
 	}
 
 	private int gain(String attribut) {
+
+		/*
+		-∑ fs log2 fs;
+		 s
+		*/
+
 		return 0;
 	}
 
