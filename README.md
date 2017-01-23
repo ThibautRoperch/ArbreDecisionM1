@@ -59,6 +59,7 @@ Classe JeuDonnees qui contient :
 ------------------------|---------------------------|----------------------|-----------------------------------|
 [@PierreGranier](https://github.com/PierreGranier) | [@ThibautRoperch](https://github.com/ThibautRoperch)
 
-[<img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882" width="50">](https://github.com/PierreGranier) | [@PierreGranier](https://github.com/PierreGranier)
+[<img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882" width="50">](https://github.com/PierreGranier) | [@PierreGranier](https://github.com/PierreGranier) |
+------------------------|---------------------------|----------------------|-----------------------------------|
 [<img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394" width="50">](https://github.com/ThibautRoperch) | [@ThibautRoperch](https://github.com/ThibautRoperch)
 
