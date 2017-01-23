@@ -50,9 +50,11 @@ Classe Noeud qui contient :
 ### Représenter un jeu de données
 
 Classe JeuDonnees qui contient :
-* Une map de ayant pour paire un attribut et une liste des valeurs de l'attribut
+* Une map ayant pour paire un attribut et une liste des valeurs de l'attribut
 * Une liste d'exemples, un exemple étant une liste de chaines de caractères représentant ses valeurs pour chaque attribut
 
+## Contributeurs
 
-http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html
-https://github.com/ThibautRoperch/ArbreDecisionM1#arbredecisionm1
+[<img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882?v=3&s=460" width="1000">](https://github.com/PierreGranier) | [<img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394?v=3&s=460" width="90">](https://github.com/ThibautRoperch) |
+------------------------|---------------------------|----------------------|-----------------------------------|
+[@PierreGranier](https://github.com/PierreGranier) |[@ThibautRoperch](https://github.com/ThibautRoperch)

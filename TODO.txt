@@ -1,4 +1,6 @@
 
+http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html ?
+
 // LECTURE D'UN FICHIER AU FORMAT ARFF
 
 @attribute dans la ligne =>
