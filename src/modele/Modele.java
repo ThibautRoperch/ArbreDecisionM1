@@ -27,4 +27,15 @@ public class Modele {
 		
 	}
 
+	public String toString() {
+		String res = "";
+
+		// Pour chaque règle
+		for (Regle r : this.regles) {
+			res += r + "\n";
+		}
+
+		return res;
+	}
+
 }

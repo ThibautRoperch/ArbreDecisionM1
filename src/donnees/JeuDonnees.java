@@ -1,3 +1,12 @@
+/**
+ * Au fur et à mesure de l'évolution d'une branche de l'arbre, un jeu de donénes est dupliqué pour un noeud fils
+ * et modifié en fonction de l'attribut utilisé par ce noeud fils
+ * 
+ * Par exemple, l'ensemble des données va être modifié de cette façon : le noeud applique la valeur "soleil" à l'attribut "ensoleillement"
+ * - La liste des exemples ne contient plus que les exemples où "ensoleillement" = "soleil"
+ * - L'attribut "ensoleillement" n'a comme valeur possible plus que "soleil" dans la liste des attributs
+ */
+
 package donnees;
 
 import java.util.HashMap;
@@ -40,7 +49,7 @@ public class JeuDonnees {
 	}
 
 	public boolean estBienConstruit() {
-		return this.attributs.size() > 0 && this.exemples.size() > 0;
+		return this.attributs.size() > 0;
 	}
 	/**
 	 * Retourne une copie des attributs
@@ -48,7 +57,12 @@ public class JeuDonnees {
 	 */
 	public HashMap<String, ArrayList<String>> attributs() {
 		HashMap<String, ArrayList<String>> res = new HashMap<String, ArrayList<String>>();
-		res.putAll(this.attributs);
+
+		// Pour chaque attribut
+		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
+			res.put(attribut.getKey(), attribut.getValue());
+		}
+		
 		return res;
 	}
 	
@@ -81,15 +95,30 @@ public class JeuDonnees {
 
 		// Pour chaque attribut
 		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
-			// Ajoute le nom de l'attribut à la liste recap si celui-ci a au moins une valeur possible
-			if (attribut.getValue().size() > 1) {
+			// Ajoute le nom de l'attribut à la liste res si celui-ci a au moins deux valeurs possibles et si ce n'est pas l'attribut classe
+			if (attribut.getValue().size() > 1 && !attribut.getKey().equals(this.attributClasse())) {
 				res.add(attribut.getKey());
 			}
 		}
+		
+		return res;
+	}
 
-		// Enlève le dernier attribut qui est l'attribut de classe
-		res.remove(res.size() - 1);
+	/**
+	 * Retourne les attributs qui n'ont qu'une seule valeur
+	 * @return ArrayList<String>
+	 */
+	public ArrayList<String> attributsUneValeur() {
+		ArrayList<String> res = new ArrayList<String>();
 
+		// Pour chaque attribut
+		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
+			// Ajoute le nom de l'attribut à la liste res si celui-ci a une valeur possibles et si ce n'est pas l'attribut classe
+			if (attribut.getValue().size() == 1 && !attribut.getKey().equals(this.attributClasse())) {
+				res.add(attribut.getKey());
+			}
+		}
+		
 		return res;
 	}
 
@@ -109,7 +138,15 @@ public class JeuDonnees {
 	 * @return ArrayList<String>
 	 */
 	public ArrayList<String> valeursPossibles(String attribut) {
-		return this.attributs.get(attribut);
+		ArrayList<String> res = new ArrayList<String>();
+
+		// Pour chaque valeur de l'attribut donné en paramètre
+		for (String valeur : this.attributs.get(attribut)) {
+			// Copie la valeur dans le tableau res
+			res.add(valeur);
+		}
+		
+		return res;
 	}
 
 	/**
@@ -171,7 +208,7 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Retourne les exemples du jeu de données où attribut = valeur donnés en paramètre
+	 * Retourne les exemples du jeu de données où attribut = valeur donnée en paramètre
 	 * @param attribut
 	 * @param valeur
 	 */

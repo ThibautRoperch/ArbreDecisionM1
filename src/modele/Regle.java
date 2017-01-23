@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Regle {
 
@@ -43,6 +44,24 @@ public class Regle {
 	public void ajouterConclusion(String attribut, String valeur) {
 		this.conclusion.clear();
 		this.conclusion.put(attribut, valeur);
+	}
+
+	public String toString() {
+		String res = "SI ";
+		int nb_conditions = 0;
+
+		// Pour chaque condition
+		for (Map.Entry<String, String> condition : this.conditions.entrySet()) {
+			// Ajoute l'attribut à la chaine " = " sa valeur
+			if (nb_conditions > 0) res += " ET ";
+			res += condition.getKey() + " = " + condition.getValue();
+			++nb_conditions;
+		}
+
+		// Pour la conclusion
+		res += " ALORS " + this.conclusion.entrySet().toArray()[0] + " = " + this.conclusion.values().toArray()[0];
+		
+		return res;
 	}
 
 }

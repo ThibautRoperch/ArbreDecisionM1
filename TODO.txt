@@ -22,7 +22,7 @@
 // TODO
 
 vérifier que le clonage (méthode attributs de la classe JeuDonnees) fait bien son boulot
-et aussi modele.java la méthode clone
+thread enlevés, synchronized ? avec les threads, l'affichage du modele se fait trop tot donc y'a rien...
 
 // ARBRE DE DECISION
 

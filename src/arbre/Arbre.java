@@ -1,5 +1,7 @@
 package arbre;
 
+import java.util.ArrayList;
+
 import donnees.JeuDonnees;
 import modele.Modele;
 
@@ -7,10 +9,17 @@ public class Arbre {
 	
 	protected JeuDonnees jeu_apprentissage;
 	protected Noeud noeud_racine;
+	protected ArrayList<Noeud> feuilles;
 	
 	public Arbre(JeuDonnees donnees) {
 		this.jeu_apprentissage = donnees;
-		this.noeud_racine = new Noeud(this.jeu_apprentissage);
+		this.noeud_racine = new Noeud(this, null, this.jeu_apprentissage);
+		this.feuilles = new ArrayList<Noeud>();
+	}
+
+	public void ajouterFeuille(Noeud noeud) {
+		this.feuilles.add(noeud); // this pour que les noeuds puissent appeller ajouterFeuille
+		System.out.println("> + une feuille : " + this.feuilles.size());
 	}
 
 	public void construire() {
@@ -22,17 +31,33 @@ public class Arbre {
 	}
 
 	public Modele genererModele() {
-		return new Modele();
+		Modele m = new Modele();
+
+		// Pour chaque feuille (noeud pur) de l'arbre
+		for (Noeud n : this.feuilles) {
+			// Ajouter au modèle la règle de la feuille
+			m.ajouterRegle(n.genererRegle());
+		}
+
+		return m;
 	}
 
 	public String toString() {
 		return jeu_apprentissage + "\n" + noeud_racine;
 	}
 
+	public String toTree() {
+		return this.noeud_racine.toTree(0);
+	}
+
 	public static void main(String[] args) {
 		Arbre a = new Arbre(new JeuDonnees("jeux/vote.arff"));
 		a.construire();
+		System.out.println("\n== Modèle de l'arbre ==\n");
+		System.out.println(a.genererModele());
+		System.out.println("\n== Noeuds de l'arbre ==\n");
 		// System.out.println(a);
+		System.out.println(a.toTree());
 		// a.postElaguer(jeu 2, coeef v)
 	}
 
