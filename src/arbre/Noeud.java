@@ -94,7 +94,7 @@ public class Noeud /*extends Thread*/ {
 	//Mais j'pense que c'est quand même nul :trololo:
 	private String meilleurAttribut(String valeur_attribut) {
 		ArrayList<String> attributs_candidats = this.jeu_de_donnees.attributsCandidats();
-		/*int plus = 0, moins = 0;
+		int plus = 0, moins = 0;
 		String meilleur_attribut;
 		int max;
 		Iterator<String> it = attributs_candidats.iterator();
@@ -108,7 +108,8 @@ public class Noeud /*extends Thread*/ {
 				meilleur_attribut = s;
 				max = gain(attributs_candidats, s);
 			}
-		}*/
+		}
+		
 		// faire d truc
 		// compter les + et les -
 		// appeller la méthode de gain pr chaque attribut, mettre le meilleur resultat dans une variable
