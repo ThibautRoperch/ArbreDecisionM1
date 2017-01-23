@@ -55,6 +55,6 @@ Classe JeuDonnees qui contient :
 
 ## Contributeurs
 
-[<img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882?v=3&s=460" width="1000">](https://github.com/PierreGranier) | [<img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394?v=3&s=460" width="90">](https://github.com/ThibautRoperch) |
+[<img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882?v=3&s=460" width="5000">](https://github.com/PierreGranier) | [<img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394?v=3&s=460" width="90">](https://github.com/ThibautRoperch) |
 ------------------------|---------------------------|----------------------|-----------------------------------|
 [@PierreGranier](https://github.com/PierreGranier) |[@ThibautRoperch](https://github.com/ThibautRoperch)
