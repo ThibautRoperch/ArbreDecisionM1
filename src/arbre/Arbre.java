@@ -19,7 +19,6 @@ public class Arbre {
 
 	public void ajouterFeuille(Noeud noeud) {
 		this.feuilles.add(noeud); // this pour que les noeuds puissent appeller ajouterFeuille
-		System.out.println("> + une feuille : " + this.feuilles.size());
 	}
 
 	public void construire() {

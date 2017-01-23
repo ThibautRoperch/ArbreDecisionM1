@@ -48,9 +48,20 @@ public class JeuDonnees {
 		this.exemples = exemples;
 	}
 
+	/**
+	 * Retourne vrai si le jeu de données est bien construit, c'est à dire s'il contient des attributs
+	 */
 	public boolean estBienConstruit() {
 		return this.attributs.size() > 0;
 	}
+
+	/**
+	 * Retourne le nombre d'exemples
+	 */
+	public int nombreExemples() {
+		return this.exemples.size();
+	}
+
 	/**
 	 * Retourne une copie des attributs
 	 * @return HashMap<String, ArrayList<String>>

@@ -64,10 +64,13 @@ public class Noeud /*extends Thread*/ {
 				JeuDonnees donnees_fils = new JeuDonnees(	this.jeu_de_donnees.attributs(),
 															this.jeu_de_donnees.selectionnerExemplesOu(attribut_choisi, valeur_possible)	);
 				donnees_fils.enregistrerAttribut(attribut_choisi, valeur_possible);
-				// Créer à partir des données, enregistrer et lancer le noeud fils
-				Noeud noeud_fils = new Noeud(this.arbre, this, donnees_fils);
-				this.noeuds_fils.add(noeud_fils);
-				noeud_fils.start();
+				// Si le jeu de données du fils contient un ou des exemples
+				if (donnees_fils.nombreExemples() > 0) {
+					// Créer à partir des données, enregistrer et lancer le noeud fils
+					Noeud noeud_fils = new Noeud(this.arbre, this, donnees_fils);
+					this.noeuds_fils.add(noeud_fils);
+					noeud_fils.start();
+				}
 			}
 		}
 		// Sinon, ce noeud est une feuille, indiquer au jeu de données la valeur de la classe majoritaire des exemples
@@ -94,7 +97,7 @@ public class Noeud /*extends Thread*/ {
 	//Mais j'pense que c'est quand même nul :trololo:
 	private String meilleurAttribut(String valeur_attribut) {
 		ArrayList<String> attributs_candidats = this.jeu_de_donnees.attributsCandidats();
-		int plus = 0, moins = 0;
+		/*int plus = 0, moins = 0;
 		String meilleur_attribut;
 		int max;
 		Iterator<String> it = attributs_candidats.iterator();
@@ -108,7 +111,7 @@ public class Noeud /*extends Thread*/ {
 				meilleur_attribut = s;
 				max = gain(attributs_candidats, s);
 			}
-		}
+		}*/
 		
 		// faire d truc
 		// compter les + et les -
@@ -177,6 +180,7 @@ public class Noeud /*extends Thread*/ {
 
 		// Pour chaque noeud fils de ce noeud
 		for (Noeud fils : this.noeuds_fils) {
+			// Affiche le noeud en augmentant le niveau
 			res += "\n" + fils.toTree(level + 1);			
 		}
 

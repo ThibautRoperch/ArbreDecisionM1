@@ -38,6 +38,7 @@ public class LectureFichier {
 						}
 					}
 					//ligne_split[1] = le nom de l'attribut
+					// System.out.println("> " + ligne_split[1] + " = " + valeurs);
 					donnees.ajouterAttribut(ligne_split[1], valeurs);	
 				}
 
