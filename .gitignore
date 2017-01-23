@@ -1,2 +1,5 @@
 #compilation
 bin/*
+
+#vscode
+.vscode

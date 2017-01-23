@@ -34,8 +34,8 @@ public class Noeud /*extends Thread*/ {
 		}
 
 		// Ajouter à la règle l'attribut de classe et sa valeur en tant que conclusion
-		// Sa valeur est la classe dominante parmi les exemples du jeu de données
-		r.ajouterConclusion(this.jeu_de_donnees.attributClasse(), this.jeu_de_donnees.classeDominante());
+		// Sa valeur est la classe majoritaire parmi les exemples du jeu de données
+		r.ajouterConclusion(this.jeu_de_donnees.attributClasse(), this.jeu_de_donnees.classeMajoritaire());
 
 		return r;
 	}
@@ -70,11 +70,11 @@ public class Noeud /*extends Thread*/ {
 				noeud_fils.start();
 			}
 		}
-		// Sinon, ce noeud est une feuille, indiquer au jeu de données la valeur de la classe dominante des exemples
+		// Sinon, ce noeud est une feuille, indiquer au jeu de données la valeur de la classe majoritaire des exemples
 		// Ajouter ce noeud à la liste des feuilles de l'abre auquel ce noeud appartient
 		else {
 			String attribut_classe = this.jeu_de_donnees.attributClasse();
-			String valeur_classe = this.jeu_de_donnees.classeDominante();
+			String valeur_classe = this.jeu_de_donnees.classeMajoritaire();
 			this.jeu_de_donnees.enregistrerAttribut(attribut_classe, valeur_classe);
 			this.arbre.ajouterFeuille(this);
 		}

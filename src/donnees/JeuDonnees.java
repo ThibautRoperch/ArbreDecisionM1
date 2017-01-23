@@ -175,12 +175,12 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Retourne la classe dominante parmi les exemples
+	 * Retourne la classe majoritaire parmi les exemples
 	 * @return String
 	 */
-	public String classeDominante() {
+	public String classeMajoritaire() {
 		HashMap<String, Integer> classes = this.valeursClasseExemples();
-		String classe_dominante = "";
+		String classe_majoritaire = "";
 		int max = 0;
 
 		// Pour chaque classe
@@ -197,14 +197,14 @@ public class JeuDonnees {
 		// S'il n'y a plus qu'une seule classe dans la map
 		if (classes.size() == 1) {
 			// Récupérer le nom de la classe (1er indice de la liste des clefs de la map)
-			classe_dominante = (String) classes.keySet().toArray()[0];
+			classe_majoritaire = (String) classes.keySet().toArray()[0];
 		}
 		// Sinon, choisir une classe en regardant ce qui a déjà été choisi dans l'arbre
 		else {
-			classe_dominante = "En éspérant que ce cas n'arrive jamais lol";
+			classe_majoritaire = "En éspérant que ce cas n'arrive jamais lol";
 		}
 
-		return classe_dominante;
+		return classe_majoritaire;
 	}
 
 	/**
