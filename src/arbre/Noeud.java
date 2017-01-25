@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import donnees.JeuDonnees;
+import jdk.nashorn.internal.codegen.ClassEmitter;
+import donnees.Attribut;
 import modele.Regle;
 
 public class Noeud /*extends Thread*/ {
@@ -27,16 +29,18 @@ public class Noeud /*extends Thread*/ {
 	public Regle genererRegle() {
 		Regle r = new Regle();
 
-		// Pour chaque attribut qui n'a qu'une seule valeur possible
-		for (String attribut : this.jeu_de_donnees.attributsUneValeur()) {
-			// Ajouter à la règle l'attribut et sa valeur en tant que condition
-			r.ajouterCondition(attribut, this.jeu_de_donnees.valeursPossibles(attribut).get(0));
+		// Pour chaque attribut du jeu de données
+		for (Attribut attribut : this.jeu_de_donnees.attributs()) {
+			// Ajouter à la règle l'attribut et sa valeur en tant que condition s'il n'a qu'une valeur possible et si ce n'est pas l'attribut classe
+			if (attribut.valeurs().size() == 1 && !attribut.equals(this.jeu_de_donnees.attributClasse())) {
+				r.ajouterCondition(attribut.nom(), attribut.valeurs().get(0));
+			}
 		}
 
 		// Ajouter à la règle l'attribut de classe et sa valeur en tant que conclusion
 		// Sa valeur est la classe majoritaire parmi les exemples du jeu de données
-		r.ajouterConclusion(this.jeu_de_donnees.attributClasse(), this.jeu_de_donnees.classeMajoritaire());
-
+		r.ajouterConclusion(this.jeu_de_donnees.attributClasse().nom(), this.jeu_de_donnees.classeMajoritaire());
+		
 		return r;
 	}
 
@@ -53,9 +57,9 @@ public class Noeud /*extends Thread*/ {
 		// Si ce noeud n'est pas pur et s'il y a des attributs à évaluer, créer des noeuds fils
 		if (!this.estPur() && this.jeu_de_donnees.attributsCandidats().size() > 0) {
 			// Choisir un attribut en fonction du gain d'information de chacune de ses valeurs
-			String attribut_choisi = meilleurAttribut("Class");
-			// Récupérer auprès du jeu de données les valeurs possibles pour l'attribut choisi
-			ArrayList<String> valeurs_possibles = jeu_de_donnees.valeursPossibles(attribut_choisi);
+			Attribut attribut_choisi = meilleurAttribut();
+			// Récupérer les valeurs possibles pour l'attribut choisi
+			ArrayList<String> valeurs_possibles = attribut_choisi.valeurs();
 			// Créer autant de noeuds fils qu'il y a de valeurs pour l'attribut choisi
 			for (String valeur_possible : valeurs_possibles) {
 				// Créer un nouveau jeu de données pour le fils, pour cela :
@@ -63,22 +67,19 @@ public class Noeud /*extends Thread*/ {
 				// Indiquer au jeu de données l'attribut et la valeur utilisés par le noeud
 				JeuDonnees donnees_fils = new JeuDonnees(	this.jeu_de_donnees.attributs(),
 															this.jeu_de_donnees.selectionnerExemplesOu(attribut_choisi, valeur_possible)	);
-				donnees_fils.enregistrerAttribut(attribut_choisi, valeur_possible);
-				// Si le jeu de données du fils contient un ou des exemples
-				if (donnees_fils.nombreExemples() > 0) {
-					// Créer à partir des données, enregistrer et lancer le noeud fils
-					Noeud noeud_fils = new Noeud(this.arbre, this, donnees_fils);
-					this.noeuds_fils.add(noeud_fils);
-					noeud_fils.start();
-				}
+				donnees_fils.choisirAttributValeur(attribut_choisi, valeur_possible);
+				// Créer à partir des données, enregistrer et lancer le noeud fils
+				Noeud noeud_fils = new Noeud(this.arbre, this, donnees_fils); // peut contenir 0 exemples dans son jeu de données, la règle ainsi générée sera "ALORS class = "
+				this.noeuds_fils.add(noeud_fils);
+				noeud_fils.start();
 			}
 		}
 		// Sinon, ce noeud est une feuille, indiquer au jeu de données la valeur de la classe majoritaire des exemples
 		// Ajouter ce noeud à la liste des feuilles de l'abre auquel ce noeud appartient
 		else {
-			String attribut_classe = this.jeu_de_donnees.attributClasse();
+			Attribut attribut_classe = this.jeu_de_donnees.attributClasse();
 			String valeur_classe = this.jeu_de_donnees.classeMajoritaire();
-			this.jeu_de_donnees.enregistrerAttribut(attribut_classe, valeur_classe);
+			this.jeu_de_donnees.choisirAttributValeur(attribut_classe, valeur_classe);
 			this.arbre.ajouterFeuille(this);
 		}
 	}
@@ -95,8 +96,8 @@ public class Noeud /*extends Thread*/ {
 
 	//Dis moi si tu galères à comprendre mais normalement ça devrait aller :p 
 	//Mais j'pense que c'est quand même nul :trololo:
-	private String meilleurAttribut(String valeur_attribut) {
-		ArrayList<String> attributs_candidats = this.jeu_de_donnees.attributsCandidats();
+	private Attribut meilleurAttribut() {
+		ArrayList<Attribut> attributs_candidats = this.jeu_de_donnees.attributsCandidats();
 		/*int plus = 0, moins = 0;
 		String meilleur_attribut;
 		int max;
@@ -113,23 +114,51 @@ public class Noeud /*extends Thread*/ {
 			}
 		}*/
 		
-		// faire d truc
-		// compter les + et les -
 		// appeller la méthode de gain pr chaque attribut, mettre le meilleur resultat dans une variable
 		// retourner la variable
 
 		// ou alors au pif !
 
-		return attributs_candidats.get( (int) Math.random() * attributs_candidats.size() );
+		// return attributs_candidats.get( (int) Math.random() * attributs_candidats.size() );
+
+		// ou alors le first ! // static Noeud.HASARD Noeud.PREMIER
+
+		return attributs_candidats.get(0);
 	}
 
 	private int gain(ArrayList<String> attributs_candidats, String attribut) {
 
-		/*
+		/*	
 		-∑ fs log2 fs;
 		 s
 		*/
-		
+
+		// float gain_potentiel = entropie(appeller la méthode pour chaque attribut candidat);
+
+		return 0;
+	}
+
+	/**
+	 * Calcule l'entropie du noeud pour un attribut donné en paramètre
+	 * L'entropie d'un noeud est égale à l'entropie du noeud + celle de ses potentiels fils générés à partir d'un attribut
+	 * @param attribut
+	 */
+	private float entropie(Attribut attribut) {
+		/*float proportion de chaque classe
+		-(9/14) * log2(9/14) - (5/14) * log2(5/14)*/
+
+		/*
+		ent = entropie de ce noeud
+		Pour chaque valeur de l'attribut donné en paramètre (donc des potentiels noeuds fils)
+			entropie = 0
+			Pour chaque valeur s de l'attribut de classe
+				Calculer fs, la proportion d'exemples qui ont pour classe s
+				Multiplier fs par log2(fs)
+				Soustraire le résultat à la variable entropie
+			ent -= prop * entropie
+			http://moodle.univ-angers.fr/pluginfile.php/579146/mod_resource/content/1/ArbreDecision.pdf
+		*/
+
 		return 0;
 	}
 

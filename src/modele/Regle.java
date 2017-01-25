@@ -26,6 +26,10 @@ public class Regle {
 		this.conclusion = conclusion;
 	}
 
+	public boolean conclut() {
+		return !this.conclusion.values().toArray()[0].equals("");
+	}
+
 	/**
 	 * Ajoute aux conditions un attribut et sa valeur
 	 * @param attribut
@@ -59,7 +63,7 @@ public class Regle {
 		}
 
 		// Pour la conclusion
-		res += " ALORS " + this.conclusion.entrySet().toArray()[0] + " = " + this.conclusion.values().toArray()[0];
+		res += " ALORS " + this.conclusion.keySet().toArray()[0] + " = " + this.conclusion.values().toArray()[0];
 		
 		return res;
 	}

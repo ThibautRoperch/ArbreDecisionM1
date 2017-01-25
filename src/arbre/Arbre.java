@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import donnees.JeuDonnees;
 import modele.Modele;
+import modele.Regle;
 
 public class Arbre {
 	
@@ -26,7 +27,11 @@ public class Arbre {
 	}
 
 	public void postElaguer(JeuDonnees donnees, int coeff_v) {
+		// remplir l'arbre avec un jeu de test
+		// parcourir de la racine vers les noeuds fils en profondeur d'abord
+		// si le noeud satisfait le coeff v, reunir avec les fils ?
 
+		// enlever la liste des feuilles et l'ajout d'une feuille dans la liste (méthode start de Noeud)
 	}
 
 	public Modele genererModele() {
@@ -34,8 +39,12 @@ public class Arbre {
 
 		// Pour chaque feuille (noeud pur) de l'arbre
 		for (Noeud n : this.feuilles) {
-			// Ajouter au modèle la règle de la feuille
-			m.ajouterRegle(n.genererRegle());
+			Regle r = n.genererRegle();
+			// Si la règle conclut sur l'attribut de classe
+			if (r.conclut()) {
+				// Ajouter au modèle la règle de la feuille
+				m.ajouterRegle(r);
+			}
 		}
 
 		return m;
@@ -50,7 +59,8 @@ public class Arbre {
 	}
 
 	public static void main(String[] args) {
-		Arbre a = new Arbre(new JeuDonnees("jeux/vote.arff"));
+		// Arbre a = new Arbre(new JeuDonnees("jeux/vote.arff"));
+		Arbre a = new Arbre(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"));
 		a.construire();
 		System.out.println("\n== Modèle de l'arbre ==\n");
 		System.out.println(a.genererModele());

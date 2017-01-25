@@ -29,13 +29,23 @@ public class LectureFichier {
 
 
 				if(ligne_lue.contains("@attribute")) {
-					ligne_split = ligne_lue.split("\'");
+					// ligne_split = ligne_lue.split("\'");
+					//On remplace les ' et " " par ,
+					ligne_lue = ligne_lue.replace("'", "");
+					ligne_lue = ligne_lue.replace(" ", ",");
+					//On remplace les { par , et } par "" (rien)
+					ligne_lue = ligne_lue.replace("{", ",");
+					ligne_lue = ligne_lue.replace("}", "");
+					//On remplace les doubles ou + virgules ainsi générées par une simple virgule
+					while(ligne_lue.contains(",,")) ligne_lue = ligne_lue.replace(",,", ",");
+					//Puis on split par les virgules
+					ligne_split = ligne_lue.split(",");
 					ArrayList<String> valeurs = new ArrayList<String>();	//ArrayList servant à contenir les valeurs possibles de l'attribut
 					for (int x=2; x<ligne_split.length; x++) {		//2 = TEST
 						//Avant d'ajouter, on vérifie que le caractère n'est pas une , ou { ou ]. 
-						if(!(ligne_split[x].contains("}") || ligne_split[x].contains(",") || ligne_split[x].contains("{"))) {							
+						// if(!(ligne_split[x].contains("}") || ligne_split[x].contains(",") || ligne_split[x].contains("{"))) {							
 							valeurs.add(ligne_split[x]);
-						}
+						// }
 					}
 					//ligne_split[1] = le nom de l'attribut
 					// System.out.println("> " + ligne_split[1] + " = " + valeurs);
@@ -54,12 +64,12 @@ public class LectureFichier {
 							ligne_split = ligne_lue.split(",");
 							//On parcourt la ligne pour qui contient une ligne de data
 							ArrayList<String> donnee_ligne = new ArrayList<String>();
-							for(int x=1; x<ligne_split.length; x++) {
+							for(int x=0; x<ligne_split.length; x++) {
 								//ALIMENTER LES DATA ICI 
 								donnee_ligne.add(ligne_split[x]);
 							}
 							
-							//System.out.println(donnee_ligne);
+							// System.out.println(donnee_ligne);
 							donnees.ajouterExemple(donnee_ligne);
 						}
 						ligne_lue = br.readLine();
@@ -78,8 +88,8 @@ public class LectureFichier {
 	}
 
 	public static void main (String[] args) {
-		JeuDonnees donnees = new JeuDonnees("jeux/vote.arff");
-		LectureFichier.lectureFichier(donnees, "jeux/vote.arff");
+		LectureFichier.lectureFichier(new JeuDonnees(), "jeux/vote.arff");
+		// LectureFichier.lectureFichier(new JeuDonnees(), "jeux/Jeuxsimples/weather.nominal.arff");
 	}
 
 }

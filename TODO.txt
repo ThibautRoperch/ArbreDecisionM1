@@ -1,29 +1,9 @@
 
 http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html ?
 
-// LECTURE D'UN FICHIER AU FORMAT ARFF
-
-@attribute dans la ligne =>
-	String attribut = chaine vide
-	Array valeur = tableau vide
-
-	Pour chaque chaine de la ligne split =>
-		Si c'est la premiere de la ligne, attribut = chaine
-		Sinon, valeur.add(chaine)
-
-	jeu.ajouterAttribut(attribut, valeurs);
-
-@data dans la ligne =>
-	Array exemple = tableau vide
-
-	Pour chaque chaine de la ligne split =>
-		exemple.add(chaine)
-	
-	jeu.ajouterExemple(exemple)
-
 // TODO
 
-vérifier que le clonage (méthode attributs de la classe JeuDonnees) fait bien son boulot
+Numéroter els règles dans le modèle ?
 thread enlevés, synchronized ? avec les threads, l'affichage du modele se fait trop tot donc y'a rien...
 
 // ARBRE DE DECISION
@@ -47,7 +27,7 @@ Récap' :
 // NOTES
 
 Les exemples incomplets, cad qui ont une valeur manquante pour un attribut, sont gérés de la facon suivante :
-? traités comme cdc (rempalcement de valeur) => https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Probl.C3.A8me_des_donn.C3.A9es_incompl.C3.A8tes
+valeur ? traités comme cdc (rempalcement de valeur) => https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Probl.C3.A8me_des_donn.C3.A9es_incompl.C3.A8tes
 
 // ENTROPIE
 

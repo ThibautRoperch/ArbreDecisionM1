@@ -9,23 +9,22 @@
 
 package donnees;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import modele.Modele;
 
 public class JeuDonnees {
     
-	protected HashMap<String, ArrayList<String>> attributs;
+	protected ArrayList<Attribut> attributs;
 	protected ArrayList<ArrayList<String>> exemples;
 
 	/**
 	 * Construit un jeu de données vide
 	 */
 	public JeuDonnees() {
-		this.attributs = new HashMap<String, ArrayList<String>>();
+		this.attributs = new ArrayList<Attribut>();
 		this.exemples = new ArrayList<ArrayList<String>>();
 	}
 
@@ -43,7 +42,7 @@ public class JeuDonnees {
 	 * @param attributs
 	 * @param exemples
 	 */
-	public JeuDonnees(HashMap<String, ArrayList<String>> attributs, ArrayList<ArrayList<String>> exemples) {
+	public JeuDonnees(ArrayList<Attribut> attributs, ArrayList<ArrayList<String>> exemples) {
 		this.attributs = attributs;
 		this.exemples = exemples;
 	}
@@ -64,16 +63,16 @@ public class JeuDonnees {
 
 	/**
 	 * Retourne une copie des attributs
-	 * @return HashMap<String, ArrayList<String>>
+	 * @return ArrayList<Attribut>
 	 */
-	public HashMap<String, ArrayList<String>> attributs() {
-		HashMap<String, ArrayList<String>> res = new HashMap<String, ArrayList<String>>();
+	public ArrayList<Attribut> attributs() {
+		ArrayList<Attribut> res = new ArrayList<Attribut>();
 
 		// Pour chaque attribut
-		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
-			res.put(attribut.getKey(), attribut.getValue());
+		for (Attribut attribut : this.attributs) {
+			res.add(attribut.clone());
 		}
-		
+
 		return res;
 	}
 	
@@ -83,7 +82,7 @@ public class JeuDonnees {
 	 * @param valeurs
 	 */
 	public void ajouterAttribut(String attribut, ArrayList<String> valeurs) {
-		this.attributs.put(attribut, valeurs);
+		this.attributs.add(new Attribut(attribut, valeurs));
 	}
 
 	/**
@@ -99,34 +98,16 @@ public class JeuDonnees {
 	 * La liste des attributs candidats est la liste des attributs excluant :
 	 * - l'attribut de classe (qui est le dernier attribut de la liste des attributs)
 	 * - les attributs qui n'ont qu'une valeur possible (ou moins), car les valeurs sont supprimées à l'issue du choix d'un attribut candidat par le noeud
-	 * @return ArrayList<String>
+	 * @return ArrayList<Attribut>
 	 */
-	public ArrayList<String> attributsCandidats() {
-		ArrayList<String> res = new ArrayList<String>();
+	public ArrayList<Attribut> attributsCandidats() {
+		ArrayList<Attribut> res = new ArrayList<Attribut>();
 
 		// Pour chaque attribut
-		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
-			// Ajoute le nom de l'attribut à la liste res si celui-ci a au moins deux valeurs possibles et si ce n'est pas l'attribut classe
-			if (attribut.getValue().size() > 1 && !attribut.getKey().equals(this.attributClasse())) {
-				res.add(attribut.getKey());
-			}
-		}
-		
-		return res;
-	}
-
-	/**
-	 * Retourne les attributs qui n'ont qu'une seule valeur
-	 * @return ArrayList<String>
-	 */
-	public ArrayList<String> attributsUneValeur() {
-		ArrayList<String> res = new ArrayList<String>();
-
-		// Pour chaque attribut
-		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
-			// Ajoute le nom de l'attribut à la liste res si celui-ci a une valeur possibles et si ce n'est pas l'attribut classe
-			if (attribut.getValue().size() == 1 && !attribut.getKey().equals(this.attributClasse())) {
-				res.add(attribut.getKey());
+		for (Attribut attribut : this.attributs) {
+			// Ajoute l'attribut à la liste res si celui-ci a au moins deux valeurs possibles et si ce n'est pas l'attribut classe
+			if (attribut.valeurs().size() > 1 && !attribut.nom().equals(this.attributClasse())) {
+				res.add(attribut.clone());
 			}
 		}
 		
@@ -135,33 +116,14 @@ public class JeuDonnees {
 
 	/**
 	 * Retourne l'attribut de classe
-	 * @return String
+	 * @return Attribut
 	 */
-	public String attributClasse() {
-		ArrayList<String> res = new ArrayList<String>();
-		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		return (String) attributs[attributs.length - 1];
+	public Attribut attributClasse() {
+		return this.attributs.get(attributs.size() - 1);
 	}
 
 	/**
-	 * Retourne les valeurs possibles pour un attribut donné en paramètre
-	 * @param attribut
-	 * @return ArrayList<String>
-	 */
-	public ArrayList<String> valeursPossibles(String attribut) {
-		ArrayList<String> res = new ArrayList<String>();
-
-		// Pour chaque valeur de l'attribut donné en paramètre
-		for (String valeur : this.attributs.get(attribut)) {
-			// Copie la valeur dans le tableau res
-			res.add(valeur);
-		}
-		
-		return res;
-	}
-
-	/**
-	 * Retourne la liste des différentes valeurs de la classe des exemples
+	 * Retourne la liste des différentes valeurs de l'attribut de classe parmi exemples
 	 * La liste est un tableau associatif avec en clef la classe et en valeur le nombre d'exemples ayant cette classe
 	 * @return HashMap<String, int>
 	 */
@@ -210,6 +172,10 @@ public class JeuDonnees {
 			// Récupérer le nom de la classe (1er indice de la liste des clefs de la map)
 			classe_majoritaire = (String) classes.keySet().toArray()[0];
 		}
+		// Sinon, s'il n'y a pas d'exemples dans le jeu de données
+		else if (classes.size() == 0) {
+			classe_majoritaire = "";
+		}
 		// Sinon, choisir une classe en regardant ce qui a déjà été choisi dans l'arbre
 		else {
 			classe_majoritaire = "En éspérant que ce cas n'arrive jamais lol";
@@ -223,10 +189,11 @@ public class JeuDonnees {
 	 * @param attribut
 	 * @param valeur
 	 */
-	public ArrayList<ArrayList<String>> selectionnerExemplesOu(String attribut, String valeur) {
+	public ArrayList<ArrayList<String>> selectionnerExemplesOu(Attribut attribut, String valeur) {
 		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
-		Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		int indice_attribut = Arrays.asList(attributs).indexOf(attribut);
+
+		// Recherche de l'indice de l'attribut dans la liste d'attributs
+		int indice_attribut = this.attributs.indexOf(attribut);
 
 		// Pour chaque exemple
 		for (ArrayList<String> exemple : this.exemples) {
@@ -245,19 +212,17 @@ public class JeuDonnees {
 	 * @param attribut
 	 * @param valeur
 	 */
-	public void enregistrerAttribut(String attribut, String valeur) {
-		// Supprime les valeurs de l'attribut, sauf celle données en paramètre
-		this.attributs.get(attribut).clear();
-		this.attributs.get(attribut).add(valeur);
+	public void choisirAttributValeur(Attribut attribut, String valeur) {
+		this.attributs.get(this.attributs.indexOf(attribut)).fixerValeur(valeur);
 	}
 
 	public String toString() {
 		String res = "";
 
 		// Pour chaque attribut
-		for (Map.Entry<String, ArrayList<String>> attribut : this.attributs.entrySet()) {
+		for (Attribut attribut : this.attributs) {
 			// Ajoute le nom de l'attribut à la chaine
-			res += attribut.getKey() + "\t";
+			res += attribut.nom() + "\t";
 		}
 
 		res += "\n";
@@ -272,6 +237,12 @@ public class JeuDonnees {
 		}		
 
 		return res;
+	}
+
+	public static void main (String[] args) {
+		// JeuDonnees jd = new JeuDonnees("jeux/vote.arff");
+		JeuDonnees jd = new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff");
+		System.out.println(jd);
 	}
 
 }
