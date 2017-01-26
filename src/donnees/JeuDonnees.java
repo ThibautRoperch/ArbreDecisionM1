@@ -11,6 +11,7 @@ package donnees;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.sql.Array;
 import java.util.ArrayList;
 
 import modele.Modele;
@@ -44,6 +45,16 @@ public class JeuDonnees {
 	 */
 	public JeuDonnees(ArrayList<Attribut> attributs, ArrayList<ArrayList<String>> exemples) {
 		this.attributs = attributs;
+		this.exemples = exemples;
+	}
+
+	/**
+	 * Construit un jeu de données à partir d'exemples
+	 * Le jeu de données n'aura pas d'attributs, il sera donc jeu mal consturit
+	 * Ce constructeur est appellé dans le cadre de calculs d'entropie, où seuls les exemples sont nécessaires
+	 */
+	public JeuDonnees(ArrayList<ArrayList<String>> exemples) {
+		this();
 		this.exemples = exemples;
 	}
 
@@ -237,6 +248,35 @@ public class JeuDonnees {
 		}		
 
 		return res;
+	}
+
+	/**
+	 * Calcule l'entropie du jeu de données pour un attribut donné en paramètre
+	 */
+	public double entropie() {
+		double entropie = 0;
+
+		// Récupérer les différentes valeurs de classe des exemples et le nombre d'exemples total
+		// Proportion d'une classe dans un jeu de données = nombre d'exemples de la classe / nombre d'exemple total
+		HashMap<String, Integer> nombre_exemples_classes = this.valeursClasseExemples();
+		int nombre_exemples_total = this.nombreExemples();
+
+		// Calculer l'entropie du jeu de données
+		// Pour chaque classe
+		for (Map.Entry<String, Integer> classe : nombre_exemples_classes.entrySet()) {
+			// Calculer la proportion de cette classe
+			double proportion_classe = classe.getValue() / nombre_exemples_total;
+			// Calculer l'entropie de cette classe
+			double entropie_classe = proportion_classe * log2(proportion_classe);
+			// Soustraire l'entropie de la calsse à l'entropie du noeud
+			entropie -= entropie_classe;
+		}
+
+		return entropie;
+	}
+
+	private double log2(double n) {
+		return Math.log(n) / Math.log(2);
 	}
 
 	public static void main (String[] args) {

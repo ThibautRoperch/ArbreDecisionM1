@@ -2,9 +2,9 @@ package arbre;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.lang.Math;
 
 import donnees.JeuDonnees;
-import jdk.nashorn.internal.codegen.ClassEmitter;
 import donnees.Attribut;
 import modele.Regle;
 
@@ -126,40 +126,19 @@ public class Noeud /*extends Thread*/ {
 		return attributs_candidats.get(0);
 	}
 
-	private int gain(ArrayList<String> attributs_candidats, String attribut) {
+	private double gain(Attribut attribut) {
+		double gain_potentiel = this.jeu_de_donnees.entropie();
 
-		/*	
-		-∑ fs log2 fs;
-		 s
-		*/
+		int nombre_exemples_this = this.jeu_de_donnees.nombreExemples();
+		ArrayList<String> valeurs_possibles = attribut.valeurs();
 
-		// float gain_potentiel = entropie(appeller la méthode pour chaque attribut candidat);
+		// Pour chaque valeur de l'attribut donné en paramètre (donc pour chaque potentiels noeuds fils)
+		for (String valeur_possible : valeurs_possibles) {
+			JeuDonnees donnees_fils = new JeuDonnees(this.jeu_de_donnees.selectionnerExemplesOu(attribut, valeur_possible));
+			gain_potentiel -= nombre_exemples_this / donnees_fils.nombreExemples() * donnees_fils.entropie();
+		}
 
-		return 0;
-	}
-
-	/**
-	 * Calcule l'entropie du noeud pour un attribut donné en paramètre
-	 * L'entropie d'un noeud est égale à l'entropie du noeud + celle de ses potentiels fils générés à partir d'un attribut
-	 * @param attribut
-	 */
-	private float entropie(Attribut attribut) {
-		/*float proportion de chaque classe
-		-(9/14) * log2(9/14) - (5/14) * log2(5/14)*/
-
-		/*
-		ent = entropie de ce noeud
-		Pour chaque valeur de l'attribut donné en paramètre (donc des potentiels noeuds fils)
-			entropie = 0
-			Pour chaque valeur s de l'attribut de classe
-				Calculer fs, la proportion d'exemples qui ont pour classe s
-				Multiplier fs par log2(fs)
-				Soustraire le résultat à la variable entropie
-			ent -= prop * entropie
-			http://moodle.univ-angers.fr/pluginfile.php/579146/mod_resource/content/1/ArbreDecision.pdf
-		*/
-
-		return 0;
+		return gain_potentiel;
 	}
 
 	/*
