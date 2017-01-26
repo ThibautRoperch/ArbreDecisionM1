@@ -55,13 +55,13 @@ Classe JeuDonnees qui contient :
 
 ## Contributeurs
 
-[<table>
+<table>
 <tr>
-	<td>[<img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882" width="25">](https://github.com/PierreGranier)</td>
-	<td>[@PierreGranier](https://github.com/PierreGranier)</td>
+	<td><a href="https://github.com/PierreGranier"><img alt="Pierre Granier--Richard" src="https://avatars1.githubusercontent.com/u/11854882" width="25"></a></td>
+	<td><a href="https://github.com/PierreGranier">PierreGranier</a></td>
 </tr>
 <tr>
-	<td>[<img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394" width="25">](https://github.com/ThibautRoperch)</td>
-	<td>[@ThibautRoperch](https://github.com/ThibautRoperch)</td>
+	<td><a href="https://github.com/ThibautRoperch"><img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394" width="25"></a></td>
+	<td><a href="https://github.com/ThibautRoperch">@ThibautRoperch</a></td>
 </tr>
-</table>]
+</table>
