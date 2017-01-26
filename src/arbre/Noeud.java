@@ -12,6 +12,7 @@ public class Noeud /*extends Thread*/ {
 
 	protected Arbre arbre;
 	protected Noeud noeud_pere;
+	protected String nom;
 	protected JeuDonnees jeu_de_donnees;
 	protected ArrayList<Noeud> noeuds_fils;
 
@@ -19,9 +20,10 @@ public class Noeud /*extends Thread*/ {
 	 * Construit un noeud à partir de l'arbre auquel il appartient, de son noeud père et d'un jeu de données
 	 * @param donnees
 	 */
-	public Noeud(Arbre arbre, Noeud pere, JeuDonnees donnees) {
+	public Noeud(Arbre arbre, Noeud pere, String nom, JeuDonnees donnees) {
 		this.arbre = arbre;
 		this.noeud_pere = pere;
+		this.nom = nom;
 		this.jeu_de_donnees = donnees;
 		this.noeuds_fils = new ArrayList<Noeud>();
 	}
@@ -33,7 +35,7 @@ public class Noeud /*extends Thread*/ {
 		for (Attribut attribut : this.jeu_de_donnees.attributs()) {
 			// Ajouter à la règle l'attribut et sa valeur en tant que condition s'il n'a qu'une valeur possible et si ce n'est pas l'attribut classe
 			if (attribut.valeurs().size() == 1 && !attribut.equals(this.jeu_de_donnees.attributClasse())) {
-				r.ajouterCondition(attribut.nom(), attribut.valeurs().get(0));
+				r.ajouterCondition(attribut.nom(), attribut.valeurs().get(0)); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière
 			}
 		}
 
@@ -69,7 +71,7 @@ public class Noeud /*extends Thread*/ {
 															this.jeu_de_donnees.selectionnerExemplesOu(attribut_choisi, valeur_possible)	);
 				donnees_fils.choisirAttributValeur(attribut_choisi, valeur_possible);
 				// Créer à partir des données, enregistrer et lancer le noeud fils
-				Noeud noeud_fils = new Noeud(this.arbre, this, donnees_fils); // peut contenir 0 exemples dans son jeu de données, la règle ainsi générée sera "ALORS class = "
+				Noeud noeud_fils = new Noeud(this.arbre, this, attribut_choisi.nom() + " = " + valeur_possible, donnees_fils); // peut contenir 0 exemples dans son jeu de données, la règle ainsi générée sera "ALORS class = "
 				this.noeuds_fils.add(noeud_fils);
 				noeud_fils.start();
 			}
@@ -94,10 +96,44 @@ public class Noeud /*extends Thread*/ {
 		return this.jeu_de_donnees.valeursClasseExemples().size() <= 1;
 	}
 
+
+
+	/*
+	//calculer le meilleur attribut à mettre en noeud racine, puis remplir les fils. Puis recommencer sur les fils.
+	//Calcule le gain pour choisir le meilleur attribut.
+	//Prendre le jeu d'apprentissage en paramètre maybe ? 
+	private int gain(int positif, int negatif) {
+		//return positif*(log(positif/positif+negatif)-log(P/P+N));
+
+		//Appeler la fonction pour chaque attribut, et mettre à jour le
+		return 0;
+	}
+	*/
+
 	//Dis moi si tu galères à comprendre mais normalement ça devrait aller :p 
 	//Mais j'pense que c'est quand même nul :trololo:
+
+	/**
+	 * Choisit le meilleur attribut en fonction de celui qui génère le gain d'information le plus élevé
+	 * @return Attribut
+	 */
 	private Attribut meilleurAttribut() {
 		ArrayList<Attribut> attributs_candidats = this.jeu_de_donnees.attributsCandidats();
+		double max_gain = 0;
+		
+		// Pour chaque attribut
+		for (Attribut attribut_candidat : attributs_candidats) {
+			// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplacer
+			// Sinon, supprimer l'attribut (en local)
+			if (this.gain(attribut_candidat) > max_gain) {
+				max_gain = this.gain(attribut_candidat);
+			} else {
+				attributs_candidats.remove(attributs_candidats);
+			}
+		}
+		
+		return attributs_candidats.get(0);
+
 		/*int plus = 0, moins = 0;
 		String meilleur_attribut;
 		int max;
@@ -114,8 +150,6 @@ public class Noeud /*extends Thread*/ {
 			}
 		}*/
 		
-		// appeller la méthode de gain pr chaque attribut, mettre le meilleur resultat dans une variable
-		// retourner la variable
 
 		// ou alors au pif !
 
@@ -123,35 +157,31 @@ public class Noeud /*extends Thread*/ {
 
 		// ou alors le first ! // static Noeud.HASARD Noeud.PREMIER
 
-		return attributs_candidats.get(0);
+		// return attributs_candidats.get(0);
 	}
 
+	/**
+	 * Calcule le gain d'information généré par un attribut donné en paramètre
+	 * Le gain se calcul avec les valeurs possibles de l'attribut donné en paramètre
+	 * L'entropie de chaque jeu de données fils (jeu de données généré par chaque valeur de l'attribut) est soustraite à celle du jeu de données du père
+	 * @return double
+	 */
 	private double gain(Attribut attribut) {
-		double gain_potentiel = this.jeu_de_donnees.entropie();
+		double gain = this.jeu_de_donnees.entropie();
 
 		int nombre_exemples_this = this.jeu_de_donnees.nombreExemples();
 		ArrayList<String> valeurs_possibles = attribut.valeurs();
-
+		
 		// Pour chaque valeur de l'attribut donné en paramètre (donc pour chaque potentiels noeuds fils)
 		for (String valeur_possible : valeurs_possibles) {
+			// Créer un jeu de données sélectionnant les exemples où l'attribut vaut cette valeur
 			JeuDonnees donnees_fils = new JeuDonnees(this.jeu_de_donnees.selectionnerExemplesOu(attribut, valeur_possible));
-			gain_potentiel -= nombre_exemples_this / donnees_fils.nombreExemples() * donnees_fils.entropie();
+			// Soustraire au gain du jeu de données père le gain de ce jeu de données fils
+			gain -= (double) donnees_fils.nombreExemples() / (double) nombre_exemples_this * donnees_fils.entropie();
 		}
 
-		return gain_potentiel;
+		return gain;
 	}
-
-	/*
-	//calculer le meilleur attribut à mettre en noeud racine, puis remplir les fils. Puis recommencer sur les fils.
-	//Calcule le gain pour choisir le meilleur attribut.
-	//Prendre le jeu d'apprentissage en paramètre maybe ? 
-	private int gain(int positif, int negatif) {
-		//return positif*(log(positif/positif+negatif)-log(P/P+N));
-
-		//Appeler la fonction pour chaque attribut, et mettre à jour le
-		return 0;
-	}
-	*/
 
 	public String toString() {
 		String res = "\n----- NOEUD -----\n";
@@ -184,7 +214,7 @@ public class Noeud /*extends Thread*/ {
 
 		String margin = margin_top + "\n" + margin_left;
 		
-		res += margin + "NŒUD";
+		res += margin + "[" + this.nom + "] " + this.jeu_de_donnees.valeursClasseExemples();
 
 		// Pour chaque noeud fils de ce noeud
 		for (Noeud fils : this.noeuds_fils) {

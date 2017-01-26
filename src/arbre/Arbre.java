@@ -14,7 +14,7 @@ public class Arbre {
 	
 	public Arbre(JeuDonnees donnees) {
 		this.jeu_apprentissage = donnees;
-		this.noeud_racine = new Noeud(this, null, this.jeu_apprentissage);
+		this.noeud_racine = new Noeud(this, null, "Racine", this.jeu_apprentissage);
 		this.feuilles = new ArrayList<Noeud>();
 	}
 

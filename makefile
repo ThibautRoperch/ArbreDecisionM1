@@ -9,8 +9,8 @@ all:
 # arbre
 
 main:
-	@echo "# Lancement du programme principal\n# Usage : <jeu d'apprentissage> <jeu de test> <k>"
-	java -cp bin Main {app} {test} {k}
+	@echo "# Lancement du programme principal\n# Usage : app=<jeu d'apprentissage> test=<jeu de test> k=<k>"
+	java -cp bin Main ${app} ${test} ${k}
 
 arbre:
 	@echo "# Création d'un arbre de test"

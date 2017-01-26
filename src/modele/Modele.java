@@ -22,10 +22,6 @@ public class Modele {
 	public void ajouterRegle(Regle regle) {
 		this.regles.add(regle);
 	}
-	
-	public void tester(JeuDonnees donnees) {
-		
-	}
 
 	public String toString() {
 		String res = "";

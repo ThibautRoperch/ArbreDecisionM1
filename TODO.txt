@@ -5,6 +5,11 @@ http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html ?
 
 Numéroter els règles dans le modèle ?
 thread enlevés, synchronized ? avec les threads, l'affichage du modele se fait trop tot donc y'a rien...
+Nettoyer le code (LectureFichier et Noeud)
+Ajouter une constante static
+Interface graphique ?
+Commenter les classes pas encore commentées
+Tester avec les exemples du site http://archive.ics.uci.edu/ml/
 
 // ARBRE DE DECISION
 

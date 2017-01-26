@@ -27,16 +27,17 @@ public class Main {
 
 		Arbre arbre_decision = new Arbre(jeu_app);
 		arbre_decision.construire();
-
+		System.out.println("\nArbre de décision\n" + arbre_decision.toTree() + "\n");
+		
 		// 4. Post-élagage de l'arbre de décision avec le jeu de test et le coefficient V
+		
 		arbre_decision.postElaguer(jeu_test, coeff_v);
+		System.out.println("\nArbre de décision post-élagué\n" + arbre_decision.toTree() + "\n");
 
-		// 4. Construction du modèle associé à l'arbre de décision
+		// 5. Construction du modèle associé à l'arbre de décision
 
 		Modele modele = arbre_decision.genererModele();
-
-		// 5. Test du modèle avec le jeu de test				Un modèle est un ensemble de règles ou d'hypothèses
-		modele.tester(jeu_test); // String resultat_test = modele.tester(jeu_test); ?
+		System.out.println("\nModèle de l'arbre de décision\n\n" + modele + "\n");
 	}
 
 }
