@@ -28,12 +28,44 @@ public class Noeud /*extends Thread*/ {
 		this.noeuds_fils = new ArrayList<Noeud>();
 	}
 
+	/**
+	 * Retourne true si le noeud est pur
+	 * Un noeud est pur si son jeu de données ne contient que des exemples appartenant à la même classe (ou aucun exemple)
+	 * Un noeud pur est une feuille de l'arbre de décision
+	 * @return boolean
+	 */
+	public boolean estPur() {
+		return this.jeu_de_donnees.valeursClasseExemples().size() <= 1;
+	}
+
+	/**
+	 * Retourne le nombre de descendances du noeud
+	 * @return int
+	 */
+	public int nombreDescendances() {
+		int max = 0;
+
+		// Pour chaque noeud fils de ce noeud
+		for (Noeud fils : this.noeuds_fils) {
+			 if (fils.nombreDescendances() > max) {
+				 max = fils.nombreDescendances();
+			 }
+		}
+		
+		return 1 + max;
+	}
+
+	/**
+	 * Retourne la règle de décision associée au noeud
+	 * Les conditions de la règle sont les attributs précédemment choisis et la conclusion est la classe majoritaire du jeu de données du noeud
+	 * @return Regle
+	 */
 	public Regle genererRegle() {
 		Regle r = new Regle();
 
 		// Pour chaque attribut du jeu de données
 		for (Attribut attribut : this.jeu_de_donnees.attributs()) {
-			// Ajouter à la règle l'attribut et sa valeur en tant que condition s'il n'a qu'une valeur possible et si ce n'est pas l'attribut classe
+			// Ajouter à la règle l'attribut et sa valeur en tant que condition s'il n'a qu'une valeur possible (def d'un attribut choisi) et si ce n'est pas l'attribut classe
 			if (attribut.valeurs().size() == 1 && !attribut.equals(this.jeu_de_donnees.attributClasse())) {
 				r.ajouterCondition(attribut.nom(), attribut.valeurs().get(0)); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière
 			}
@@ -87,33 +119,6 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
-	 * Retourne true si le noeud est pur
-	 * Un noeud est pur si son jeu de données ne contient que des exemples appartenant à la même classe (ou aucun exemple)
-	 * Un noeud pur est une feuille de l'arbre de décision
-	 * @return boolean
-	 */
-	public boolean estPur() {
-		return this.jeu_de_donnees.valeursClasseExemples().size() <= 1;
-	}
-
-
-
-	/*
-	//calculer le meilleur attribut à mettre en noeud racine, puis remplir les fils. Puis recommencer sur les fils.
-	//Calcule le gain pour choisir le meilleur attribut.
-	//Prendre le jeu d'apprentissage en paramètre maybe ? 
-	private int gain(int positif, int negatif) {
-		//return positif*(log(positif/positif+negatif)-log(P/P+N));
-
-		//Appeler la fonction pour chaque attribut, et mettre à jour le
-		return 0;
-	}
-	*/
-
-	//Dis moi si tu galères à comprendre mais normalement ça devrait aller :p 
-	//Mais j'pense que c'est quand même nul :trololo:
-
-	/**
 	 * Choisit le meilleur attribut en fonction de celui qui génère le gain d'information le plus élevé
 	 * @return Attribut
 	 */
@@ -133,23 +138,6 @@ public class Noeud /*extends Thread*/ {
 		}
 		
 		return attributs_candidats.get(0);
-
-		/*int plus = 0, moins = 0;
-		String meilleur_attribut;
-		int max;
-		Iterator<String> it = attributs_candidats.iterator();
-		while(it.hasNext()) {
-			String s = it.toString();
-			if(s == valeur_attribut) {
-				plus++;
-			} else moins++;
-
-			if(gain(s) > max) {
-				meilleur_attribut = s;
-				max = gain(attributs_candidats, s);
-			}
-		}*/
-		
 
 		// ou alors au pif !
 
@@ -183,6 +171,32 @@ public class Noeud /*extends Thread*/ {
 		return gain;
 	}
 
+	/**
+	 * Tente de regrouper les noeuds fils avec ce noeud si le coeeficient k donné en paramètre est satisfait
+	 * Les fils sont supprimés et leur jeu de données est ajouté à celui de ce noeud
+	 */
+	public void regrouperFils(JeuDonnees donnees_test, int coeff_v) {
+		JeuDonnees exemples_a_tester = new JeuDonnees(donnees_test.exemples()); // exemples pouvant être placés à ce noeud
+
+		// Sélection des exemples du jeu de test satisfaisant les attributs choisis de ce noeud
+		// Pour chaque attribut du jeu de données de ce noeud
+		for (Attribut attribut : this.jeu_de_donnees.attributs()) {
+			// Sélection des exemples du jeu de test où l'attribut = cet attribut s'il n'a qu'une valeur possible pour cet attribut (def d'un attribut choisi) et si ce n'est pas l'attribut classe
+			if (attribut.valeurs().size() == 1 && !attribut.equals(this.jeu_de_donnees.attributClasse())) {
+				exemples_a_tester = new JeuDonnees(exemples_a_tester.selectionnerExemplesOu(attribut, attribut.valeurs().get(0))); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière
+			}
+		}
+
+		System.out.println(exemples_a_tester);
+
+		// parcourir de la racine vers les noeuds fils en profondeur d'abord
+		// si le noeud satisfait le coeff v, reunir avec les fils ?
+
+		// Un noeud : 
+		// si (il peut etre elaguer, cad si le taux d'erreur du jeu de test ne dépasse pas k sur le noeud) alors elaguer (suppr les fils)
+		// sinon pour chaque fils,  postelaguer
+	}
+
 	public String toString() {
 		String res = "\n----- NOEUD -----\n";
 
@@ -207,7 +221,7 @@ public class Noeud /*extends Thread*/ {
 			if (niveau > 1) {
 				margin_left += " |  ";
 			} else {
-				margin_left += " |__";
+				margin_left += " |___";
 			}
 			--niveau;
 		}

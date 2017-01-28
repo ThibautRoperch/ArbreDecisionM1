@@ -24,13 +24,14 @@ public class Modele {
 	}
 
 	public String toString() {
-		String res = "";
+		String res = "\n# Affichage du modèle\n\n";
 
 		// Pour chaque règle
+		int indice_regle = 0;
 		for (Regle r : this.regles) {
-			res += r + "\n";
+			res += "R " + ++indice_regle + "\t" + r + "\n";
 		}
-
+		
 		return res;
 	}
 

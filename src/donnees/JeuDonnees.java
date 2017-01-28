@@ -59,20 +59,6 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Retourne vrai si le jeu de données est bien construit, c'est à dire s'il contient des attributs
-	 */
-	public boolean estBienConstruit() {
-		return this.attributs.size() > 0;
-	}
-
-	/**
-	 * Retourne le nombre d'exemples
-	 */
-	public int nombreExemples() {
-		return this.exemples.size();
-	}
-
-	/**
 	 * Retourne une copie des attributs
 	 * @return ArrayList<Attribut>
 	 */
@@ -85,6 +71,42 @@ public class JeuDonnees {
 		}
 
 		return res;
+	}
+
+	/**
+	 * Retourne une copie des exemples
+	 * @return ArrayList<ArrayList<String>>
+	 */
+	public ArrayList<ArrayList<String>> exemples() {
+		ArrayList<ArrayList<String>> res = new ArrayList<ArrayList<String>>();
+
+		// Pour chaque exemple
+		for (ArrayList<String> exemple : this.exemples) {
+			res.add(exemple);
+		}
+
+		return res;
+	}
+
+	/**
+	 * Retourne le nombre d'attributs
+	 */
+	public int nombreAttributs() {
+		return this.attributs.size();
+	}
+
+	/**
+	 * Retourne le nombre d'exemples
+	 */
+	public int nombreExemples() {
+		return this.exemples.size();
+	}
+
+	/**
+	 * Retourne vrai si le jeu de données est bien construit, c'est à dire s'il contient des attributs
+	 */
+	public boolean estBienConstruit() {
+		return this.attributs.size() > 0;
 	}
 	
 	/**
@@ -194,7 +216,7 @@ public class JeuDonnees {
 
 		return classe_majoritaire;
 	}
-
+	
 	/**
 	 * Retourne les exemples du jeu de données où attribut = valeur donnée en paramètre
 	 * @param attribut
