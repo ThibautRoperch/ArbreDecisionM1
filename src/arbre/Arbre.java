@@ -82,8 +82,8 @@ public class Arbre {
 		res += "\nNombre d'attributs :\t" + this.jeu_apprentissage.nombreAttributs() + "\n";
 		int surrapprentissage = this.hauteur() * 100 / this.jeu_apprentissage.nombreAttributs();
 		res += "\nSurrapprentissage :\t" + surrapprentissage + "%\n";
-		int surrapprentissage2 = this.feuilles.size() * 100 / this.jeu_apprentissage.nombreExemples();
-		res += "\nSurrapprentissage2 :\t" + surrapprentissage2 + "%\n";
+		// int surrapprentissage2 = this.feuilles.size() * 100 / this.jeu_apprentissage.nombreExemples();
+		// res += "\nSurrapprentissage2 :\t" + surrapprentissage2 + "%\n";
 
 
 		return res;

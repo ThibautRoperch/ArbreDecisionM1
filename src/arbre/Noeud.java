@@ -232,11 +232,11 @@ public class Noeud /*extends Thread*/ {
 		int niveau = level;
 
 		while (niveau > 0) {
-			margin_top += " |  ";
+			margin_top += " |   ";
 			if (niveau > 1) {
-				margin_left += " |  ";
+				margin_left += " |   ";
 			} else {
-				margin_left += " |___";
+				margin_left += " |____";
 			}
 			--niveau;
 		}
@@ -244,10 +244,7 @@ public class Noeud /*extends Thread*/ {
 		String margin = margin_top + "\n" + margin_left;
 		
 		res += margin + "[" + this.nom + "] " + this.jeu_de_donnees.valeursClasseExemples();
-
-		if (this.nombreDescendances() - 1 == 0) {
-			res += " (" + new DecimalFormat("#0.00").format(this.jeu_de_donnees.tauxErreur() * 100) + " % de taux d'erreur)";
-		}
+		res += " (" + new DecimalFormat("#0.00").format(this.jeu_de_donnees.tauxErreur() * 100) + " % de taux d'erreur)";
 
 		// Pour chaque noeud fils de ce noeud
 		for (Noeud fils : this.noeuds_fils) {
