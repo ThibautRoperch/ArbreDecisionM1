@@ -16,7 +16,7 @@ public class Main {
 		// Jeu de test
 		String fichier_jeu_test = (args.length >= 2) ? args[1] : "";
 		// Coefficient V
-		int coeff_v = (args.length >= 3) ? Integer.parseInt(args[2]) : 0;
+		double coeff_v = (args.length >= 3) ? Double.parseDouble(args[2]) : 0;
 
 		// 2. Lecture les fichiers, création des deux jeux de données avec le contenu des fichiers
 
