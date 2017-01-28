@@ -3,6 +3,7 @@ package arbre;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.lang.Math;
+import java.text.DecimalFormat;
 
 import donnees.JeuDonnees;
 import donnees.Attribut;
@@ -17,7 +18,10 @@ public class Noeud /*extends Thread*/ {
 	protected ArrayList<Noeud> noeuds_fils;
 
 	/**
-	 * Construit un noeud à partir de l'arbre auquel il appartient, de son noeud père et d'un jeu de données
+	 * Construit un noeud à partir de l'arbre auquel il appartient, de son noeud père, d'un nom et d'un jeu de données
+	 * @param arbre
+	 * @param pere
+	 * @param nom
 	 * @param donnees
 	 */
 	public Noeud(Arbre arbre, Noeud pere, String nom, JeuDonnees donnees) {
@@ -152,6 +156,7 @@ public class Noeud /*extends Thread*/ {
 	 * Calcule le gain d'information généré par un attribut donné en paramètre
 	 * Le gain se calcul avec les valeurs possibles de l'attribut donné en paramètre
 	 * L'entropie de chaque jeu de données fils (jeu de données généré par chaque valeur de l'attribut) est soustraite à celle du jeu de données du père
+	 * @param attribut
 	 * @return double
 	 */
 	private double gain(Attribut attribut) {
@@ -172,29 +177,39 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
-	 * Tente de regrouper les noeuds fils avec ce noeud si le coeeficient k donné en paramètre est satisfait
-	 * Les fils sont supprimés et leur jeu de données est ajouté à celui de ce noeud
+	 * Tente de regrouper les noeuds fils avec ce noeud si le coefficient k donné en paramètre est satisfait
+	 * Les fils sont supprimés et leurs jeux de données sont fusionnés avec celui de ce noeud
+	 * Ce noeud devient une feuille et s'ajoute à la liste des feuilles de l'arbre auquel il appartient
+	 * Le regroupement des fils se fait dans le cadre d'un élagage de l'arbre
+	 * @param donnees_test
+	 * @param coeff_v
 	 */
-	public void regrouperFils(JeuDonnees donnees_test, int coeff_v) {
-		JeuDonnees exemples_a_tester = new JeuDonnees(donnees_test.exemples()); // exemples pouvant être placés à ce noeud
+	public void regrouperFils(JeuDonnees donnees_test, double coeff_v) {
+		ArrayList<Attribut> attributs_this = this.jeu_de_donnees.attributs();
+		JeuDonnees exemples_a_tester = new JeuDonnees(attributs_this, donnees_test.exemples()); // exemples pouvant être placés à ce noeud
 
 		// Sélection des exemples du jeu de test satisfaisant les attributs choisis de ce noeud
 		// Pour chaque attribut du jeu de données de ce noeud
-		for (Attribut attribut : this.jeu_de_donnees.attributs()) {
+		for (Attribut attribut : attributs_this) {
 			// Sélection des exemples du jeu de test où l'attribut = cet attribut s'il n'a qu'une valeur possible pour cet attribut (def d'un attribut choisi) et si ce n'est pas l'attribut classe
 			if (attribut.valeurs().size() == 1 && !attribut.equals(this.jeu_de_donnees.attributClasse())) {
-				exemples_a_tester = new JeuDonnees(exemples_a_tester.selectionnerExemplesOu(attribut, attribut.valeurs().get(0))); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière
+				exemples_a_tester = new JeuDonnees(attributs_this, exemples_a_tester.selectionnerExemplesOu(attribut, attribut.valeurs().get(0))); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière
+			}
+		}	
+		
+		// Si le taux de réussite du jeu de données test est supérieur ou égal au coefficient v donné en paramètre, regrouper les noeud fils avec ce noeud
+		// Si le noeud est déjà une feuille, ça va juste re-ajouter le noeud à la liste des feuilles de l'arbre auquel il appartient
+		if (1 - exemples_a_tester.tauxErreur() >= coeff_v) {
+			this.noeuds_fils.clear();
+			this.arbre.ajouterFeuille(this);
+		}
+		// Sinon, parcours en profondeur, tester si les fils peuvent être regroupés en commençant par le premier
+		else {
+			// Pour chaque noeud fils de ce noeud
+			for (Noeud fils : this.noeuds_fils) {
+				fils.regrouperFils(donnees_test, coeff_v);
 			}
 		}
-
-		System.out.println(exemples_a_tester);
-
-		// parcourir de la racine vers les noeuds fils en profondeur d'abord
-		// si le noeud satisfait le coeff v, reunir avec les fils ?
-
-		// Un noeud : 
-		// si (il peut etre elaguer, cad si le taux d'erreur du jeu de test ne dépasse pas k sur le noeud) alors elaguer (suppr les fils)
-		// sinon pour chaque fils,  postelaguer
 	}
 
 	public String toString() {
@@ -229,6 +244,10 @@ public class Noeud /*extends Thread*/ {
 		String margin = margin_top + "\n" + margin_left;
 		
 		res += margin + "[" + this.nom + "] " + this.jeu_de_donnees.valeursClasseExemples();
+
+		if (this.nombreDescendances() - 1 == 0) {
+			res += " (" + new DecimalFormat("#0.00").format(this.jeu_de_donnees.tauxErreur() * 100) + " % de taux d'erreur)";
+		}
 
 		// Pour chaque noeud fils de ce noeud
 		for (Noeud fils : this.noeuds_fils) {

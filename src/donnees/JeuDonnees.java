@@ -200,21 +200,26 @@ public class JeuDonnees {
 			}
 		}
 
-		// S'il n'y a plus qu'une seule classe dans la map
-		if (classes.size() == 1) {
-			// Récupérer le nom de la classe (1er indice de la liste des clefs de la map)
-			classe_majoritaire = (String) classes.keySet().toArray()[0];
-		}
-		// Sinon, s'il n'y a pas d'exemples dans le jeu de données
-		else if (classes.size() == 0) {
-			classe_majoritaire = "";
-		}
-		// Sinon, choisir une classe en regardant ce qui a déjà été choisi dans l'arbre
-		else {
-			classe_majoritaire = "En éspérant que ce cas n'arrive jamais lol";
+		// S'il y a au moins une classe dans la map
+		if (classes.size() > 0) {
+			// Récupérer le nom de la classe (dernier indice de la liste des clefs de la map)
+			classe_majoritaire = (String) classes.keySet().toArray()[classes.keySet().toArray().length - 1];
 		}
 
 		return classe_majoritaire;
+	}
+
+	/**
+	 * Retourne le taux d'erreur de la classe majoritaire
+	 * @return double
+	 */
+	public double tauxErreur() {
+		if (this.nombreExemples() > 0) {
+			JeuDonnees exemples_ou_classe_majoritaire = new JeuDonnees(this.selectionnerExemplesOu(this.attributClasse(), this.classeMajoritaire()));
+			return 1 - (double) exemples_ou_classe_majoritaire.nombreExemples() / (double) this.nombreExemples();
+		} else {
+			return 0;
+		}
 	}
 	
 	/**

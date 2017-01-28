@@ -42,7 +42,10 @@ public class Arbre {
 		this.noeud_racine.start();
 	}
 
-	public void postElaguer(JeuDonnees donnees_test, int coeff_v) {
+	public void postElaguer(JeuDonnees donnees_test, double coeff_v) {
+		// Supprimer les feuilles, car avec le regroupement des fils, des noeuds vont devenir feuille (et s'ajouter à la liste des feuilles)
+		// et des feuilles vont disparaître sans pouvoir se supprimer de la liste des feuilles, donc remise à zéro de la liste des feuilles
+		this.feuilles.clear();
 		this.noeud_racine.regrouperFils(donnees_test, coeff_v);
 	}
 
@@ -91,9 +94,10 @@ public class Arbre {
 		Arbre a = new Arbre(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"));
 		a.construire();
 		// System.out.println(a);
-		// System.out.println(a.toTree());
+		System.out.println(a.toTree());
 		// System.out.println(a.genererModele());
-		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 5);
+		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 0.65); // 65% de taux de succes min
+		System.out.println(a.toTree());
 	}
 
 }
