@@ -45,6 +45,21 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
+	 * Retourne le taux d'erreur du jeu de validation du noeud
+	 * @return double
+	 */
+	public double tauxErreurValidation() {
+		return this.jeu_validation.tauxErreur();
+	}
+
+	/**
+	 * Retourne la classe majoritaire du jeu de validation du noeud
+	 */
+	public String classeMajoritaireValidation() {
+		return this.jeu_validation.classeMajoritaire();
+	}
+
+	/**
 	 * Retourne le nombre de descendances du noeud
 	 * @return int
 	 */
@@ -237,6 +252,13 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	public String toTree(int level) {
+		// Ne rien afficher si le jeu d'apprentissage ne contient pas d'exemple dans le cas d'un jeu de validation null,
+		// ou si le jeu de validation ne contient pas d'exemple dans le cas d'un jeu de validation non null
+		if (this.jeu_validation == null && this.jeu_apprentissage.nombreExemples() == 0
+		 || this.jeu_validation != null && this.jeu_validation.nombreExemples() == 0) {
+			return "";
+		}
+
 		String res = "";
 		String margin_top = "";
 		String margin_left = "";
@@ -254,7 +276,7 @@ public class Noeud /*extends Thread*/ {
 
 		String margin = margin_top + "\n" + margin_left;
 		
-		res += margin + "[" + this.nom + "] " + this.jeu_apprentissage.valeursClasseExemples();
+		res += "\n" + margin + "[" + this.nom + "] " + this.jeu_apprentissage.valeursClasseExemples();
 
 		if (this.jeu_validation != null && this.noeuds_fils.size() == 0) {
 			res += " (" + new DecimalFormat("#0.00").format(this.jeu_apprentissage.tauxErreur() * 100) + " % de taux d'erreur)";
@@ -263,7 +285,7 @@ public class Noeud /*extends Thread*/ {
 		// Pour chaque noeud fils de ce noeud
 		for (Noeud fils : this.noeuds_fils) {
 			// Affiche le noeud en augmentant le niveau
-			res += "\n" + fils.toTree(level + 1);			
+			res += fils.toTree(level + 1);			
 		}
 
 		return res;

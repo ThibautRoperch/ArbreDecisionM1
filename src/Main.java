@@ -20,24 +20,30 @@ public class Main {
 
 		// 2. Lecture les fichiers, création des deux jeux de données avec le contenu des fichiers
 
+		System.out.println("\n> Création des jeux de données\n");
 		JeuDonnees jeu_app = new JeuDonnees(fichier_jeu_app);
 		JeuDonnees jeu_test = new JeuDonnees(fichier_jeu_test);
 
 		// 3. Construction d'un arbre de décision avec le jeu d'apprentissage
 
+		System.out.println("\n> Construction d'un arbre de décision avec le jeu d'apprentissage\n");
 		Arbre arbre_decision = new Arbre();
 		arbre_decision.construire(jeu_app, Arbre.GAIN_INFORMATION);
-		System.out.println("\nArbre de décision\n" + arbre_decision.toTree() + "\n");
+		System.out.println(arbre_decision.toTree());
+		System.out.println(arbre_decision.toCharacteristics());
 		
 		// 4. Post-élagage de l'arbre de décision avec le jeu de test et le coefficient V
 		
+		System.out.println("\n> Post-élagage de l'arbre de décision avec le jeu de test et le coefficient V\n");
 		arbre_decision.postElaguer(jeu_test, coeff_v);
-		System.out.println("\nArbre de décision post-élagué\n" + arbre_decision.toTree() + "\n");
+		// System.out.println(arbre_decision.toTree());
+		System.out.println(arbre_decision.toCharacteristics());
 
-		// 5. Construction du modèle associé à l'arbre de décision
+		// 5. Génération du modèle associé à l'arbre de décision
 
+		System.out.println("\n> Génération du modèle associé à l'arbre de décision\n");
 		Modele modele = arbre_decision.genererModele();
-		System.out.println("\nModèle de l'arbre de décision\n\n" + modele + "\n");
+		System.out.println(modele);
 	}
 
 }

@@ -14,7 +14,7 @@ Exécuter le programme principal en donnant les jeux d'apprentissage et de test 
 
 Exemple de ligne de compilation et d'exécution :
 
-	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff k=0.65
+	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff k=0.05
 
 
 ## Termes employés

@@ -221,6 +221,8 @@ public class JeuDonnees {
 
 	/**
 	 * Retourne le taux d'erreur de la classe majoritaire
+	 * Le taux d'erreur est le nombre d'exemples où l'attribut de classe vaut la classe majoritaire
+	 * divisé par le nombre total d'exemples
 	 * @return double
 	 */
 	public double tauxErreur() {

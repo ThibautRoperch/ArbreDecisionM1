@@ -1,6 +1,8 @@
 package arbre;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import donnees.JeuDonnees;
 import modele.Modele;
@@ -81,7 +83,7 @@ public class Arbre {
 			this.noeud_racine = new Noeud(this, null, "Racine", this.jeu_apprentissage);
 			this.noeud_racine.start();
 		} else {
-			System.out.println("Erreur : Le jeu de données d'apprentissage est vide d'attributs, impossible de construire l'arbre");
+			System.out.println("Erreur : Le jeu de d'apprentissage est vide d'attributs, impossible de construire l'arbre");
 		}
 	}
 
@@ -93,14 +95,17 @@ public class Arbre {
 	 * @param coeff_v
 	 */
 	public void postElaguer(JeuDonnees donnees_validation, double coeff_v) {
-		// Si le jeu de données de validation est du même acabit que le jeu de données d'apprentissage, lancer le post-élagage de l'arbre
+		// Enregistrer le jeu de validation
+		this.jeu_validation = donnees_validation;
+
+		// Si le jeu de validation est du même acabit que le jeu d'apprentissage, lancer le post-élagage de l'arbre
 		if (donnees_validation.estConstruitComme(this.jeu_apprentissage)) {
 			// Supprimer les feuilles, car avec le regroupement des fils, des noeuds vont devenir feuille (et s'ajouter à la liste des feuilles)
 			// et des feuilles vont disparaître sans pouvoir se supprimer de la liste des feuilles, donc remise à zéro de la liste des feuilles
 			this.feuilles.clear();
 			this.noeud_racine.regrouperFils(donnees_validation, coeff_v);
 		} else {
-			System.out.println("Erreur : Le jeu de données de validation n'a pas les mêmes attributs que le jeu de données d'apprentissage, impossible de post-élaguer l'arbre");
+			System.out.println("Erreur : Le jeu de validation n'a pas les mêmes attributs que le jeu d'apprentissage, impossible de post-élaguer l'arbre");
 		}
 	}
 
@@ -152,15 +157,37 @@ public class Arbre {
 	}
 
 	public String toStatistics() {
-		String res = "\n\n# Statistiques de l'arbre\n";
+		String res = "\n# Statistiques de l'arbre\n";
+
+		HashMap<String, Double> taux_erreur_validation = new HashMap<String, Double>();
 
 		// Pour chaque feuille de l'arbre
 		for (Noeud n : this.feuilles) {
-
+			// Si la classe majoritaire n'est pas vide (à cause d'un jeu de 0 exemples)
+			if (!n.classeMajoritaireValidation().equals("")) {
+				// Enregistrement du taux d'erreur du jeu de validation de ce noeud feuille
+				// S'il y a déjà un taux enregistré dans la map, + 1 à la partie entière
+				Object taux_deja_enregistre = taux_erreur_validation.get(n.classeMajoritaireValidation());
+				if (taux_deja_enregistre == null) taux_deja_enregistre = (double) 1;
+				taux_erreur_validation.put(n.classeMajoritaireValidation(), (double) taux_deja_enregistre + n.tauxErreurValidation());
+			}
 		}
 
-		/*Taux d'erreur moyen par classe (uniquement les feuilles)
-		Taux d'erreur moyen total (uniquement les feuilles)*/
+		double taux_erreur_validation_total = 0;
+
+		res += "\nTaux d'erreur des classes (dans les jeux de validation des feuilles) :\n\n";
+
+		// Pour chaque couple (classe, taux d'erreur)
+		for (Map.Entry<String, Double> e : taux_erreur_validation.entrySet()) {
+			// Extraction de la partie entière
+			// Soustraction de la partie entière à la somme des taux et division de la somme des taux par la partie entière
+			int partie_entiere = (int) Math.floor(e.getValue());
+			e.setValue((e.getValue() - partie_entiere) / partie_entiere);
+			res += e.getKey() + "\t" + e.getValue() * 100 + "%\n";
+			taux_erreur_validation_total += e.getValue();
+		}
+
+		res += "Total\t" + taux_erreur_validation_total / taux_erreur_validation.size() + "%\n";
 
 		return res;
 	}
@@ -170,13 +197,12 @@ public class Arbre {
 		// a.construire(new JeuDonnees("jeux/vote.arff"), Arbre.GAIN_INFORMATION);
 		a.construire(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), Arbre.GAIN_INFORMATION);
 		// System.out.println(a);
-		// System.out.println(a.toTree());
+		System.out.println(a.toTree());
 		System.out.println(a.toCharacteristics());
-		System.out.println(a.toStatistics());
-		// System.out.println(a.genererModele());
+		System.out.println(a.genererModele());
 		// a.postElaguer(new JeuDonnees("jeux/vote.arff"), 0.005);
-		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 0.05);
-		// System.out.println(a.toTree());
+		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 0.005);
+		System.out.println(a.toTree());
 		System.out.println(a.toCharacteristics());
 		System.out.println(a.toStatistics());
 		// System.out.println(a.genererModele());
