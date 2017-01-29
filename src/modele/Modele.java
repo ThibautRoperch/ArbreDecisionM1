@@ -29,7 +29,7 @@ public class Modele {
 		// Pour chaque règle
 		int indice_regle = 0;
 		for (Regle r : this.regles) {
-			res += "R " + ++indice_regle + "\t" + r + "\n";
+			res += "R" + ++indice_regle + "\t" + r + "\n";
 		}
 		
 		return res;

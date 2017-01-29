@@ -184,9 +184,9 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
-	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (>= coeff_v)
+	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (+= coeff_v)
 	 * par rapport au jeu d'apprentissage
-	 * S'il y a plus de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (plus de coeff_v) :
+	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (+= coeff_v) :
 	 * - Les fils sont supprimés et leurs jeux de données sont fusionnés avec celui de ce noeud
 	 * - Ce noeud devient une feuille et s'ajoute à la liste des feuilles de l'arbre auquel il appartient
 	 * Le regroupement des fils se fait dans le cadre d'un élagage de l'arbre
@@ -206,10 +206,11 @@ public class Noeud /*extends Thread*/ {
 			}
 		}
 		
-		// Si le taux de bonnes réponses du jeu de validation est supérieur ou égal au taux de bonnes réponses du jeu d'apprentissage * le coefficient v donné en paramètre,
+		// Si le taux de bonnes réponses du jeu de validation est supérieur ou égal au taux de bonnes réponses du jeu d'apprentissage + le coefficient v donné en paramètre,
 		// regrouper les noeud fils avec ce noeud et ajouter ce noeud à la liste des feuilles de l'arbre
 		// Si ce noeud est déjà une feuille, re-ajouter ce noeud à la liste des feuilles de l'arbre
-		if (1 - this.jeu_validation.tauxErreur() >= (1 - this.jeu_apprentissage.tauxErreur()) * ( 1 + coeff_v) || this.noeuds_fils.size() == 0) {
+		// Taux de réussite de l'arbre élagué augmente d'une valeur coeff_v par rapport à l'arbre non élagué => regroupement
+		if (1 - this.jeu_validation.tauxErreur() >= (1 - this.jeu_apprentissage.tauxErreur()) + coeff_v || this.noeuds_fils.size() == 0) {
 			this.noeuds_fils.clear();
 			this.arbre.ajouterFeuille(this);
 		}

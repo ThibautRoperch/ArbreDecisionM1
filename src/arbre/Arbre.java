@@ -174,11 +174,12 @@ public class Arbre {
 		System.out.println(a.toCharacteristics());
 		System.out.println(a.toStatistics());
 		// System.out.println(a.genererModele());
-		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 0.00000001);
+		// a.postElaguer(new JeuDonnees("jeux/vote.arff"), 0.005);
+		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 0.05);
 		// System.out.println(a.toTree());
 		System.out.println(a.toCharacteristics());
 		System.out.println(a.toStatistics());
-		System.out.println(a.genererModele());
+		// System.out.println(a.genererModele());
 	}
 
 }
