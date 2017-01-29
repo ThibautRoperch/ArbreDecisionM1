@@ -108,6 +108,16 @@ public class JeuDonnees {
 	public boolean estBienConstruit() {
 		return this.attributs.size() > 0;
 	}
+
+	/**
+	 * Retourne vrai si le jeu de données en paramètre a les mêmes attributs que le jeu de données this
+	 */
+	public boolean estConstruitComme(JeuDonnees donnees) {
+		/*for (Attribut a : this.attributs) {
+			if (donnes)
+		}*/
+		return this.attributs.equals(donnees.attributs);
+	}
 	
 	/**
 	 * Ajoute un attribut et ses valeurs possibles
@@ -272,8 +282,8 @@ public class JeuDonnees {
 		for (Map.Entry<String, Integer> classe : nombre_exemples_classes.entrySet()) {
 			// Calculer la proportion de cette classe
 			double proportion_classe = (double) classe.getValue() / (double) nombre_exemples_total;
-			// Calculer l'entropie de cette classe
-			double entropie_classe = (double) proportion_classe * log2(proportion_classe);
+			// Calculer l'entropie de cette classe, si la proportion n'est pas égale à 0
+			double entropie_classe = (proportion_classe > 0) ? (double) proportion_classe * log2(proportion_classe) : 0;
 			// Soustraire l'entropie de la calsse à l'entropie du noeud
 			entropie -= entropie_classe;
 		}
@@ -290,7 +300,7 @@ public class JeuDonnees {
 	}
 
 	public String toString() {
-		String res = "";
+		String res = "\n# Affichage du jeu de données\n";
 
 		// Pour chaque attribut
 		for (Attribut attribut : this.attributs) {
@@ -307,10 +317,15 @@ public class JeuDonnees {
 				res += valeur + "\t";
 			}
 			res += "\n";
-		}		
+		}
+
+		res += "\n# Caractéristiques du jeu de données\n";
+		res += "\nNombre d'exemples :\t" + this.nombreExemples() + "\n";
+		res += "\nNombre d'attributs :\t" + this.nombreAttributs() + "\n";
 
 		return res;
 	}
+
 	public static void main (String[] args) {
 		// JeuDonnees jd = new JeuDonnees("jeux/vote.arff");
 		JeuDonnees jd = new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff");

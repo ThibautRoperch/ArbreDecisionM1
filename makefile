@@ -9,7 +9,7 @@ all:
 # arbre
 
 main:
-	@echo "# Lancement du programme principal\n# Usage : app=<jeu d'apprentissage> test=<jeu de test> k=<k>"
+	@echo "# Lancement du programme principal\n# Usage : app=<jeu d'apprentissage> test=<jeu de test> k=<coefficient k>"
 	java -cp bin Main ${app} ${test} ${k}
 
 arbre:
@@ -23,7 +23,6 @@ jeudonnees:
 lecturefichier:
 	@echo "# Lecture d'un fichier de test"
 	java -cp bin donnees.LectureFichier
-
 	
 # nettoyage
 

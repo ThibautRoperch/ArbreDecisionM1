@@ -1,33 +1,30 @@
 package modele;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+
+import donnees.Attribut;
 
 public class Regle {
 
-	protected HashMap<String, String> conditions;
-	protected HashMap<String, String> conclusion;
+	protected ArrayList<Attribut> conditions;
+	protected Attribut conclusion;
 
 	/**
 	 * Construit une règle vide
 	 */
 	public Regle() {
-		this.conditions = new HashMap<String, String>();
-		this.conclusion = new HashMap<String, String>();
+		this.conditions = new ArrayList<Attribut>();
+		this.conclusion = null;
 	}
 
 	/**
-	 * Construit une règle à partir de conditions et d'une conclusion
-	 * @param conditions
-	 * @param conclusion
+	 * Retourne vrai si la règle a une conclusion, c'est-à-dire une valeur pour l'attribut de classe
+	 * La règle a une conclusion si la valeur de l'attribut de classe de la conclusion n'est pas vide
+	 * Il y a une valeur de classe vide lorsqu'il n'y a pas de classe majoritaire dans le jeu de données, ce qui arrive lorsque le jeu est vide d'exemples
+	 * @return boolean
 	 */
-	public Regle(HashMap<String, String> conditions, HashMap<String, String> conclusion) {
-		this.conditions = conditions;
-		this.conclusion = conclusion;
-	}
-
 	public boolean conclut() {
-		return !this.conclusion.values().toArray()[0].equals("");
+		return !this.conclusion.valeurs().get(0).equals(""); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière
 	}
 
 	/**
@@ -35,8 +32,8 @@ public class Regle {
 	 * @param attribut
 	 * @param valeur
 	 */
-	public void ajouterCondition(String attribut, String valeur) {
-		this.conditions.put(attribut, valeur);
+	public void ajouterCondition(Attribut attribut) {
+		this.conditions.add(attribut);
 	}
 
 	/**
@@ -45,9 +42,8 @@ public class Regle {
 	 * @param attribut
 	 * @param valeur
 	 */
-	public void ajouterConclusion(String attribut, String valeur) {
-		this.conclusion.clear();
-		this.conclusion.put(attribut, valeur);
+	public void ajouterConclusion(Attribut attribut) {
+		this.conclusion = attribut;
 	}
 
 	public String toString() {
@@ -55,15 +51,15 @@ public class Regle {
 		int nb_conditions = 0;
 
 		// Pour chaque condition
-		for (Map.Entry<String, String> condition : this.conditions.entrySet()) {
-			// Ajoute l'attribut à la chaine " = " sa valeur
+		for (Attribut condition : this.conditions) {
+			// Ajoute l'attribut à la chaine
 			if (nb_conditions > 0) res += " ET ";
-			res += condition.getKey() + " = " + condition.getValue();
+			res += condition.nom() + " = " + condition.valeurs().get(0); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière;
 			++nb_conditions;
 		}
 
 		// Pour la conclusion
-		res += " ALORS " + this.conclusion.keySet().toArray()[0] + " = " + this.conclusion.values().toArray()[0];
+		res += " ALORS " + this.conclusion.nom() + " = " + this.conclusion.valeurs().get(0); // il n'y a qu'une valeur, en théorie, get(0) est la première et la dernière;
 		
 		return res;
 	}

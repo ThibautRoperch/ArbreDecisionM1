@@ -2,6 +2,21 @@
 
 Construire et post-élaguer un arbre de décision (projet d'option IA M1 info 2017)
 
+## Compilation et exécution
+
+Compiler les classes :
+
+	make
+
+Exécuter le programme principal en donnant les jeux d'apprentissage et de test ainsi qu'un coefficient k :
+
+	make main app=<jeu d'apprentissage> test=<jeu de test> k=<coefficient k>
+
+Exemple de ligne de compilation et d'exécution :
+
+	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff k=0.65
+
+
 ## Termes employés
 
 Attribut
@@ -15,21 +30,6 @@ Attribut discriminant
 Exemple
 
 > Un cas concret ayant une valeur pour chaque attribut, une ligne dans un jeu de données
-
-## Code
-
-### Nom des méthodes
-
-camelCase (nomMethode)
-
-### Commentaire en début de classe
-
-	/**
-	 * NomClasse
-	 *
-	 * Cette classe permet d'instancier un ... 
-	 * Un objet de type ... instancie cette classe dans la methode ...
-	 */
 
 ## Structures utilisées
 

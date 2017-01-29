@@ -3,7 +3,6 @@ http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html ?
 
 // TODO
 
-Numéroter els règles dans le modèle ?
 thread enlevés, synchronized ? avec les threads, l'affichage du modele se fait trop tot donc y'a rien...
 Nettoyer le code (LectureFichier et Noeud)
 Ajouter une constante static
@@ -52,21 +51,15 @@ http://archive.ics.uci.edu/ml/
 
 
 
+// NOM DES METHODES
 
+camelCase (nomMethode)
 
+// COMMENTAIRE EN DEBUT DE CLASSE
 
-
-
-
-
-
-// POUBELLE
-
-		// Supprime la colonne attribut des exemples
-		/*Object[] attributs = this.attributs.keySet().toArray(); // converti la map en liste des clefs (récupération des attributs)
-		int indice_attribut = Arrays.asList(attributs).indexOf(attribut);
-		// Pour chaque exemple
-		for (ArrayList<String> exemple : this.exemples) {
-			// Supprime la valeur à la colonne de l'attribut
-			exemple.remove(indice_attribut);
-		}*/
+/**
+ * NomClasse
+ *
+ * Cette classe permet d'instancier un ... 
+ * Un objet de type ... instancie cette classe dans la méthode ...
+ */

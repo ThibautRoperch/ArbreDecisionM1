@@ -25,8 +25,8 @@ public class Main {
 
 		// 3. Construction d'un arbre de décision avec le jeu d'apprentissage
 
-		Arbre arbre_decision = new Arbre(jeu_app);
-		arbre_decision.construire();
+		Arbre arbre_decision = new Arbre();
+		arbre_decision.construire(jeu_app, Arbre.GAIN_INFORMATION);
 		System.out.println("\nArbre de décision\n" + arbre_decision.toTree() + "\n");
 		
 		// 4. Post-élagage de l'arbre de décision avec le jeu de test et le coefficient V
