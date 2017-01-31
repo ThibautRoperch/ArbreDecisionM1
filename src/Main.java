@@ -1,8 +1,8 @@
 import java.io.*;
 import java.util.*;
 
-import arbre.Arbre;
 import donnees.JeuDonnees;
+import arbre.Arbre;
 import modele.Modele;
 
 public class Main {
@@ -45,6 +45,7 @@ public class Main {
 		System.out.println("\n> Génération du modèle associé à l'arbre de décision\n");
 		Modele modele = arbre_decision.genererModele();
 		System.out.println(modele);
+		
 	}
 
 }
