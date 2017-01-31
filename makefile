@@ -12,6 +12,10 @@ main:
 	@echo "# Lancement du programme principal\n# Usage : app=<jeu d'apprentissage> test=<jeu de test> k=<coefficient k>"
 	java -cp bin Main ${app} ${test} ${k}
 
+interface:
+	@echo "# Lancement de l'interface graphique"
+	java -cp bin gui.Gui
+
 arbre:
 	@echo "# Création d'un arbre de test"
 	java -cp bin arbre.Arbre

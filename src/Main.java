@@ -29,6 +29,7 @@ public class Main {
 		System.out.println("\n> Construction d'un arbre de décision avec le jeu d'apprentissage\n");
 		Arbre arbre_decision = new Arbre();
 		arbre_decision.construire(jeu_app, Arbre.GAIN_INFORMATION);
+		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		System.out.println(arbre_decision.toTree());
 		System.out.println(arbre_decision.toCharacteristics());
 		

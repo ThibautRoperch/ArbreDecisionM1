@@ -132,6 +132,7 @@ public class Noeud /*extends Thread*/ {
 			String valeur_classe = this.jeu_apprentissage.classeMajoritaire();
 			this.jeu_apprentissage.choisirAttributValeur(attribut_classe, valeur_classe);
 			this.arbre.ajouterFeuille(this);
+			System.out.println(this.genererRegle());
 		}
 	}
 
@@ -199,10 +200,10 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
-	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (+= coeff_v)
+	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (+ coeff_v)
 	 * par rapport au jeu d'apprentissage
-	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (+= coeff_v) :
-	 * - Les fils sont supprimés et leurs jeux de données sont fusionnés avec celui de ce noeud
+	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (+ coeff_v) :
+	 * - Les fils sont supprimés et leurs jeux de données (du jeu d'apprentissage, donc) sont fusionnés avec celui de ce noeud
 	 * - Ce noeud devient une feuille et s'ajoute à la liste des feuilles de l'arbre auquel il appartient
 	 * Le regroupement des fils se fait dans le cadre d'un élagage de l'arbre
 	 * @param donnees_validation
