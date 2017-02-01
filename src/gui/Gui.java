@@ -4,6 +4,8 @@ import java.awt.BorderLayout; // https://docs.oracle.com/javase/tutorial/uiswing
 import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -19,11 +21,12 @@ public class Gui extends JFrame {
 	protected JTextArea modele; // zone de texte contenant le modèle (ensemble de règles)
 	protected JTextArea caracteristiques; // zone de texte contenant les caractéristiques de l'arbre
 	protected JTextArea statistiques; // zone de texte contenant les statistiques de l'arbre
-	protected JButton fichier_jeu_apprentissage; // nom du fichier contenant le jeu d'apprentissage
-	protected JLabel fichier_jeu_validation; // nom du fichier contenant le jeu de validation
+	protected JTextField fichier_jeu_apprentissage; // nom du fichier contenant le jeu d'apprentissage
+	protected JTextField fichier_jeu_validation; // nom du fichier contenant le jeu de validation
 	protected JComboBox<String> meilleurAttribut; // menu déroulant pour sélectionner la façon dont est choisi du meilleur attribut
 	protected Checkbox elaguer; // case à cocher pour élaguer l'arbre de décision
 	protected JTextField coefficient_v; // coefficient v pour l'élagage
+	protected JLabel etat; // état du moteur
 
 	public Gui() {
 		super("Construction et élagage d'un arbre de décision");
@@ -34,10 +37,11 @@ public class Gui extends JFrame {
 		GridLayout grille = null;
 		JLabel texte = null;
 		JButton bouton = null;
+		GridBagConstraints contrainte = null; // https://openclassrooms.com/courses/apprenez-a-programmer-en-java/positionner-des-boutons#/id/r-2183149
 
 		// Centre de la fenêtre : des onglets pour l'arbre et le modèle
 		JTabbedPane ongletsArbreModele = new JTabbedPane();
-		ongletsArbreModele.setPreferredSize(new Dimension(700, 800)); // width height
+		ongletsArbreModele.setPreferredSize(new Dimension(700, 0)); // width height, 0 pour "auto"
 		this.add(BorderLayout.CENTER, ongletsArbreModele);
 
 			// Zone d'affichage de l'arbre dans un scrolleur dans un onglet
@@ -45,98 +49,149 @@ public class Gui extends JFrame {
 			this.arbre.setEditable(false);
 			this.arbre.setMargin(new Insets(10, 10, 10, 10));
 			scrolleur = new JScrollPane(this.arbre);
-			ongletsArbreModele.addTab("Arbre", this.arbre);
+			ongletsArbreModele.addTab("Arbre", scrolleur);
 
 			// Zone d'affichage du modèle dans un scrolleur dans un onglet
 			this.modele = new JTextArea();
 			this.modele.setEditable(false);
 			this.modele.setMargin(new Insets(10, 10, 10, 10));
 			scrolleur = new JScrollPane(this.modele);
-			ongletsArbreModele.addTab("Modèle", this.modele);
+			ongletsArbreModele.addTab("Modèle", scrolleur);
 
 		// Droite de la fenêtre : un panneau formaté par une grille de 2 lignes x 1 colonne pour les caractériques et les statistiques
 		grille = new GridLayout(2, 1);
 		JPanel caracStats = new JPanel(grille);
-		caracStats.setPreferredSize(new Dimension(150, 0)); // width height, 0 pour "auto"
+		// caracStats.setPreferredSize(new Dimension(300, 0)); // width height, 0 pour "auto"
 		this.add(BorderLayout.EAST, caracStats);
 
-			// Zone d'affichage des caractéristiques de l'arbre dans une case de la grille de droite
+			// Zone d'affichage des caractéristiques de l'arbre dans un scrolleur dans un panneau dans une case de la grille de droite
+			panneau = new JPanel();
+			panneau.setBorder(BorderFactory.createTitledBorder("Caractéristiques"));
 			this.caracteristiques = new JTextArea();
 			this.caracteristiques.setEditable(false);
-			this.caracteristiques.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), BorderFactory.createEmptyBorder(10,10,10,10)));
-			caracStats.add(this.caracteristiques);
-
-			// Zone d'affichage des statistiques de l'arbre dans une case de la grille de droite
+			this.caracteristiques.setMargin(new Insets(5, 5, 5, 5));
+			scrolleur = new JScrollPane(this.caracteristiques);
+			scrolleur.setPreferredSize(new Dimension(300, 400));
+			panneau.add(scrolleur);
+			caracStats.add(panneau);
+			
+			// Zone d'affichage des statistiques de l'arbre dans un scrolleur dans un panneau dans une case de la grille de droite
+			panneau = new JPanel();
+			panneau.setBorder(BorderFactory.createTitledBorder("Statistiques"));
 			this.statistiques = new JTextArea();
 			this.statistiques.setEditable(false);
-			this.statistiques.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), BorderFactory.createEmptyBorder(10,10,10,10)));
-			caracStats.add(this.statistiques);
+			this.statistiques.setMargin(new Insets(5, 5, 5, 5));
+			scrolleur = new JScrollPane(this.statistiques);
+			scrolleur.setPreferredSize(new Dimension(300, 400));
+			panneau.add(scrolleur);
+			caracStats.add(panneau);
 
-		// Gauche de la fenêtre : un panneau formaté par une grille de 2 lignes x 1 colonne pour le panneau des options et le bouton de construction de l'arbre de décision
-		grille = new GridLayout(3, 1);
-		JPanel optionsConstruction = new JPanel(grille);
-		optionsConstruction.setPreferredSize(new Dimension(500, 0)); // width height, 0 pour "auto"
-		this.add(BorderLayout.WEST, optionsConstruction);
+		// Gauche de la fenêtre : un panneau formaté par une grille de x lignes x 1 colonne pour le panneau des options de construction, le panneau des options d'élagage et le bouton de construction de l'arbre de décision
+		grille = new GridLayout(0, 1);
+		JPanel constructionElagage = new JPanel(grille);
+		this.add(BorderLayout.WEST, constructionElagage);
 
-			// Panneau des options formaté par une grille de x lignes x 2 colonnes pour les options dans la grille de gauche
-			grille = new GridLayout(0, 2);
-			JPanel options = new JPanel(grille);
-			options.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED), BorderFactory.createEmptyBorder(10,10,10,10)));
-			optionsConstruction.add(options);
+			// Panneau des options de construction dans une case de la grille de gauche
+			JPanel optionsConstruction = new JPanel(new GridBagLayout());
+			optionsConstruction.setBorder(BorderFactory.createTitledBorder("Construction"));
+			constructionElagage.add(optionsConstruction);
+
+			contrainte = new GridBagConstraints();
+			contrainte.insets = new Insets(10, 10, 10, 10);
+			contrainte.fill = GridBagConstraints.BOTH;
 
 				// Bouton pour sélectionner le jeu d'apprentissage dans les options
 				texte = new JLabel("Jeu d'apprentissage");
-				options.add(texte);
-				this.fichier_jeu_apprentissage = new JButton("Aucun fichier sélectionné");
-				this.fichier_jeu_apprentissage.addActionListener(new SelectionnerFichier(this, "apprentissage"));
-				options.add(fichier_jeu_apprentissage);
-
-				// Bouton pour sélectionner le jeu de validation dans les options
-				texte = new JLabel("Jeu de validation");
-				options.add(texte);
-				panneau = new JPanel();
-				panneau.setLayout(new GridBagLayout()); // alignement vertical des futurs éléments added à panneau
-				bouton = new JButton("Choisir");
-				bouton.addActionListener(new SelectionnerFichier(this, "validation"));
-				panneau.add(bouton);
-				this.fichier_jeu_validation = new JLabel("Aucun fichier");
-				panneau.add(fichier_jeu_validation);
-				options.add(panneau);
+				contrainte.gridx = 0;
+				contrainte.gridy = 0;
+				optionsConstruction.add(texte, contrainte);
+				bouton = new JButton("Ouvrir");
+				bouton.addActionListener(new SelectionnerFichier(this, "apprentissage"));
+				contrainte.gridx = 1;
+				optionsConstruction.add(bouton, contrainte);
+				this.fichier_jeu_apprentissage = new JTextField("Aucun fichier sélectionné");
+				this.fichier_jeu_apprentissage.setEditable(false);
+				this.fichier_jeu_apprentissage.setMargin(new Insets(5, 5, 5, 5));
+				this.fichier_jeu_apprentissage.setHorizontalAlignment(JTextField.CENTER);
+				this.fichier_jeu_apprentissage.setPreferredSize(this.fichier_jeu_apprentissage.getPreferredSize());
+				contrainte.gridx = 0;
+				contrainte.gridy = 1;
+				contrainte.gridwidth = 2;
+				optionsConstruction.add(this.fichier_jeu_apprentissage, contrainte);
 
 				// Menu déroulant pour sélectionner la façon dont est choisi le meilleur attribut
 				texte = new JLabel("Choix du meilleur attribut");
-				options.add(texte);
-				String[] choixMeilleurAttribut = {"Le premier", "Au hasard", "Meilleur gain d'information"};
+				contrainte.gridx = 0;
+				contrainte.gridy = 2;
+				optionsConstruction.add(texte, contrainte);
+				String[] choixMeilleurAttribut = {"Le premier des candidats", "Au hasard parmi les candidats", "Gain d'information maximum"};
 				this.meilleurAttribut = new JComboBox<String>(choixMeilleurAttribut);
-				options.add(this.meilleurAttribut);
-				
-				// Case à cocher pour élaguer l'arbre de décision
-				texte = new JLabel("Elaguer l'arbre de décision");
-				options.add(texte);
-				this.elaguer = new Checkbox("Clique ici pour agrandir ton penis");
-				// action event dessus pour changer letat de laffichage de l'input du coeff v
-				options.add(this.elaguer);
+				contrainte.gridx = 0;
+				contrainte.gridy = 3;
+				optionsConstruction.add(this.meilleurAttribut, contrainte);
 
+			// Panneau des options d'élagage dans une case de la grille de droite
+			JPanel optionsElagage = new JPanel(new GridBagLayout());
+			optionsElagage.setBorder(BorderFactory.createTitledBorder("Élagage"));
+			constructionElagage.add(optionsElagage);
+			
+			contrainte = new GridBagConstraints();
+			contrainte.insets = new Insets(10, 10, 10, 10);
+			contrainte.fill = GridBagConstraints.BOTH;
+
+				// Case à cocher pour élaguer l'arbre de décision
+				contrainte.gridx = 0;
+				contrainte.gridy = 0;
+				contrainte.gridwidth = 2;
+				this.elaguer = new Checkbox(" Élaguer l'arbre de décision            ");
+				this.elaguer.setState(true);
+				// action event dessus pour changer letat de laffichage de l'input du coeff v
+				optionsElagage.add(this.elaguer, contrainte);
+
+				// Bouton pour sélectionner le jeu de validation dans les options
+				texte = new JLabel("Jeu de validation");
+				contrainte.gridy = 1;
+				contrainte.gridwidth = 1;
+				optionsElagage.add(texte, contrainte);
+				bouton = new JButton("Ouvrir");
+				bouton.addActionListener(new SelectionnerFichier(this, "validation"));
+				contrainte.gridx = 1;
+				optionsElagage.add(bouton, contrainte);
+				this.fichier_jeu_validation = new JTextField("Aucun fichier sélectionné");
+				this.fichier_jeu_validation.setEditable(false);
+				this.fichier_jeu_validation.setMargin(new Insets(5, 5, 5, 5));
+				this.fichier_jeu_validation.setHorizontalAlignment(JTextField.CENTER);
+				this.fichier_jeu_validation.setPreferredSize(this.fichier_jeu_validation.getPreferredSize());
+				contrainte.gridx = 0;
+				contrainte.gridy = 2;
+				contrainte.gridwidth = 2;
+				optionsElagage.add(this.fichier_jeu_validation, contrainte);
+				
 				// Champ de texte pour le coefficient V pour l'élagage
 				texte = new JLabel("Coefficient V");
-				options.add(texte);
+				contrainte.gridx = 0;
+				contrainte.gridy = 3;
+				optionsElagage.add(texte, contrainte);
 				this.coefficient_v = new JTextField();
-				options.add(this.coefficient_v);
-
-			// Elément vide pour séparer le panneau des options du bouton de construction
-			panneau = new JPanel();
-			panneau.setBorder(BorderFactory.createEmptyBorder(500,500,500,500));
-			optionsConstruction.add(panneau);
+				this.coefficient_v.setMargin(new Insets(5, 5, 5, 5));
+				this.coefficient_v.setHorizontalAlignment(JTextField.CENTER);
+				contrainte.gridx = 1;
+				optionsElagage.add(this.coefficient_v, contrainte);
+				
+			constructionElagage.add(new JLabel());
 
 			// Bouton de construction de l'arbre de décision dans la grille de gauche
-			JButton construction = new JButton("Construire l'arbre");
-			construction.setPreferredSize(new Dimension(0, 50)); // width height, 0 pour "auto"
+			JButton construction = new JButton("Construire l'arbre de décision");
 			construction.addActionListener(new ConstruireArbre(this));
-			optionsConstruction.add(construction);
+			constructionElagage.add(construction);
+
+		// Bas de la fenêtre : état du moteur (prêt, en construction de l'arbre, du modèle, ...)
+		this.etat = new JLabel("Prêt");
+		this.add(BorderLayout.SOUTH, this.etat);
 	}
 
 	public String jeuApprentissage() {
-		return this.fichier_jeu_apprentissage.getText(); // rturn bien "" si pas de fichier ?
+		return this.fichier_jeu_apprentissage.getText();
 	}
 
 	public String jeuValidation() {
@@ -186,6 +241,10 @@ public class Gui extends JFrame {
 
 	public void afficherFichierJeuValidation(String chemin_fichier) {
 		this.fichier_jeu_validation.setText(chemin_fichier);
+	}
+
+	public void afficherEtat(String etat) {
+		this.etat.setText(etat);
 	}
 
 	public static void main(String[] args) {

@@ -53,7 +53,7 @@ public class Arbre {
 	 * @return int
 	 */
 	public int hauteur() {
-		return this.noeud_racine.nombreDescendances() - 1;
+		return (this.noeud_racine != null) ? this.noeud_racine.nombreDescendances() - 1 : 0;
 	}
 
 	/**
@@ -131,33 +131,37 @@ public class Arbre {
 	}
 
 	public String toString() {
-		return jeu_apprentissage + "\n" + noeud_racine;
+		String res = jeu_apprentissage.toString();
+
+		res += (this.noeud_racine != null) ? "\n" + this.noeud_racine.toString() : "";
+		
+		return res;
 	}
 
 	public String toTree() {
-		String res = "\n# Affichage de l'arbre\n";
+		String res = "";
 
-		res += this.noeud_racine.toTree(0);
+		res += (this.noeud_racine != null) ? this.noeud_racine.toTree(0) : "";
 
 		return res;
 	}
 
 	public String toCharacteristics() {
-		String res = "\n\n# Caractéristiques de l'arbre\n";
-
+		String res = "";
+		
 		res += "\nArbre parfait :\t\t" + this.estParfait() + "\n";
 		res += "\nNombre de feuilles :\t" + this.feuilles.size() + "\n";
-		int surapprentissage = this.feuilles.size() * 100 / this.jeu_apprentissage.nombreExemples(); // surapprentissage = autant de feuilles que d'individus dans la population
+		int surapprentissage = (this.jeu_apprentissage.nombreExemples() > 0) ? this.feuilles.size() * 100 / this.jeu_apprentissage.nombreExemples() : 0; // surapprentissage = autant de feuilles que d'individus dans la population
 		res += "\nSurapprentissage :\t" + surapprentissage + "%\n";
 		res += "\nHauteur de l'arbre :\t" + this.hauteur() + "\n";
-		// int surapprentissage = this.hauteur() * 100 / this.jeu_apprentissage.nombreAttributs();
-		// res += "\nSurapprentissage :\t" + surapprentissage + "%\n";
 
 		return res;
 	}
 
 	public String toStatistics() {
-		String res = "\n# Statistiques de l'arbre\n";
+		String res = "";
+
+		res += "Note : S'il n'y a pas eu d'élagage, le jeu de validation est considéré comme non existant\nAinsi, les satistiques seront calculées avec le jeu d'apprentissage (résultats optimistes)\n";
 
 		HashMap<String, Double> taux_erreur_validation = new HashMap<String, Double>();
 
@@ -175,7 +179,7 @@ public class Arbre {
 
 		double taux_erreur_validation_total = 0;
 
-		res += "\nTaux d'erreur des classes (dans les jeux de validation des feuilles) :\n\n";
+		res += "\nTaux d'erreur des classes :\n\n";
 
 		// Pour chaque couple (classe, taux d'erreur)
 		for (Map.Entry<String, Double> e : taux_erreur_validation.entrySet()) {
@@ -187,7 +191,8 @@ public class Arbre {
 			taux_erreur_validation_total += e.getValue();
 		}
 
-		res += "Total\t" + taux_erreur_validation_total / taux_erreur_validation.size() + "%\n";
+		int taux_erreur_validation_moyen = (taux_erreur_validation.size() > 0) ? (int) taux_erreur_validation_total / taux_erreur_validation.size() : 0;
+		res += "Moyenne\t" + taux_erreur_validation_moyen + "%\n";
 
 		return res;
 	}

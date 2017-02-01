@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class LectureFichier {
 
-//ajouter JeuDonnees jeu, en argument (c'est pour les tests qu'il a été enlevé)
 	public static void lectureFichier(JeuDonnees donnees, String nom_fichier) { // throws IOException 
 		String fichier = nom_fichier;
 		String lignes_fichier = new String();
@@ -23,7 +22,7 @@ public class LectureFichier {
 			boolean lire_fichier = ((ligne_lue = br.readLine()) != null) ? true : false;
 
 			while (lire_fichier) {
-				lignes_fichier += "\n" + ligne_lue;		//Pas utile je crois
+				lignes_fichier += "\n" + ligne_lue;
 				ligne_lue = br.readLine();
 				String[] ligne_split;
 

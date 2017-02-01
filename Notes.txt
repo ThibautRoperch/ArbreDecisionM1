@@ -1,18 +1,12 @@
 
-http://www.grappa.univ-lille3.fr/polys/apprentissage/sortie004.html ?
-
 // TODO
 
 thread enlevés, synchronized ? avec les threads, l'affichage du modele se fait trop tot donc y'a rien...
-Nettoyer le code (LectureFichier et Noeud)
-Ajouter une constante static
-Interface graphique ?
-Commenter les classes pas encore commentées
 Tester avec les exemples du site http://archive.ics.uci.edu/ml/
 
 // ARBRE DE DECISION
 
-Si j'ai bien compris comment un arbre se construit :
+Construction d'un arbre de décision :
 - Création d'un premier noeud contenant le jeu de données complet
 - Ce noeud choisit un attribut : calcul du gain d'information (semestre 1) ou du gain d'entropie (semestre 2) ?
 - Pour chaque valeur de cet attribut, le noeud instancie un noeud fils contenant le jeu de données en ne gardant que les exemples concernés par la valeur
@@ -47,9 +41,6 @@ Post-élagage : https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentiss
 
 Tester votre programme sur des exemples assez conséquents que l'on peut trouver sur le site :
 http://archive.ics.uci.edu/ml/
-
-
-
 
 // NOM DES METHODES
 

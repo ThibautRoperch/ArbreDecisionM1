@@ -46,16 +46,25 @@ public class Noeud /*extends Thread*/ {
 
 	/**
 	 * Retourne le taux d'erreur du jeu de validation du noeud
+	 * Si le jeu de validation n'existe pas, alors retourne le taux d'erreur du jeu d'apprentissage
 	 * @return double
 	 */
 	public double tauxErreurValidation() {
+		if (this.jeu_validation == null) {
+			return this.jeu_apprentissage.tauxErreur();
+		}
 		return this.jeu_validation.tauxErreur();
 	}
 
 	/**
 	 * Retourne la classe majoritaire du jeu de validation du noeud
+	 * Si le jeu de validation n'existe pas, alors retourne la classe majoritaire du jeu d'apprentissage
+	 * @return String
 	 */
 	public String classeMajoritaireValidation() {
+		if (this.jeu_validation == null) {
+			return this.jeu_apprentissage.classeMajoritaire();
+		}
 		return this.jeu_validation.classeMajoritaire();
 	}
 

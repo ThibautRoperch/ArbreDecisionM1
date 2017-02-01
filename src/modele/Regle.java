@@ -19,7 +19,7 @@ public class Regle {
 
 	/**
 	 * Retourne vrai si la règle a une conclusion, c'est-à-dire une valeur pour l'attribut de classe
-	 * La règle a une conclusion si la valeur de l'attribut de classe de la conclusion n'est pas vide
+	 * La règle a une conclusion si la valeur de l'attribut de la conclusion n'est pas vide (l'attribut de classe)
 	 * Il y a une valeur de classe vide lorsqu'il n'y a pas de classe majoritaire dans le jeu de données, ce qui arrive lorsque le jeu est vide d'exemples
 	 * @return boolean
 	 */
@@ -28,19 +28,16 @@ public class Regle {
 	}
 
 	/**
-	 * Ajoute aux conditions un attribut et sa valeur
+	 * Ajoute aux conditions un attribut
 	 * @param attribut
-	 * @param valeur
 	 */
 	public void ajouterCondition(Attribut attribut) {
 		this.conditions.add(attribut);
 	}
 
 	/**
-	 * Ajoute la conclusion
-	 * Supprime l'ancienne s'il y en avait une (ce qui n'est pas censé arriver)
+	 * Modifie l'attribut conclusion
 	 * @param attribut
-	 * @param valeur
 	 */
 	public void ajouterConclusion(Attribut attribut) {
 		this.conclusion = attribut;

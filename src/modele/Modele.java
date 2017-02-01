@@ -24,7 +24,7 @@ public class Modele {
 	}
 
 	public String toString() {
-		String res = "\n# Affichage du modèle\n\n";
+		String res = "";
 
 		// Pour chaque règle
 		int indice_regle = 0;

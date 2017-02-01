@@ -35,7 +35,7 @@ public class SelectionnerFichier implements ActionListener {
 		dialogue.showOpenDialog(null);
 		 
 		// Récupération du fichier sélectionné
-		String fichierChoisi = dialogue.getSelectedFile().toString();
+		String fichierChoisi = (dialogue.getSelectedFile() != null) ? dialogue.getSelectedFile().toString() : "";
 
 		// Envoi du chemin du fichier dans l'interface graphique
 		if (this.type_du_jeu.equals("apprentissage")) {

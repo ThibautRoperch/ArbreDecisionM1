@@ -12,16 +12,20 @@ Exécuter le programme principal en donnant les jeux d'apprentissage et de test 
 
 	make main app=<jeu d'apprentissage> test=<jeu de test> k=<coefficient k>
 
-Exemple de ligne de compilation et d'exécution :
+Exemple de ligne de compilation et d'exécution du programme principal :
 
 	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff k=0.05
+
+Ouvrir l'interface graphique :
+
+	make interface
 
 
 ## Termes employés
 
 Attribut
 
-> Un critère, une colonne dans un jeu de données)
+> Un critère, une colonne dans un jeu de données
 
 Attribut discriminant
 
@@ -37,21 +41,21 @@ Exemple
 
 Classe Arbre qui contient :
 * Un pointeur vers le noeud racine de l'arbre
-* Un pointeur vers chaque noeud feuille (liste)
+* Un pointeur vers chaque noeud feuille (liste de noeuds)
 
 ### Représenter un noeud d'arbre
 
 Classe Noeud qui contient :
 * Un pointeur vers son noeud père
-* Un jeu de données
-* Un pointeur vers chaque noeud enfants (liste)
-* Une calcul du meilleur attribut (gain d'entropie pour chaque attribut)
+* Un jeu de données d'apprentissage
+* Un jeu de donénes de validation
+* Un pointeur vers chaque noeud enfants (liste de noeuds)
 
 ### Représenter un jeu de données
 
 Classe JeuDonnees qui contient :
-* Une map ayant pour paire un attribut et une liste des valeurs de l'attribut
-* Une liste d'exemples, un exemple étant une liste de chaines de caractères représentant ses valeurs pour chaque attribut
+* Une liste d'attributs, un attribut étant représenté par son nom et ses valeurs possibles
+* Une liste d'exemples, un exemple étant représenté par une liste de valeurs à raison d'une valeur pour chaque attribut
 
 ## Contributeurs
 
