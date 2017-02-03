@@ -69,6 +69,38 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
+	 * Retourne les classes non majoritaires du jeu de validation du noeud
+	 * Si le jeu de validation n'existe pas, alors retourne les classes non majoritaires du jeu d'apprentissage
+	 * @return String
+	 */
+	public ArrayList<String> classesNonMajoritairesValidation() {
+		ArrayList<String> res = new ArrayList<String>();
+
+		if (this.jeu_validation == null) {
+			res.addAll(this.jeu_apprentissage.valeursClasseExemples().keySet());
+			res.remove(this.jeu_apprentissage.classeMajoritaire());
+		} else {
+			res.addAll(this.jeu_validation.valeursClasseExemples().keySet());
+			res.remove(this.jeu_validation.classeMajoritaire());
+		}
+
+		return res;
+	}
+
+	/**
+	 * Retourne la proportion de la classe donnée en paramètre dans le jeu de validation du noeud
+	 * Si le jeu de validation n'existe pas, alors retourne la proportion de la classe donnée en paramètre dans le jeu d'apprentissage
+	 * @param classe
+	 * @return double
+	 */
+	public double proportionClasseValidation(String classe) {
+		if (this.jeu_validation == null) {
+			return (double) this.jeu_apprentissage.selectionnerExemplesOu(this.jeu_apprentissage.attributClasse(), classe).size() / (double) this.jeu_apprentissage.nombreExemples();
+		}
+		return (double) this.jeu_validation.selectionnerExemplesOu(this.jeu_validation.attributClasse(), classe).size() / (double) this.jeu_validation.nombreExemples();
+	}
+
+	/**
 	 * Retourne le nombre de descendances du noeud
 	 * @return int
 	 */
@@ -158,23 +190,24 @@ public class Noeud /*extends Thread*/ {
 				res = attributs_candidats.get(0);
 				break;
 			case 2: // attribut au hasard
-				res = attributs_candidats.get( (int) Math.random() * attributs_candidats.size() );
+				res = attributs_candidats.get( (int) (Math.random() * attributs_candidats.size()) );
 				break;
 			case 3: // gain d'information le plus élevé
 				double max_gain = 0;
+				Attribut max_gain_attribut = null;
 
 				// Pour chaque attribut
 				for (Attribut attribut_candidat : attributs_candidats) {
 					// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplacer
 					// Sinon, supprimer l'attribut (en local)
-					if (this.gain(attribut_candidat) > max_gain) {
-						max_gain = this.gain(attribut_candidat);
-					} else {
-						attributs_candidats.remove(attributs_candidats);
+					double gain_attribut = this.gain(attribut_candidat);
+					if (gain_attribut > max_gain) {
+						max_gain = gain_attribut;
+						max_gain_attribut = attribut_candidat;
 					}
 				}
 				
-				res = attributs_candidats.get(0);
+				res = max_gain_attribut;
 				break;
 			default: // le premier par défaut
 				res = attributs_candidats.get(0);

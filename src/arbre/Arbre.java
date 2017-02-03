@@ -1,5 +1,15 @@
+/**
+ * Classe Arbre
+ *
+ * Cette classe permet d'instancier un arbre de décision
+ * 
+ * Un arbre possède un pointeur vers le premier noed racine de l'arbre, ainsi que la liste des noeuds feuilles qu'il contient
+ */
+
+
 package arbre;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,13 +88,9 @@ public class Arbre {
 		// Enregistrer la méthode de choix, récupérée par les noeuds de l'arbre
 		this.methode_de_choix = methode_de_choix;
 
-		// Si le jeu de données est bien construit, lancer la construction de l'arbre
-		if (this.jeu_apprentissage.estBienConstruit()) {
-			this.noeud_racine = new Noeud(this, null, "Racine", this.jeu_apprentissage);
-			this.noeud_racine.start();
-		} else {
-			System.out.println("Erreur : Le jeu de d'apprentissage est vide d'attributs, impossible de construire l'arbre");
-		}
+		// Lancer la construction de l'arbre
+		this.noeud_racine = new Noeud(this, null, "Racine", this.jeu_apprentissage);
+		this.noeud_racine.start();
 	}
 
 	/**
@@ -98,15 +104,11 @@ public class Arbre {
 		// Enregistrer le jeu de validation
 		this.jeu_validation = donnees_validation;
 
-		// Si le jeu de validation est du même acabit que le jeu d'apprentissage, lancer le post-élagage de l'arbre
-		if (donnees_validation.estConstruitComme(this.jeu_apprentissage)) {
-			// Supprimer les feuilles, car avec le regroupement des fils, des noeuds vont devenir feuille (et s'ajouter à la liste des feuilles)
-			// et des feuilles vont disparaître sans pouvoir se supprimer de la liste des feuilles, donc remise à zéro de la liste des feuilles
-			this.feuilles.clear();
-			this.noeud_racine.regrouperFils(donnees_validation, coeff_v);
-		} else {
-			System.out.println("Erreur : Le jeu de validation n'a pas les mêmes attributs que le jeu d'apprentissage, impossible de post-élaguer l'arbre");
-		}
+		// Lancer le post-élagage de l'arbre
+		// Supprimer les feuilles, car avec le regroupement des fils, des noeuds vont devenir feuille (et s'ajouter à la liste des feuilles)
+		// et des feuilles vont disparaître sans pouvoir se supprimer de la liste des feuilles, donc remise à zéro de la liste des feuilles
+		this.feuilles.clear();
+		this.noeud_racine.regrouperFils(this.jeu_validation, coeff_v);
 	}
 
 	/**
@@ -143,7 +145,7 @@ public class Arbre {
 
 		res += (this.noeud_racine != null) ? this.noeud_racine.toTree(0) : "";
 
-		return res;
+		return res += "\n";
 	}
 
 	public String toCharacteristics() {
@@ -167,13 +169,14 @@ public class Arbre {
 
 		// Pour chaque feuille de l'arbre
 		for (Noeud n : this.feuilles) {
-			// Si la classe majoritaire n'est pas vide (à cause d'un jeu de 0 exemples)
-			if (!n.classeMajoritaireValidation().equals("")) {
-				// Enregistrement du taux d'erreur du jeu de validation de ce noeud feuille
-				// S'il y a déjà un taux enregistré dans la map, + 1 à la partie entière
-				Object taux_deja_enregistre = taux_erreur_validation.get(n.classeMajoritaireValidation());
-				if (taux_deja_enregistre == null) taux_deja_enregistre = (double) 1;
-				taux_erreur_validation.put(n.classeMajoritaireValidation(), (double) taux_deja_enregistre + n.tauxErreurValidation());
+			ArrayList<String> classes_non_majoritaires = n.classesNonMajoritairesValidation();
+			for (String classe : classes_non_majoritaires) {
+				// Enregistrement de la proportion de cette classe de ce noeud feuille
+				// S'il y a déjà une valeur enregistrée dans la map, ajouter à la valeur déjà existante
+				Object taux_deja_enregistre = taux_erreur_validation.get(classe);
+				if (taux_deja_enregistre == null) taux_deja_enregistre = (double) 0;
+				Double taux_erreur_classe = (double) taux_deja_enregistre + n.proportionClasseValidation(classe);
+				taux_erreur_validation.put(classe, (double) taux_deja_enregistre + n.proportionClasseValidation(classe));
 			}
 		}
 
@@ -183,16 +186,12 @@ public class Arbre {
 
 		// Pour chaque couple (classe, taux d'erreur)
 		for (Map.Entry<String, Double> e : taux_erreur_validation.entrySet()) {
-			// Extraction de la partie entière
-			// Soustraction de la partie entière à la somme des taux et division de la somme des taux par la partie entière
-			int partie_entiere = (int) Math.floor(e.getValue());
-			e.setValue((e.getValue() - partie_entiere) / partie_entiere);
-			res += e.getKey() + "\t" + e.getValue() * 100 + "%\n";
+			res += e.getKey() + "\t" +  new DecimalFormat("#0.00").format(e.getValue() * 100) + " %\n";
 			taux_erreur_validation_total += e.getValue();
 		}
-
-		int taux_erreur_validation_moyen = (taux_erreur_validation.size() > 0) ? (int) taux_erreur_validation_total / taux_erreur_validation.size() : 0;
-		res += "Moyenne\t" + taux_erreur_validation_moyen + "%\n";
+		
+		double taux_erreur_validation_moyen = (taux_erreur_validation.size() > 0) ? taux_erreur_validation_total / taux_erreur_validation.size() : (double) 0;
+		res += "Moyenne\t" + new DecimalFormat("#0.00").format(taux_erreur_validation_moyen * 100) + " %\n";
 
 		return res;
 	}

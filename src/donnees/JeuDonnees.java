@@ -104,6 +104,7 @@ public class JeuDonnees {
 
 	/**
 	 * Retourne vrai si le jeu de données est bien construit, c'est à dire s'il contient des attributs
+	 * @return boolean
 	 */
 	public boolean estBienConstruit() {
 		return this.attributs.size() > 0;
@@ -111,11 +112,9 @@ public class JeuDonnees {
 
 	/**
 	 * Retourne vrai si le jeu de données en paramètre a les mêmes attributs que le jeu de données this
+	 * @return boolean
 	 */
 	public boolean estConstruitComme(JeuDonnees donnees) {
-		/*for (Attribut a : this.attributs) {
-			if (donnes)
-		}*/
 		return this.attributs.equals(donnees.attributs);
 	}
 	
@@ -129,7 +128,7 @@ public class JeuDonnees {
 	}
 
 	/**
-	 * Ajoute un exemple (une donnée, une ligne)
+	 * Ajoute un exemple
 	 * @param exemple
 	 */
 	public void ajouterExemple(ArrayList<String> exemple) {
@@ -191,6 +190,21 @@ public class JeuDonnees {
 	}
 
 	/**
+	 * Retourne le taux d'erreur de la classe majoritaire
+	 * Le taux d'erreur est le nombre d'exemples où l'attribut de classe ne vaut pas la classe majoritaire
+	 * divisé par le nombre total d'exemples
+	 * @return double
+	 */
+	public double tauxErreur() {
+		if (this.nombreExemples() > 0) {
+			JeuDonnees exemples_ou_classe_majoritaire = new JeuDonnees(this.selectionnerExemplesOu(this.attributClasse(), this.classeMajoritaire()));
+			return 1 - (double) exemples_ou_classe_majoritaire.nombreExemples() / (double) this.nombreExemples();
+		} else {
+			return 0;
+		}
+	}
+
+	/**
 	 * Retourne la classe majoritaire parmi les exemples
 	 * @return String
 	 */
@@ -205,33 +219,13 @@ public class JeuDonnees {
 			// Sinon, supprimer la classe (en local)
 			if (classe.getValue() > max) {
 				max = classe.getValue();
+				classe_majoritaire = classe.getKey();
 			} else {
 				classes.remove(classe.getKey());
 			}
 		}
-
-		// S'il y a au moins une classe dans la map
-		if (classes.size() > 0) {
-			// Récupérer le nom de la classe (dernier indice de la liste des clefs de la map)
-			classe_majoritaire = (String) classes.keySet().toArray()[classes.keySet().toArray().length - 1];
-		}
-
+		
 		return classe_majoritaire;
-	}
-
-	/**
-	 * Retourne le taux d'erreur de la classe majoritaire
-	 * Le taux d'erreur est le nombre d'exemples où l'attribut de classe vaut la classe majoritaire
-	 * divisé par le nombre total d'exemples
-	 * @return double
-	 */
-	public double tauxErreur() {
-		if (this.nombreExemples() > 0) {
-			JeuDonnees exemples_ou_classe_majoritaire = new JeuDonnees(this.selectionnerExemplesOu(this.attributClasse(), this.classeMajoritaire()));
-			return 1 - (double) exemples_ou_classe_majoritaire.nombreExemples() / (double) this.nombreExemples();
-		} else {
-			return 0;
-		}
 	}
 	
 	/**

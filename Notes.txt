@@ -1,8 +1,10 @@
 
 // TODO
 
-thread enlevés, synchronized ? avec les threads, l'affichage du modele se fait trop tot donc y'a rien...
 Tester avec les exemples du site http://archive.ics.uci.edu/ml/
+
+Mushroom train => pb
+contact-lenses elagage => pb
 
 // ARBRE DE DECISION
 
@@ -49,8 +51,10 @@ camelCase (nomMethode)
 // COMMENTAIRE EN DEBUT DE CLASSE
 
 /**
- * NomClasse
+ * Classe NomClasse
  *
  * Cette classe permet d'instancier un ... 
  * Un objet de type ... instancie cette classe dans la méthode ...
+ *
+ * Les propriétés de la calsse, ce qu'elle implémente
  */

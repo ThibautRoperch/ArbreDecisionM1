@@ -33,16 +33,19 @@ public class SelectionnerFichier implements ActionListener {
 		 
 		// Affichage de la boîte de dialogue
 		dialogue.showOpenDialog(null);
-		 
-		// Récupération du fichier sélectionné
-		String fichierChoisi = (dialogue.getSelectedFile() != null) ? dialogue.getSelectedFile().toString() : "";
 
-		// Envoi du chemin du fichier dans l'interface graphique
-		if (this.type_du_jeu.equals("apprentissage")) {
-			this.interface_graphique.afficherFichierJeuApprentissage(fichierChoisi);
-		}
-		else if (this.type_du_jeu.equals("validation")) {
-			this.interface_graphique.afficherFichierJeuValidation(fichierChoisi);
+		// Si un fichier a été sélectionné
+		if (dialogue.getSelectedFile() != null) {
+			// Récupération du fichier sélectionné
+			String fichierChoisi = dialogue.getSelectedFile().toString();
+			
+			// Envoi du chemin du fichier dans l'interface graphique
+			if (this.type_du_jeu.equals("apprentissage")) {
+				this.interface_graphique.afficherFichierJeuApprentissage(fichierChoisi);
+			}
+			else if (this.type_du_jeu.equals("validation")) {
+				this.interface_graphique.afficherFichierJeuValidation(fichierChoisi);
+			}
 		}
 	}
 

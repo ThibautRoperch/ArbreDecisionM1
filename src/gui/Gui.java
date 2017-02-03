@@ -124,7 +124,7 @@ public class Gui extends JFrame {
 				contrainte.gridx = 0;
 				contrainte.gridy = 2;
 				optionsConstruction.add(texte, contrainte);
-				String[] choixMeilleurAttribut = {"Le premier des candidats", "Au hasard parmi les candidats", "Gain d'information maximum"};
+				String[] choixMeilleurAttribut = {"Gain d'information maximum", "Le premier des candidats", "Au hasard parmi les candidats"};
 				this.meilleurAttribut = new JComboBox<String>(choixMeilleurAttribut);
 				contrainte.gridx = 0;
 				contrainte.gridy = 3;
@@ -245,6 +245,17 @@ public class Gui extends JFrame {
 
 	public void afficherEtat(String etat) {
 		this.etat.setText(etat);
+	}
+
+	public void nettoyer() {
+		this.afficherArbre("");
+		this.afficherModele("");
+		this.afficherCaracteristiques("");
+		this.afficherStatistiques("");
+	}
+
+	public void afficherErreur(String message) {
+		JOptionPane.showMessageDialog(this, message, "Erreur", JOptionPane.ERROR_MESSAGE);
 	}
 
 	public static void main(String[] args) {

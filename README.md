@@ -8,13 +8,13 @@ Compiler les classes :
 
 	make
 
-Exécuter le programme principal en donnant les jeux d'apprentissage et de test ainsi qu'un coefficient k :
+Exécuter le programme principal en donnant les jeux d'apprentissage et de validation ainsi qu'un coefficient V :
 
-	make main app=<jeu d'apprentissage> test=<jeu de test> k=<coefficient k>
+	make main app=<jeu d'apprentissage> test=<jeu de validation> v=<coefficient V>
 
 Exemple de ligne de compilation et d'exécution du programme principal :
 
-	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff k=0.05
+	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff v=0.005
 
 Ouvrir l'interface graphique :
 

@@ -16,7 +16,7 @@ public class Main {
 		// Jeu de test
 		String fichier_jeu_test = (args.length >= 2) ? args[1] : "";
 		// Coefficient V
-		double coeff_v = (args.length >= 3) ? Double.parseDouble(args[2]) : 0;
+		String coeff_v = (args.length >= 3) ? args[2] : "";
 
 		// 2. Lecture les fichiers, création des jeux de données avec le contenu des fichiers
 
@@ -28,18 +28,30 @@ public class Main {
 
 		System.out.println("\n> Construction de l'arbre de décision avec le jeu d'apprentissage\n");
 		Arbre arbre_decision = new Arbre();
-		arbre_decision.construire(jeu_app, Arbre.GAIN_INFORMATION);
-		System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree());
-		System.out.println("\n\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
+		if (jeu_app.estBienConstruit()) {
+			arbre_decision.construire(jeu_app, Arbre.GAIN_INFORMATION);
+			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+			// System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree());
+			System.out.println("\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
+		} else {
+			System.out.println("Erreur : Le jeu de d'apprentissage n'a pas d'attribut, impossible de construire l'arbre");
+		}
 		
 		// 4. Post-élagage de l'arbre de décision avec le jeu de test et le coefficient V
 		
 		System.out.println("\n> Post-élagage de l'arbre de décision avec le jeu de test et le coefficient V\n");
-		arbre_decision.postElaguer(jeu_test, coeff_v);
-		// System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree());
-		System.out.println("\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
-		System.out.println("\n# Statistiques de l'arbre\n\n" + arbre_decision.toStatistics());
+		if (jeu_test.estBienConstruit() && jeu_test.estConstruitComme(jeu_app)) {
+			if (!coeff_v.equals("")) {
+				arbre_decision.postElaguer(jeu_test, Double.parseDouble(coeff_v));
+				System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree());
+				System.out.println("\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
+				System.out.println("\n# Statistiques de l'arbre\n\n" + arbre_decision.toStatistics());
+			} else {
+				System.out.println("Erreur : Le coefficient V doit être un nombre non null");
+			}
+		} else {
+			System.out.println("Erreur : Le jeu de validation n'a pas d'attribut ou n'a pas les mêmes attributs que le jeu d'apprentissage, impossible de post-élaguer l'arbre");
+		}
 
 		// 5. Génération du modèle associé à l'arbre de décision
 

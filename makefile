@@ -9,8 +9,8 @@ all:
 # arbre
 
 main:
-	@echo "# Lancement du programme principal\n# Usage : app=<jeu d'apprentissage> test=<jeu de test> k=<coefficient k>"
-	java -cp bin Main ${app} ${test} ${k}
+	@echo "# Lancement du programme principal\n\n# Usage : app=<jeu d'apprentissage> test=<jeu de validation> v=<coefficient V>"
+	java -cp bin Main ${app} ${test} ${v}
 
 interface:
 	@echo "# Lancement de l'interface graphique"
