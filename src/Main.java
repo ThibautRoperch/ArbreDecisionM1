@@ -47,7 +47,7 @@ public class Main {
 				System.out.println("\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
 				System.out.println("\n# Statistiques de l'arbre\n\n" + arbre_decision.toStatistics());
 			} else {
-				System.out.println("Erreur : Le coefficient V doit être un nombre non null");
+				System.out.println("Erreur : Le coefficient V doit être un nombre non null, impossible de post-élaguer l'arbre");
 			}
 		} else {
 			System.out.println("Erreur : Le jeu de validation n'a pas d'attribut ou n'a pas les mêmes attributs que le jeu d'apprentissage, impossible de post-élaguer l'arbre");

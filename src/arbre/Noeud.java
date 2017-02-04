@@ -45,6 +45,20 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
+	 * Retourne true si le noeud est pur
+	 * Un noeud est pur si son jeu de données ne contient que des exemples appartenant à la même classe (ou aucun exemple)
+	 * Un noeud pur est une feuille de l'arbre de décision
+	 * Si le jeu de validation n'existe pas, alors retourne estPur du jeu d'apprentissage
+	 * @return boolean
+	 */
+	public boolean estPurValidation() {
+		if (this.jeu_validation == null) {
+			return this.estPur();
+		}
+		return this.jeu_validation.valeursClasseExemples().size() <= 1;
+	}
+
+	/**
 	 * Retourne le taux d'erreur du jeu de validation du noeud
 	 * Si le jeu de validation n'existe pas, alors retourne le taux d'erreur du jeu d'apprentissage
 	 * @return double
@@ -89,15 +103,16 @@ public class Noeud /*extends Thread*/ {
 
 	/**
 	 * Retourne la proportion de la classe donnée en paramètre dans le jeu de validation du noeud
+	 * Le nombre d'exemples ayant  la classe est l'indice 0 du tableau retourné
 	 * Si le jeu de validation n'existe pas, alors retourne la proportion de la classe donnée en paramètre dans le jeu d'apprentissage
 	 * @param classe
-	 * @return double
+	 * @return int[]
 	 */
-	public double proportionClasseValidation(String classe) {
+	public int[] proportionClasseValidation(String classe) {
 		if (this.jeu_validation == null) {
-			return (double) this.jeu_apprentissage.selectionnerExemplesOu(this.jeu_apprentissage.attributClasse(), classe).size() / (double) this.jeu_apprentissage.nombreExemples();
+			return new int[] { this.jeu_apprentissage.selectionnerExemplesOu(this.jeu_apprentissage.attributClasse(), classe).size(), this.jeu_apprentissage.nombreExemples() };
 		}
-		return (double) this.jeu_validation.selectionnerExemplesOu(this.jeu_validation.attributClasse(), classe).size() / (double) this.jeu_validation.nombreExemples();
+		return new int[] { this.jeu_validation.selectionnerExemplesOu(this.jeu_validation.attributClasse(), classe).size(), this.jeu_validation.nombreExemples() };
 	}
 
 	/**
@@ -125,18 +140,23 @@ public class Noeud /*extends Thread*/ {
 	public Regle genererRegle() {
 		Regle r = new Regle();
 
-		// Pour chaque attribut du jeu de données
+		// Pour chaque attribut du jeu de données d'apprentissage
 		for (Attribut attribut : this.jeu_apprentissage.attributs()) {
 			// Ajouter à la règle l'attribut et sa valeur en tant que condition s'il n'a qu'une valeur possible (def d'un attribut choisi) et si ce n'est pas l'attribut classe
 			if (attribut.valeurs().size() == 1 && !attribut.equals(this.jeu_apprentissage.attributClasse())) {
 				r.ajouterCondition(attribut);
 			}
 		}
-
+			
 		// Ajouter à la règle l'attribut de classe et sa valeur en tant que conclusion
-		// Sa valeur est la classe majoritaire parmi les exemples du jeu de données
-		r.ajouterConclusion(this.jeu_apprentissage.attributClasse());
-		
+		if (this.jeu_validation == null) {
+			// Sa valeur restante est la classe majoritaire parmi les exemples du jeu de données d'apprentissage
+			r.ajouterConclusion(this.jeu_apprentissage.attributClasse());
+		} else {
+			// Ses valeurs sont celles d'origine, il faut donc recalculer la classe majoritaire parmi les exemples du jeu de données de validation et créer un attribut
+			r.ajouterConclusion(new Attribut(this.jeu_validation.attributClasse().nom(), this.jeu_apprentissage.classeMajoritaire()));
+		}
+			
 		return r;
 	}
 
@@ -193,7 +213,7 @@ public class Noeud /*extends Thread*/ {
 				res = attributs_candidats.get( (int) (Math.random() * attributs_candidats.size()) );
 				break;
 			case 3: // gain d'information le plus élevé
-				double max_gain = 0;
+				double max_gain = -1; // -1 car le gain peut être de 0 pour chaque attribut candidat
 				Attribut max_gain_attribut = null;
 
 				// Pour chaque attribut
@@ -201,6 +221,7 @@ public class Noeud /*extends Thread*/ {
 					// Si le nombre d'exemples est strictement supérieur au maximum lu, le remplacer
 					// Sinon, supprimer l'attribut (en local)
 					double gain_attribut = this.gain(attribut_candidat);
+
 					if (gain_attribut > max_gain) {
 						max_gain = gain_attribut;
 						max_gain_attribut = attribut_candidat;

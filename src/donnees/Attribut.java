@@ -16,13 +16,24 @@ public class Attribut {
 	}
 
 	/**
-	 * Construit un attribut à partir d'un nom et de valeurs
+	 * Construit un attribut à partir d'un nom et d'une liste de valeurs
 	 * @param attribut
 	 * @param valeurs
 	 */
 	public Attribut(String nom, ArrayList<String> valeurs) {
 		this.nom = nom;
 		this.valeurs = valeurs;
+	}
+
+	/**
+	 * Construit un attribut à partir d'un nom et d'une seule valeur
+	 * @param attribut
+	 * @param valeur
+	 */
+	public Attribut(String nom, String valeur) {
+        this();
+        this.nom = nom;
+        this.valeurs.add(valeur);
 	}
 
     /**

@@ -2,8 +2,8 @@
 // TODO
 
 Tester avec les exemples du site http://archive.ics.uci.edu/ml/
-
-Mushroom train => pb
+Faire le compte rendu
+Commenter les classes
 contact-lenses elagage => pb
 
 // ARBRE DE DECISION

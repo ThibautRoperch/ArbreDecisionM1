@@ -211,7 +211,7 @@ public class JeuDonnees {
 	public String classeMajoritaire() {
 		HashMap<String, Integer> classes = this.valeursClasseExemples();
 		String classe_majoritaire = "";
-		int max = 0;
+		int max = -1;
 
 		// Pour chaque classe
 		for (Map.Entry<String, Integer> classe : classes.entrySet()) {
@@ -220,8 +220,6 @@ public class JeuDonnees {
 			if (classe.getValue() > max) {
 				max = classe.getValue();
 				classe_majoritaire = classe.getKey();
-			} else {
-				classes.remove(classe.getKey());
 			}
 		}
 		

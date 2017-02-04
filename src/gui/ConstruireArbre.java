@@ -68,7 +68,7 @@ public class ConstruireArbre implements ActionListener {
 				if (!this.interface_graphique.coefficientV().equals("")) {
 					arbre_decision.postElaguer(jeu_test, Double.parseDouble(this.interface_graphique.coefficientV()));
 				} else {
-					this.interface_graphique.afficherErreur("Le coefficient V doit être un nombre non null");
+					this.interface_graphique.afficherErreur("Le coefficient V doit être un nombre non null, impossible de post-élaguer l'arbre");
 				}
 			} else {
 				this.interface_graphique.afficherErreur("Le jeu de validation n'a pas d'attribut ou n'a pas les mêmes attributs que le jeu d'apprentissage, impossible de post-élaguer l'arbre");
@@ -88,6 +88,7 @@ public class ConstruireArbre implements ActionListener {
 		this.interface_graphique.afficherModele(modele.toString());
 
 		this.interface_graphique.afficherEtat("Prêt");
+
 	}
 
 }

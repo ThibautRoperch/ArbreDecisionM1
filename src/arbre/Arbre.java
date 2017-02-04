@@ -50,7 +50,7 @@ public class Arbre {
 		// Pour chaque feuille de l'arbre
 		for (Noeud n : this.feuilles) {
 			// Si la feuille n'est pas pure, retourner false
-			if (!n.estPur()) {
+			if (!n.estPurValidation()) {
 				return false;
 			}
 		}
@@ -165,18 +165,23 @@ public class Arbre {
 
 		res += "Note : S'il n'y a pas eu d'élagage, le jeu de validation est considéré comme non existant\nAinsi, les satistiques seront calculées avec le jeu d'apprentissage (résultats optimistes)\n";
 
-		HashMap<String, Double> taux_erreur_validation = new HashMap<String, Double>();
+		// Nom des classes, [ nombre d'éléments ayant la valeur classe, nombre d'éléments total ]
+		HashMap<String, int[]> taux_erreur_validation = new HashMap<String, int[]>();
+
+		// Pour chaque valeur de l'attribut classe
+		for (String classe : this.jeu_apprentissage.attributClasse().valeurs()) {
+			// Enregistrement de la classe et [ 0, 0 ] en proportion
+			taux_erreur_validation.put(classe, new int[] { 0, 0 });
+		}
 
 		// Pour chaque feuille de l'arbre
 		for (Noeud n : this.feuilles) {
 			ArrayList<String> classes_non_majoritaires = n.classesNonMajoritairesValidation();
 			for (String classe : classes_non_majoritaires) {
 				// Enregistrement de la proportion de cette classe de ce noeud feuille
-				// S'il y a déjà une valeur enregistrée dans la map, ajouter à la valeur déjà existante
-				Object taux_deja_enregistre = taux_erreur_validation.get(classe);
-				if (taux_deja_enregistre == null) taux_deja_enregistre = (double) 0;
-				Double taux_erreur_classe = (double) taux_deja_enregistre + n.proportionClasseValidation(classe);
-				taux_erreur_validation.put(classe, (double) taux_deja_enregistre + n.proportionClasseValidation(classe));
+				int[] taux_deja_enregistre = taux_erreur_validation.get(classe);
+				int[] taux_erreur_classe = { taux_deja_enregistre[0] + n.proportionClasseValidation(classe)[0], taux_deja_enregistre[1] + n.proportionClasseValidation(classe)[1] };
+				taux_erreur_validation.put(classe, taux_erreur_classe);
 			}
 		}
 
@@ -184,14 +189,21 @@ public class Arbre {
 
 		res += "\nTaux d'erreur des classes :\n\n";
 
-		// Pour chaque couple (classe, taux d'erreur)
-		for (Map.Entry<String, Double> e : taux_erreur_validation.entrySet()) {
-			res += e.getKey() + "\t" +  new DecimalFormat("#0.00").format(e.getValue() * 100) + " %\n";
-			taux_erreur_validation_total += e.getValue();
+		// Pour chaque couple (classe, proportion[])
+		for (Map.Entry<String, int[]> e : taux_erreur_validation.entrySet()) {
+			if (e.getValue()[1] > 0) {
+				res += e.getKey() + "\t" +  new DecimalFormat("#0.00").format((double) e.getValue()[0] / (double) e.getValue()[1] * 100) + " %\n";
+				taux_erreur_validation_total += (double) e.getValue()[0] / (double) e.getValue()[1] * 100;
+			} else {
+				res += e.getKey() + "\t" +  new DecimalFormat("#0.00").format(0) + " %\n";
+				taux_erreur_validation_total += (double) 0;
+			}
 		}
 		
+		res += "---------------------------------\n";
 		double taux_erreur_validation_moyen = (taux_erreur_validation.size() > 0) ? taux_erreur_validation_total / taux_erreur_validation.size() : (double) 0;
-		res += "Moyenne\t" + new DecimalFormat("#0.00").format(taux_erreur_validation_moyen * 100) + " %\n";
+		res += "Moyenne\t" + new DecimalFormat("#0.00").format(taux_erreur_validation_moyen) + " %\n";
+		res += "Somme\t" + new DecimalFormat("#0.00").format(taux_erreur_validation_total) + " %\n";
 
 		return res;
 	}
