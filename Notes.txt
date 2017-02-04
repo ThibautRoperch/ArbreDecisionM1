@@ -4,7 +4,6 @@
 Tester avec les exemples du site http://archive.ics.uci.edu/ml/
 Faire le compte rendu
 Commenter les classes
-contact-lenses elagage => pb
 
 // ARBRE DE DECISION
 
