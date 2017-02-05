@@ -9,7 +9,7 @@ Commenter les classes
 
 Construction d'un arbre de décision :
 - Création d'un premier noeud contenant le jeu de données complet
-- Ce noeud choisit un attribut : calcul du gain d'information (semestre 1) ou du gain d'entropie (semestre 2) ?
+- Ce noeud choisit un attribut : calcul du gain d'information (et d'entropie, cf semestre 1)
 - Pour chaque valeur de cet attribut, le noeud instancie un noeud fils contenant le jeu de données en ne gardant que les exemples concernés par la valeur
   Ex : l'attribut choisi est Prévision et a 3 valeurs : Soleil, Pluie, Couvert
   3 noeuds sont créés, ayant tous pour noeud père le même noeud

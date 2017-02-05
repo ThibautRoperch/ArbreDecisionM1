@@ -48,7 +48,7 @@ Classe Arbre qui contient :
 Classe Noeud qui contient :
 * Un pointeur vers son noeud père
 * Un jeu de données d'apprentissage
-* Un jeu de donénes de validation
+* Un jeu de données de validation
 * Un pointeur vers chaque noeud enfants (liste de noeuds)
 
 ### Représenter un jeu de données
@@ -56,6 +56,8 @@ Classe Noeud qui contient :
 Classe JeuDonnees qui contient :
 * Une liste d'attributs, un attribut étant représenté par son nom et ses valeurs possibles
 * Une liste d'exemples, un exemple étant représenté par une liste de valeurs à raison d'une valeur pour chaque attribut
+* Des méthodes de calcul sur les caractéristiques du jeu de données comme le nombre d’exemples, la liste des attributs candidats (soit les attributs à au moins deux valeurs possibles), ou encore la classe majoritaire.
+
 
 ## Contributeurs
 
