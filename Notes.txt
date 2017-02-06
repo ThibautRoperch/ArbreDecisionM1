@@ -1,11 +1,10 @@
 
 // TODO
 
-Tester avec les exemples du site http://archive.ics.uci.edu/ml/
-Faire le compte rendu
+"Tester votre programme sur des exemples assez conséquents que l'on peut trouver sur le site : http://archive.ics.uci.edu/ml/"
 Commenter les classes
 
-// ARBRE DE DECISION
+// CONSTRUCTION ARBRE DE DECISION
 
 Construction d'un arbre de décision :
 - Création d'un premier noeud contenant le jeu de données complet
@@ -23,29 +22,25 @@ Récap' :
   L'arbre execute le noeud racine (racine.start())
 - Chaque noeud choisit un attribut et créé des noeuds fils, ssi ce n'est pas une feuille pure
 
-// NOTES
-
-Les exemples incomplets, cad qui ont une valeur manquante pour un attribut, sont gérés de la facon suivante :
-valeur ? traités comme cdc (rempalcement de valeur) => https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Probl.C3.A8me_des_donn.C3.A9es_incompl.C3.A8tes
-
 // ENTROPIE
 
 Entropie semestre 1 : http://moodle.univ-angers.fr/pluginfile.php/579146/mod_resource/content/1/ArbreDecision.pdf Algo page 9 et calcul de gain page 13
 Entropie: http://www-lisic.univ-littoral.fr/~verel/TEACHING/13-14/IASF-M1app/cm10.pdf
 Entropie > 1 : http://people.revoledu.com/kardi/tutorial/DecisionTree/how-to-measure-impurity.htm
 
-// POST ELAGAGE
+// POST-ELAGAGE ARBRE DE DECISION
 
-Post-élagage : https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Le_post-.C3.A9lagage
+https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Le_post-.C3.A9lagage
 
-// SUJET DU PROJET
+// EXEMPLES INCOMPLETS
 
-Tester votre programme sur des exemples assez conséquents que l'on peut trouver sur le site :
-http://archive.ics.uci.edu/ml/
+Les exemples incomplets, cad qui ont une valeur manquante pour un attribut, sont gérés de la facon suivante :
+Valeurs ? traités comme cdc (remplacement de valeur) => https://fr.wikipedia.org/wiki/Arbre_de_d%C3%A9cision_(apprentissage)#Probl.C3.A8me_des_donn.C3.A9es_incompl.C3.A8tes
 
 // NOM DES METHODES
 
-camelCase (nomMethode)
+lowerCamelCase (nomMethode)
+En français
 
 // COMMENTAIRE EN DEBUT DE CLASSE
 
@@ -53,7 +48,6 @@ camelCase (nomMethode)
  * Classe NomClasse
  *
  * Cette classe permet d'instancier un ... 
- * Un objet de type ... instancie cette classe dans la méthode ...
  *
- * Les propriétés de la calsse, ce qu'elle implémente
+ * Un ... possède un(attributs de la classe, ce qu'elle implémente)
  */

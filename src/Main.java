@@ -31,7 +31,7 @@ public class Main {
 		if (jeu_app.estBienConstruit()) {
 			arbre_decision.construire(jeu_app, Arbre.GAIN_INFORMATION);
 			System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			// System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree());
+			// System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree(true));
 			System.out.println("\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
 		} else {
 			System.out.println("Erreur : Le jeu de d'apprentissage n'a pas d'attribut, impossible de construire l'arbre");
@@ -43,7 +43,7 @@ public class Main {
 		if (jeu_test.estBienConstruit() && jeu_test.estConstruitComme(jeu_app)) {
 			if (!coeff_v.equals("")) {
 				arbre_decision.postElaguer(jeu_test, Double.parseDouble(coeff_v));
-				System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree());
+				System.out.println("\n# Affichage de l'arbre\n" + arbre_decision.toTree(true));
 				System.out.println("\n# Caractéristiques de l'arbre\n" + arbre_decision.toCharacteristics());
 				System.out.println("\n# Statistiques de l'arbre\n\n" + arbre_decision.toStatistics());
 			} else {

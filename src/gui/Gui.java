@@ -24,9 +24,10 @@ public class Gui extends JFrame {
 	protected JTextField fichier_jeu_apprentissage; // nom du fichier contenant le jeu d'apprentissage
 	protected JTextField fichier_jeu_validation; // nom du fichier contenant le jeu de validation
 	protected JComboBox<String> meilleurAttribut; // menu déroulant pour sélectionner la façon dont est choisi du meilleur attribut
+	protected Checkbox afficher_noeuds_vides; // case à cocher pour afficher les noeuds vides de l'arbre
 	protected Checkbox elaguer; // case à cocher pour élaguer l'arbre de décision
-	protected JTextField coefficient_v; // coefficient v pour l'élagage
-	protected JLabel etat; // état du moteur
+	protected JTextField coefficient_v; // champ texte pour le coefficient v pour l'élagage
+	protected JLabel etat; // texte pour l'état du moteur
 
 	public Gui() {
 		super("Construction et élagage d'un arbre de décision");
@@ -130,6 +131,13 @@ public class Gui extends JFrame {
 				contrainte.gridy = 3;
 				optionsConstruction.add(this.meilleurAttribut, contrainte);
 
+				// Case à cocher pour afficher les noeuds vides de l'abre
+				contrainte.gridx = 0;
+				contrainte.gridy = 4;
+				this.afficher_noeuds_vides = new Checkbox(" Afficher les noeuds vides              ");
+				this.afficher_noeuds_vides.setState(true);
+				optionsConstruction.add(this.afficher_noeuds_vides, contrainte);
+
 			// Panneau des options d'élagage dans une case de la grille de droite
 			JPanel optionsElagage = new JPanel(new GridBagLayout());
 			optionsElagage.setBorder(BorderFactory.createTitledBorder("Élagage"));
@@ -145,7 +153,6 @@ public class Gui extends JFrame {
 				contrainte.gridwidth = 2;
 				this.elaguer = new Checkbox(" Élaguer l'arbre de décision            ");
 				this.elaguer.setState(true);
-				// action event dessus pour changer letat de laffichage de l'input du coeff v
 				optionsElagage.add(this.elaguer, contrainte);
 
 				// Bouton pour sélectionner le jeu de validation dans les options
@@ -208,6 +215,10 @@ public class Gui extends JFrame {
 
 	public boolean elaguer() {
 		return this.elaguer.getState();
+	}
+
+	public boolean afficherNoeudsVides() {
+		return this.afficher_noeuds_vides.getState();
 	}
 
 	/**

@@ -6,7 +6,6 @@
  * Un arbre possède un pointeur vers le premier noed racine de l'arbre, ainsi que la liste des noeuds feuilles qu'il contient
  */
 
-
 package arbre;
 
 import java.text.DecimalFormat;
@@ -28,7 +27,9 @@ public class Arbre {
 	protected JeuDonnees jeu_validation;
 	protected Noeud noeud_racine;
 	protected ArrayList<Noeud> feuilles;
+
 	public static int methode_de_choix;
+	public static boolean afficher_noeuds_vides;
 	
 	/**
 	 * Instancie un arbre vide
@@ -140,7 +141,10 @@ public class Arbre {
 		return res;
 	}
 
-	public String toTree() {
+	public String toTree(boolean afficher_noeuds_vides) {
+		// Enregistrer la condition d'affichage des noeuds vides, récupérée par les noeuds de l'arbre
+		this.afficher_noeuds_vides = afficher_noeuds_vides;
+		
 		String res = "";
 
 		res += (this.noeud_racine != null) ? this.noeud_racine.toTree(0) : "";
@@ -213,12 +217,12 @@ public class Arbre {
 		// a.construire(new JeuDonnees("jeux/vote.arff"), Arbre.GAIN_INFORMATION);
 		a.construire(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), Arbre.GAIN_INFORMATION);
 		// System.out.println(a);
-		System.out.println(a.toTree());
+		System.out.println(a.toTree(true));
 		System.out.println(a.toCharacteristics());
 		System.out.println(a.genererModele());
 		// a.postElaguer(new JeuDonnees("jeux/vote.arff"), 0.005);
 		a.postElaguer(new JeuDonnees("jeux/Jeuxsimples/weather.nominal.arff"), 0.005);
-		System.out.println(a.toTree());
+		System.out.println(a.toTree(true));
 		System.out.println(a.toCharacteristics());
 		System.out.println(a.toStatistics());
 		// System.out.println(a.genererModele());

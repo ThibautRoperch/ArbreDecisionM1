@@ -1,3 +1,11 @@
+/**
+ * Classe Noeud
+ *
+ * Cette classe permet d'instancier un noeud composant un arbre de décision
+ * 
+ * Un noeud possède
+ */
+
 package arbre;
 
 import java.util.ArrayList;
@@ -192,8 +200,11 @@ public class Noeud /*extends Thread*/ {
 			Attribut attribut_classe = this.jeu_apprentissage.attributClasse();
 			String valeur_classe = this.jeu_apprentissage.classeMajoritaire();
 			this.jeu_apprentissage.choisirAttributValeur(attribut_classe, valeur_classe);
-			this.arbre.ajouterFeuille(this);
-			System.out.println(this.genererRegle());
+			if (this.jeu_apprentissage.nombreExemples() > 0
+			 || this.jeu_apprentissage.nombreExemples() == 0 && this.arbre.afficher_noeuds_vides) {
+				this.arbre.ajouterFeuille(this);
+				System.out.println(this.genererRegle());
+			}
 		}
 	}
 
@@ -318,8 +329,9 @@ public class Noeud /*extends Thread*/ {
 	public String toTree(int level) {
 		// Ne rien afficher si le jeu d'apprentissage ne contient pas d'exemple dans le cas d'un jeu de validation null,
 		// ou si le jeu de validation ne contient pas d'exemple dans le cas d'un jeu de validation non null
-		if (this.jeu_validation == null && this.jeu_apprentissage.nombreExemples() == 0
-		 || this.jeu_validation != null && this.jeu_validation.nombreExemples() == 0) {
+		// (et que afficher_noeuds_vides est à faux pour les deux cas précédents)
+		if (this.jeu_validation == null && this.jeu_apprentissage.nombreExemples() == 0 && !this.arbre.afficher_noeuds_vides
+		 || this.jeu_validation != null && this.jeu_validation.nombreExemples() == 0 && !this.arbre.afficher_noeuds_vides) {
 			return "";
 		}
 
@@ -343,6 +355,8 @@ public class Noeud /*extends Thread*/ {
 		res += "\n" + margin + "[" + this.nom + "] " + this.jeu_apprentissage.valeursClasseExemples();
 
 		if (this.jeu_validation != null && this.noeuds_fils.size() == 0) {
+			res += " (" + new DecimalFormat("#0.00").format(this.jeu_validation.tauxErreur() * 100) + " % de taux d'erreur)";
+		} else if (this.jeu_validation == null && this.noeuds_fils.size() == 0) {
 			res += " (" + new DecimalFormat("#0.00").format(this.jeu_apprentissage.tauxErreur() * 100) + " % de taux d'erreur)";
 		}
 

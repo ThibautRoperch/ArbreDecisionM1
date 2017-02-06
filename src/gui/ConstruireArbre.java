@@ -77,7 +77,7 @@ public class ConstruireArbre implements ActionListener {
 
 		// 5. Affichage de l'arbre de décision, ses caractéristiques et ses statistiques
 
-		this.interface_graphique.afficherArbre(arbre_decision.toTree());
+		this.interface_graphique.afficherArbre(arbre_decision.toTree(this.interface_graphique.afficherNoeudsVides()));
 		this.interface_graphique.afficherCaracteristiques(arbre_decision.toCharacteristics());
 		this.interface_graphique.afficherStatistiques(arbre_decision.toStatistics());
 
