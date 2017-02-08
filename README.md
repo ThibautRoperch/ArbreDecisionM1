@@ -22,7 +22,7 @@ Ligne de compilation et d'exécution du programme principal avec les jeux sur le
 
 	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff v=0.005
 
-Ouverture de l'interface graphique dans laquelle il faudra sélectionner les fichiers des mushrooms dans le dossier Jeux/Mushroom :
+Ouverture de l'interface graphique dans laquelle il faudra sélectionner les fichiers des mushrooms dans le dossier jeux/Mushroom :
 
 	clear ; make ; make interface
 

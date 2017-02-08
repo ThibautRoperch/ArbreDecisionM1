@@ -75,17 +75,17 @@ public class ConstruireArbre implements ActionListener {
 			}
 		}
 
-		// 5. Affichage de l'arbre de décision, ses caractéristiques et ses statistiques
-
-		this.interface_graphique.afficherArbre(arbre_decision.toTree(this.interface_graphique.afficherNoeudsVides()));
-		this.interface_graphique.afficherCaracteristiques(arbre_decision.toCharacteristics());
-		this.interface_graphique.afficherStatistiques(arbre_decision.toStatistics());
-
-		// 6. Génération et affichage du modèle associé à l'arbre de décision
+		// 5. Génération et affichage du modèle associé à l'arbre de décision
 
 		this.interface_graphique.afficherEtat("Génération du modèle associé à l'arbre de décision");
 		Modele modele = arbre_decision.genererModele();
 		this.interface_graphique.afficherModele(modele.toString());
+
+		// 6. Affichage de l'arbre de décision, ses caractéristiques et ses statistiques
+
+		this.interface_graphique.afficherArbre(arbre_decision.toTree(this.interface_graphique.afficherNoeudsVides()));
+		this.interface_graphique.afficherCaracteristiques(arbre_decision.toCharacteristics());
+		this.interface_graphique.afficherStatistiques(arbre_decision.toStatistics());
 
 		this.interface_graphique.afficherEtat("Prêt");
 

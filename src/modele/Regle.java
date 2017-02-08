@@ -1,3 +1,14 @@
+/**
+ * Classe Regle
+ * 
+ * Cette classe permet d'instancier une règle de décision
+ * 
+ * Une règle possède un ensemble de conditions et une conclusion, qui sont en réalité des attributs avec une valeur
+ * Une règle est de la forme SI ...=... (ET ...=...) ALORS ...=...
+ * 
+ * Un noeud peut instancir une règle de décision, un arbre de décision demandera à ses feuilles de générer une règle
+ */
+
 package modele;
 
 import java.util.ArrayList;

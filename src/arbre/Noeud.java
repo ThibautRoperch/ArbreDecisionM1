@@ -288,9 +288,9 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
-	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (* coeff_v)
+	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (+ coeff_v)
 	 * par rapport au jeu d'apprentissage
-	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (* coeff_v) :
+	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (+ coeff_v) :
 	 * - Les fils sont supprimés et leurs jeux de données (du jeu d'apprentissage, donc) sont fusionnés avec celui de ce noeud
 	 * - Ce noeud devient une feuille et s'ajoute à la liste des feuilles de l'arbre auquel il appartient
 	 * Le regroupement des fils se fait dans le cadre d'un élagage de l'arbre
@@ -314,7 +314,7 @@ public class Noeud /*extends Thread*/ {
 		// regrouper les noeud fils avec ce noeud et ajouter ce noeud à la liste des feuilles de l'arbre
 		// Si ce noeud est déjà une feuille, re-ajouter ce noeud à la liste des feuilles de l'arbre
 		// Taux de réussite de l'arbre élagué augmente d'une valeur coeff_v par rapport à l'arbre non élagué => regroupement
-		if (1 - this.jeu_validation.tauxErreur() >= (1 - this.jeu_apprentissage.tauxErreur()) * (1 + coeff_v) || this.noeuds_fils.size() == 0) {
+		if ( (1 - this.jeu_validation.tauxErreur()) >= (1 - this.jeu_apprentissage.tauxErreur() + coeff_v) || this.noeuds_fils.size() == 0) {
 			this.noeuds_fils.clear();
 			this.arbre.ajouterFeuille(this);
 		}
@@ -366,7 +366,11 @@ public class Noeud /*extends Thread*/ {
 
 		String margin = margin_top + "\n" + margin_left;
 		
-		res += "\n" + margin + "[" + this.nom + "] " + this.jeu_apprentissage.valeursClasseExemples();
+		if (this.jeu_validation != null) {
+			res += "\n" + margin + "[" + this.nom + "] " + this.jeu_validation.valeursClasseExemples();
+		} else {
+			res += "\n" + margin + "[" + this.nom + "] " + this.jeu_apprentissage.valeursClasseExemples();
+		}
 
 		if (this.jeu_validation != null && this.noeuds_fils.size() == 0) {
 			res += " (" + new DecimalFormat("#0.00").format(this.jeu_validation.tauxErreur() * 100) + " % de taux d'erreur)";

@@ -178,12 +178,13 @@ public class Gui extends JFrame {
 				contrainte.gridx = 0;
 				contrainte.gridy = 3;
 				optionsElagage.add(texte, contrainte);
-				this.coefficient_v = new JTextField();
+				this.coefficient_v = new JTextField("0.005");
 				this.coefficient_v.setMargin(new Insets(5, 5, 5, 5));
 				this.coefficient_v.setHorizontalAlignment(JTextField.CENTER);
 				contrainte.gridx = 1;
 				optionsElagage.add(this.coefficient_v, contrainte);
-				
+			
+			// Espace avec les options et le bouton
 			constructionElagage.add(new JLabel());
 
 			// Bouton de construction de l'arbre de décision dans la grille de gauche

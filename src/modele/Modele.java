@@ -1,3 +1,13 @@
+/**
+ * Classe Modele
+ * 
+ * Cette classe permet d'instancier un modèle de décision
+ * 
+ * Un modèle possède un ensemble de règles de décisions
+ * 
+ * Un modèle est généré par un arbre de décision
+ */
+
 package modele;
 
 import java.util.ArrayList;
@@ -21,6 +31,14 @@ public class Modele {
 	 */
 	public void ajouterRegle(Regle regle) {
 		this.regles.add(regle);
+	}
+
+	/**
+	 * Retourne le nombre de règles
+	 * @return int
+	 */
+	public int nombreDeRegles() {
+		return this.regles.size();
 	}
 
 	public String toString() {

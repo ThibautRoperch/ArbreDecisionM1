@@ -8,7 +8,6 @@
  * Un attribut est instancié par un jeu de données, structuré avec des attributs
  */
 
-
 package donnees;
 
 import java.util.ArrayList;
@@ -120,7 +119,7 @@ public class Attribut {
 
     public boolean equals(Object o) {
         Attribut attribut = (Attribut) o;
-        return this.nom.equals(attribut.nom());
+        return this.nom.equals(attribut.nom()) && this.valeurs.equals(attribut.valeurs());
 	}
 
 }

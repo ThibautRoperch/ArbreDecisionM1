@@ -1,8 +1,4 @@
 
-// TODO
-
-"Tester votre programme sur des exemples assez conséquents que l'on peut trouver sur le site : http://archive.ics.uci.edu/ml/"
-
 // CONSTRUCTION ARBRE DE DECISION
 
 Construction d'un arbre de décision :
@@ -49,4 +45,6 @@ En français
  * Cette classe permet d'instancier un ... 
  *
  * Un ... possède un(attributs de la classe, ce qu'elle implémente)
+ *
+ * Un ... est instancié par un ...
  */

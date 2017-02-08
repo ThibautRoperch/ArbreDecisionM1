@@ -32,6 +32,7 @@ public class Arbre {
 	protected JeuDonnees jeu_validation;
 	protected Noeud noeud_racine;
 	protected ArrayList<Noeud> feuilles;
+	protected Modele modele;
 
 	public static int methode_de_choix;
 	public static boolean afficher_noeuds_vides;
@@ -44,6 +45,7 @@ public class Arbre {
 		this.jeu_validation = null;
 		this.noeud_racine = null;
 		this.feuilles = new ArrayList<Noeud>();
+		this.modele = null;
 		this.methode_de_choix = 0;
 	}
 
@@ -135,6 +137,8 @@ public class Arbre {
 			}
 		}
 
+		this.modele = m;
+
 		return m;
 	}
 
@@ -152,6 +156,8 @@ public class Arbre {
 		
 		String res = "";
 
+		res += "Note : S'il n'y a pas eu d'élagage, le jeu de validation est considéré comme non existant\nAinsi, ce sont les informations du jeu d'apprentissage de chaque noeuds qui seront affichées\n";
+
 		res += (this.noeud_racine != null) ? this.noeud_racine.toTree(0) : "";
 
 		return res += "\n";
@@ -159,10 +165,11 @@ public class Arbre {
 
 	public String toCharacteristics() {
 		String res = "";
-		
+
 		res += "\nArbre parfait :\t\t" + this.estParfait() + "\n";
 		res += "\nNombre de feuilles :\t" + this.feuilles.size() + "\n";
-		int surapprentissage = (this.jeu_apprentissage.nombreExemples() > 0) ? this.feuilles.size() * 100 / this.jeu_apprentissage.nombreExemples() : 0; // surapprentissage = autant de feuilles que d'individus dans la population
+		res += "\nFeuilles non vides :\t" + this.modele.nombreDeRegles() + "\n";
+		int surapprentissage = (this.jeu_apprentissage.nombreExemples() > 0) ? this.modele.nombreDeRegles() * 100 / this.jeu_apprentissage.nombreExemples() : 0; // surapprentissage = autant de feuilles non vides que d'individus dans la population
 		res += "\nSurapprentissage :\t" + surapprentissage + "%\n";
 		res += "\nHauteur de l'arbre :\t" + this.hauteur() + "\n";
 
