@@ -3,7 +3,24 @@
  *
  * Cette classe permet d'instancier un noeud composant un arbre de décision
  * 
- * Un noeud possède
+ * Un noeud possède un pointeur vers l'abre auquel il appartient, son noeud père et vers chacun de ses noeuds fils
+ * Il possède également deux jeux de données : un jeu d'apprentissage, servant à construire ses noeuds fils, et un
+ * jeu de validation servant à réunir (ou pas) ses noeuds fils
+ * 
+ * Un noeud construit un noeud fils pour chaque valeur d'un attribut qu'il aura choisi parmi les candidats (meilleur attribut,
+ * calcul de gain d'information et d'entropie sur le jeu d'apprentissage)
+ * Si un noeud et vide d'exemples, il ne s'affichera pas si cette option est enregistrée dans l'arbre, mais comptera
+ * quand même dans les statistiques de l'arbre
+ * 
+ * Un noeud peut générer la règle de décision à partir de son jeu de données d'apprentissage, s'il n'est pas vide d'exemples,
+ * auquel cas sa règle n'a pas de conclusion
+ * Seules les noeuds feuilles auront à générer leur règle de décision lorsque l'arbre auquel elles appartiennent leur en donnera l'ordre
+ * pour construire son modèle (composé de l'ensemble des règles des feuilles)
+ * 
+ * Lors de l'affichage en arbre, un noeud s'affiche (s'il n'est pas vide d'exemples ou que les noeuds vides peuvent s'afficher)
+ * et appelle la méthode d'affichage sur ses noeuds fils
+ * 
+ * Les statistiques du jeu de données du noeuds sont celles de son jeu de validation s'il est existant, de son jeu d'apprentissage sinon
  */
 
 package arbre;
@@ -200,11 +217,8 @@ public class Noeud /*extends Thread*/ {
 			Attribut attribut_classe = this.jeu_apprentissage.attributClasse();
 			String valeur_classe = this.jeu_apprentissage.classeMajoritaire();
 			this.jeu_apprentissage.choisirAttributValeur(attribut_classe, valeur_classe);
-			if (this.jeu_apprentissage.nombreExemples() > 0
-			 || this.jeu_apprentissage.nombreExemples() == 0 && this.arbre.afficher_noeuds_vides) {
-				this.arbre.ajouterFeuille(this);
-				System.out.println(this.genererRegle());
-			}
+			this.arbre.ajouterFeuille(this);
+			System.out.println(this.genererRegle());
 		}
 	}
 
@@ -274,9 +288,9 @@ public class Noeud /*extends Thread*/ {
 	}
 
 	/**
-	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (+ coeff_v)
+	 * Tente de regrouper les noeuds fils avec ce noeud si le jeu de validation entraine une augmentation du taux de bonnes réponses (* coeff_v)
 	 * par rapport au jeu d'apprentissage
-	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (+ coeff_v) :
+	 * S'il y a plus de taux de bonnes réponses dans le jeu de validation que dans le jeu d'apprentissage (* coeff_v) :
 	 * - Les fils sont supprimés et leurs jeux de données (du jeu d'apprentissage, donc) sont fusionnés avec celui de ce noeud
 	 * - Ce noeud devient une feuille et s'ajoute à la liste des feuilles de l'arbre auquel il appartient
 	 * Le regroupement des fils se fait dans le cadre d'un élagage de l'arbre
@@ -300,7 +314,7 @@ public class Noeud /*extends Thread*/ {
 		// regrouper les noeud fils avec ce noeud et ajouter ce noeud à la liste des feuilles de l'arbre
 		// Si ce noeud est déjà une feuille, re-ajouter ce noeud à la liste des feuilles de l'arbre
 		// Taux de réussite de l'arbre élagué augmente d'une valeur coeff_v par rapport à l'arbre non élagué => regroupement
-		if (1 - this.jeu_validation.tauxErreur() >= (1 - this.jeu_apprentissage.tauxErreur()) + coeff_v || this.noeuds_fils.size() == 0) {
+		if (1 - this.jeu_validation.tauxErreur() >= (1 - this.jeu_apprentissage.tauxErreur()) * (1 + coeff_v) || this.noeuds_fils.size() == 0) {
 			this.noeuds_fils.clear();
 			this.arbre.ajouterFeuille(this);
 		}
@@ -341,11 +355,11 @@ public class Noeud /*extends Thread*/ {
 		int niveau = level;
 
 		while (niveau > 0) {
-			margin_top += " |   ";
+			margin_top += " |     ";
 			if (niveau > 1) {
-				margin_left += " |   ";
+				margin_left += " |     ";
 			} else {
-				margin_left += " |____";
+				margin_left += " |______";
 			}
 			--niveau;
 		}

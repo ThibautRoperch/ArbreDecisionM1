@@ -62,7 +62,6 @@ public class Gui extends JFrame {
 		// Droite de la fenêtre : un panneau formaté par une grille de 2 lignes x 1 colonne pour les caractériques et les statistiques
 		grille = new GridLayout(2, 1);
 		JPanel caracStats = new JPanel(grille);
-		// caracStats.setPreferredSize(new Dimension(300, 0)); // width height, 0 pour "auto"
 		this.add(BorderLayout.EAST, caracStats);
 
 			// Zone d'affichage des caractéristiques de l'arbre dans un scrolleur dans un panneau dans une case de la grille de droite
@@ -72,7 +71,7 @@ public class Gui extends JFrame {
 			this.caracteristiques.setEditable(false);
 			this.caracteristiques.setMargin(new Insets(5, 5, 5, 5));
 			scrolleur = new JScrollPane(this.caracteristiques);
-			scrolleur.setPreferredSize(new Dimension(300, 400));
+			scrolleur.setPreferredSize(new Dimension(300, 450)); // width height
 			panneau.add(scrolleur);
 			caracStats.add(panneau);
 			
@@ -83,7 +82,7 @@ public class Gui extends JFrame {
 			this.statistiques.setEditable(false);
 			this.statistiques.setMargin(new Insets(5, 5, 5, 5));
 			scrolleur = new JScrollPane(this.statistiques);
-			scrolleur.setPreferredSize(new Dimension(300, 400));
+			scrolleur.setPreferredSize(new Dimension(300, 450)); // width height
 			panneau.add(scrolleur);
 			caracStats.add(panneau);
 
@@ -227,7 +226,7 @@ public class Gui extends JFrame {
 	public void afficher() {
 		this.pack();
 		this.setVisible(true);
-		this.setLocation(350, 100);
+		this.setLocation(300, 50);
 	}
 
 	public void afficherArbre(String arbre) {

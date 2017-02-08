@@ -12,14 +12,19 @@ Exécuter le programme principal en donnant les jeux d'apprentissage et de valid
 
 	make main app=<jeu d'apprentissage> test=<jeu de validation> v=<coefficient V>
 
-Exemple de ligne de compilation et d'exécution du programme principal :
-
-	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff v=0.005
-
 Ouvrir l'interface graphique :
 
 	make interface
 
+## Exemples d'utilisation
+
+Ligne de compilation et d'exécution du programme principal avec les jeux sur les mushrooms :
+
+	clear ;  make ; make main app=jeux/Mushroom/mushroom_train.arff test=jeux/Mushroom/mushroom_valid.arff v=0.005
+
+Ouverture de l'interface graphique dans laquelle il faudra sélectionner les fichiers des mushrooms dans le dossier Jeux/Mushroom :
+
+	clear ; make ; make interface
 
 ## Termes employés
 

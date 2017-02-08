@@ -1,10 +1,36 @@
 /**
+ * Classe JeuDonnees
+ * 
+ * Cette classe permet d'instancier un jeu de données
+ * 
+ * Un jeu de données, issu d'un fichier .arff, est représenté ici par une liste d'attributs
+ * et une liste d'exemples
+ * Un exemple est une liste de chaines de caractères, représentant les valeurs des attributs dans ce même ordre
+ * 
+ * 
+ * attributs =	[
+ * 					1 : "Temps", ["Pluvieux", "Nuageux"]			=> Instance de la classe Attribut
+ * 					2 : "Vent", ["Chaud", "Froid"]					=> Instance de la classe Attribut
+ * 					3 : "Sortir", ["OUI", "NON"]					=> Instance de la classe Attribut
+ * 				]
+ *
+ * exemples =	[
+ *					1 : [ "Nuageux", "Chaud", "OUI" ]
+ *					2 : [ "Nuageux", "Froid", "NON" ]
+ *				]
+ * 
+ * L'attribut de classe d'un jeu de données est toujours le dernier de la liste de attributs, les attributs
+ * candidats pour être choisi en tant que meilleur attribut par un noeud sont les autres attributs à au moins deux valeurs
+ * 
  * Au fur et à mesure de l'évolution d'une branche de l'arbre, un jeu de donénes est dupliqué pour un noeud fils
  * et modifié en fonction de l'attribut utilisé par ce noeud fils
  * 
  * Par exemple, l'ensemble des données va être modifié de cette façon : le noeud applique la valeur "soleil" à l'attribut "ensoleillement"
  * - La liste des exemples ne contient plus que les exemples où "ensoleillement" = "soleil"
  * - L'attribut "ensoleillement" n'a comme valeur possible plus que "soleil" dans la liste des attributs
+ * 
+ * Ainsi, lorsqu'un attribut du jeu de données n'a qu'une valeur possible, il n'est pas considéré comme étant un attribut candidat
+ * par le noeud, laissant la place aux attributs ayant au moins deux valeurs d'être choisis comme meilleurs attributs
  */
 
 package donnees;
@@ -327,10 +353,3 @@ public class JeuDonnees {
 	}
 
 }
-
-/*
-	exemples =	[
-					1 : [ "aaa", "bbb", "OUI" ],
-					2 : [ "aaa", "bbb", "NON" ]
-				]
-*/

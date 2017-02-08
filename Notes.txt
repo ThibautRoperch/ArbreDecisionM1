@@ -2,7 +2,6 @@
 // TODO
 
 "Tester votre programme sur des exemples assez conséquents que l'on peut trouver sur le site : http://archive.ics.uci.edu/ml/"
-Commenter les classes
 
 // CONSTRUCTION ARBRE DE DECISION
 

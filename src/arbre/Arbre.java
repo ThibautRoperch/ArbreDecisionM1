@@ -4,6 +4,11 @@
  * Cette classe permet d'instancier un arbre de décision
  * 
  * Un arbre possède un pointeur vers le premier noed racine de l'arbre, ainsi que la liste des noeuds feuilles qu'il contient
+ * Un arbre est construit avec un jeu de données d'apprentissage et peut être élagué avec un jeu de données de Validation,
+ * les deux jeux devant être de la même structuer (vérification faite dans le programme instanciant un arbre)
+ * 
+ * Les caractéristiques et les statistiques de l'arbre sont calculés sur les jeux de validation de ses feuilles s'ils sont existants,
+ * sinon sur les jeux d'apprentissage de ses feuilles
  */
 
 package arbre;

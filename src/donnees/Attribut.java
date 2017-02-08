@@ -1,3 +1,14 @@
+/**
+ * Classe Attribut
+ *
+ * Cette classe permet d'instancier un attribut
+ *
+ * Un attribut possède un nom et une liste de valeurs
+ * 
+ * Un attribut est instancié par un jeu de données, structuré avec des attributs
+ */
+
+
 package donnees;
 
 import java.util.ArrayList;
