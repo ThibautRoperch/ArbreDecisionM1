@@ -73,6 +73,6 @@ Classe JeuDonnees qui contient :
 </tr>
 <tr>
 	<td><a href="https://github.com/ThibautRoperch"><img alt="Thibaut Roperch" src="https://avatars3.githubusercontent.com/u/18574394" width="25"></a></td>
-	<td><a href="https://github.com/ThibautRoperch">@ThibautRoperch</a></td>
+	<td><a href="https://github.com/ThibautRoperch">ThibautRoperch</a></td>
 </tr>
 </table>
