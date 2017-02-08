@@ -63,7 +63,6 @@ Classe JeuDonnees qui contient :
 * Une liste d'exemples, un exemple étant représenté par une liste de valeurs à raison d'une valeur pour chaque attribut
 * Des méthodes de calcul sur les caractéristiques du jeu de données comme le nombre d’exemples, la liste des attributs candidats (soit les attributs à au moins deux valeurs possibles), ou encore la classe majoritaire.
 
-
 ## Contributeurs
 
 <table>
